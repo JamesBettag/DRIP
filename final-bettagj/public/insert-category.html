@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="author" content="James Bettag">
+    <script type="text/javascript" src="utilities.js">    
+    </script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <title>Insert Category</title>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Insert Category</h1>
+      <div class="form-group">
+        <form id="example" action="api/categories" method="POST">
+          <div class="form-group">
+            <label class="field-label" for="categoryName">Category</label>
+            <input class="form-control" placeholder="Category Name" id="categoryName" name="categoryName" required>
+          </div>
+          <button type="submit" class="btn btn-primary">Submit</button>
+          <button type="reset" class="btn btn-secondary">Reset</button>
+        </form>
+
+      </div>
+      <div id="output">
+
+      </div>
+
+    </div>
+  </body>
+</html>
