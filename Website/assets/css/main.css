@@ -1748,7 +1748,7 @@ input, select, textarea {
 		position: relative;
 		display: inline-block;
 		border: 0;
-		background: #35b88f;
+		background: #6AA72C;
 		color: #fff;
 		text-shadow: 0 0 0.5px rgba(255, 255, 255, 0.25);
 		cursor: pointer;
@@ -1765,7 +1765,7 @@ input, select, textarea {
 		input[type="reset"]:hover,
 		button:hover,
 		.button:hover {
-			background: #45c89f;
+			background: #5B8934;
 		}
 		/* Login button for home page */
 		input[type="button"].style2,
@@ -1806,7 +1806,7 @@ input, select, textarea {
 			input[type="reset"].style3:hover,
 			button.style3:hover,
 			.button.style3:hover {
-				background: rgba(58, 57, 57, 0.025);
+				background: rgba(19, 18, 18, 0.075);
 			}
 
 /* Box */
@@ -1875,7 +1875,9 @@ input, select, textarea {
 			}
 
 				.box.style1.right .image img {
-					right: 0;
+					width: 100%;
+					height: 100%;
+					object-fit: cover;
 				}
 
 			.box.style1.right .inner {
@@ -1888,7 +1890,9 @@ input, select, textarea {
 			}
 
 				.box.style1.left .image img {
-					left: 0;
+					width: 100%;
+					height: 100%;
+					object-fit: cover;
 				}
 
 			.box.style1.left .inner {
