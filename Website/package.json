@@ -1,0 +1,32 @@
+{
+  "name": "assets",
+  "version": "1.0.0",
+  "description": "package jaysun file",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bettagj/DRIP.git"
+  },
+  "author": "Mathew Lister, Tad Okazaki, James Bettag",
+  "license": "ISC",
+  "devDependencies": {
+    "dotenv": "^8.2.0",
+    "nodemon": "^2.0.3"
+  },
+  "dependencies": {
+    "chart.js": "^2.9.3",
+    "@sendgrid/mail": "^7.0.1",
+    "bcryptjs": "^2.4.3",
+    "ejs": "^2.6.2",
+    "express": "^4.17.1",
+    "express-flash": "0.0.2",
+    "express-session": "^1.17.0",
+    "method-override": "^3.0.0",
+    "mysql": "~2.15.0",
+    "passport": "^0.4.1",
+    "passport-local": "^1.0.0"
+  }
+}
