@@ -10,6 +10,38 @@ const flash = require('express-flash')
 const session = require('express-session')
 const methodOverride = require('method-override')
 
+const sgMail = require('@sendgrid/mail');
+sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+const msg = {
+  to: 'okazakit@spu.edu',
+  from: 'notifications.drip@gmail.com',
+  subject: 'Test1',
+  text: 'This is a test',
+  html: '<strong>and easy to do anywhere, even with Node.js</strong>',
+};
+//ES6
+sgMail
+  .send(msg)
+  .then(() => {}, error => {
+    console.error(error);
+ 
+    if (error.response) {
+      console.error(error.response.body)
+    }
+  });
+//ES8
+(async () => {
+  try {
+    await sgMail.send(msg);
+  } catch (error) {
+    console.error(error);
+ 
+    if (error.response) {
+      console.error(error.response.body)
+    }
+  }
+})();
+
 const initializePassport = require('./passport-config')
 initializePassport(
     passport, 
