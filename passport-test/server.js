@@ -2,6 +2,7 @@ if(process.env.NODE_ENV !== 'production'){
     require('dotenv').config()
 }
 
+//require('dotenv').config()
 const express = require('express')
 const app = express()
 const bcrypt = require('bcryptjs')
@@ -9,6 +10,39 @@ const passport = require('passport')
 const flash = require('express-flash')
 const session = require('express-session')
 const methodOverride = require('method-override')
+const key = process.env.SENDGRID_API_KEY
+
+const sgMail = require('@sendgrid/mail');
+sgMail.setApiKey(key);
+const msg = {
+  to: 'bettagj@spu.edu',
+  from: 'notifications.drip@gmail.com',
+  subject: 'Test1',
+  text: 'This is a test',
+  html: '<strong>and easy to do anywhere, even with Node.js</strong>',
+};
+//ES6
+sgMail
+  .send(msg)
+  .then(() => {}, error => {
+    console.error(error);
+ 
+    if (error.response) {
+      console.error(error.response.body)
+    }
+  });
+//ES8
+(async () => {
+  try {
+    await sgMail.send(msg);
+  } catch (error) {
+    console.error(error);
+ 
+    if (error.response) {
+      console.error(error.response.body)
+    }
+  }
+})();
 
 const initializePassport = require('./passport-config')
 initializePassport(
