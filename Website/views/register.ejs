@@ -1,3 +1,4 @@
+<!---
 <h1>Register</h1>
 <form action="/register" method="POST">
     <div>
@@ -17,3 +18,63 @@
     <button type="submit">Register</button>
 </form>
 <a href="/login">Login</a>
+-->
+
+<!--
+	Place holder for register screen
+-->
+    <head>
+		<title>DRIP</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="assets/css/main.css" />
+		<noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
+	</head>
+	<!-- Registration Form -->
+    <article class="container box style3">
+        <header>
+            <h2>Register</h2>
+        </header>
+        <form>
+        <div class="row">
+            <label for="uname"><b></b></label>
+            <input type="text" placeholder="Enter Email" name="email" required>
+
+            <label for="psw"><b></b></label>
+            <input type="password" placeholder="Enter Password" name="psw1" id="psw1" required>
+
+            <label for="psw"><b></b></label>
+            <input type="password" placeholder="Reenter Password" name="psw2" id="psw2" oninput="passwordChecker(this)" required>
+            
+            <p id="passwordVailidityOutput">&#10005; Passwords do not match<br></p>
+            <p id="willItSend">&#10005; Will not send<br></p>
+
+            <div class="col-12">
+                <ul class="actions">
+                    <li><input type="button" value="Create Account" onclick="accountCreation()"></li>
+                </ul>
+            </div>
+        </div>
+            <a href="index.html" class="button style3">Cancel</a>
+        </form>
+    </article>
+
+    
+    <script language='javascript' type='text/javascript'>
+        function passwordChecker(password){
+            if(password.value == document.getElementById('psw1').value){
+                document.getElementById('passwordVailidityOutput').innerHTML = "&#10004 Passwords match"
+            }else{
+                document.getElementById('passwordVailidityOutput').innerHTML = "&#10005 Passwords do not match"
+            }
+        }
+        function accountCreation(){
+            document.getElementById('willItSend').innerHTML = "Hi"
+            /*
+            if(document.getElementById('passwordValidityOutput').value == "&#10004 Passwords match"){
+                document.getElementById('willItSend').innerHTML = "&#10004 Will send"
+            }else{
+                document.getElementById('willItSend').innerHTML = "&#10005; Will not send"
+            }*/
+        }
+    </script>
