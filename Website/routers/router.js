@@ -28,6 +28,18 @@ router.use(session({
     saveUninitialized: false
 }))
 
+//testing
+router.get('/email', function EmailGetHandler(req, res) {
+    model.getUserEmail('bettagj@spu.edu', function DoneGettingEmail(err, result, fields) {
+        if(err) {
+            console.log('Error getting email')
+            console.log(err)
+        } else {
+            res.json(result)
+        }
+    })
+})
+
 router.get('/', checkAuthenticated, (req, res) => {
     res.render('../views/dashboard.ejs', {name: req.user.name})
 })
@@ -67,14 +79,18 @@ router.post('/register', checkNotAuthenticated, async (req,res) => {
     } catch (e){
         res.redirect('/register')
     }
-    model.insertNewUser(req.body.name, req.body.name, req.body.email, hashedPassword, function DoneInsertingUser(err, result) {
-        if(err) {
-            console.log('Error Inserting')
-            console.log(err)
-        } else {
-            console.log('Successful Insertion')
-        }
-    })
+    try {
+        model.insertNewUser(req.body.name, req.body.name, req.body.email, hashedPassword, function DoneInsertingUser(err, result) {
+            if(err) {
+                console.log('Error Inserting')
+                console.log(err)
+            } else {
+                console.log('Successful Insertion')
+            }
+        })
+    } catch (err) {
+        console.log('Error from InsertNewUser')
+    }    
 
     console.log(users)
 })

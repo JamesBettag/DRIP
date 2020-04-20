@@ -33,6 +33,7 @@ db.connect(function ConnectionHandler(err) {
   console.log('Connection to MySQL Successful')
 })
 
+
 var router = require('./routers/router')
 //app.use(express.static('public'))
 

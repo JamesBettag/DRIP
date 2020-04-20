@@ -1,13 +1,3 @@
-/*
-const mysqlx = require('@mysql/xdevapi')
-
-mysqlx
-    .getSession('mysqlx://bettagj:Password0*@leia.cs.spu.edu:33060/gms')
-    .then(session=> {
-        console.log(session.inspect())
-    })
-*/
-
 var mysql = require('mysql')
 var pool
 
@@ -17,11 +7,10 @@ exports.connect = function ConnectionHandler(done){
         connectTimeout  : 60 * 60 * 1000,
         acquireTimeout  : 60 * 60 * 1000,
         timeout         : 60 * 60 * 1000,
-        host: "leia.cs.spu.edu",
+        host: "localhost",
         user: "bettagj",
         password: "Password0*",
-        database: "gms",
-        insecureAuth: true
+        database: "gms"
     });
     done();
 }
