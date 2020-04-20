@@ -16,6 +16,8 @@ const port = 3000
 
 
 app.set('view-engine', 'ejs')
+app.use(require('express-session')({ secret: 'keyboard cat', resave: true, saveUninitialized: true })) //This solved an error for me "Error: secret option required for sessions"
+app.use(express.static(__dirname + '/public'));
 app.use(express.urlencoded({ extended: false }))
 app.use(flash())
 app.use(session({
