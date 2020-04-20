@@ -1,17 +1,34 @@
-<h1>Login</h1>
+<head>
+    <title>DRIP</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+    <link href="assets/css/main.css" rel="stylesheet" type="text/css">
+    <noscript><link rel="stylesheet" href="assets/css/noscript.css"/></noscript>
+</head>
+
 <% if (messages.error){ %>
     <%= messages.error %>
 <% } %>
-<form action="/login" method="POST">
-    <div>
-        <label for="email">Email</label>
-        <input type="text" name="email" id="email" required>
-    </div>
 
-    <div>
-        <label for="password">Password</label>
-        <input type="text" name="password" id="password" required>
+<article class="container box style3">
+    <header>
+        <h2>Login</h2>
+    </header>
+    <form method="input" action="/login" method="POST">
+    <div class="row">
+        <label for="email"><b></b></label>
+        <input type="text" placeholder="Enter Email" name="email" id="email" required>
+
+        <label for="password"><b></b></label>
+        <input type="text" placeholder="Enter Password" name="password" id="password" required>
+        
+        <div class="col-12">
+            <ul class="actions">
+                <li><input type="submit" value="Sign In" /></li>
+            </ul>
+        </div>
     </div>
-    <button type="submit">Login</button>
-</form>
-<a href="/register">Register</a>
+        <a href="index.html" class="button style3">Cancel</a>
+        <a href="#" style="float: right;" class="button style3">Forgot Password?</a>
+    </form>
+</article>
