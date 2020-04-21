@@ -35,13 +35,16 @@
         <header>
             <h2>Register</h2>
         </header>
-        <form>
+        <form action="/register" method="POST">
         <div class="row">
-            <label for="uname"><b></b></label>
-            <input type="text" placeholder="Enter Email" name="email" required>
+            <label for="name"><b></b></label>
+            <input type="text" placeholder="Enter Name" name="name" id="name" required>
+
+            <label for="email"><b></b></label>
+            <input type="text" placeholder="Enter Email" name="email" id="email" required>
 
             <label for="psw"><b></b></label>
-            <input type="password" placeholder="Enter Password" name="psw1" id="psw1" required>
+            <input type="password" placeholder="Enter Password" name="password" id="password" required>
 
             <label for="psw"><b></b></label>
             <input type="password" placeholder="Reenter Password" name="psw2" id="psw2" oninput="passwordChecker(this)" required>
@@ -51,18 +54,19 @@
 
             <div class="col-12">
                 <ul class="actions">
-                    <li><input type="button" value="Create Account" onclick="accountCreation()"></li>
+                    <li><button type="submit">Create Account</button></li>
                 </ul>
             </div>
         </div>
             <a href="index.html" class="button style3">Cancel</a>
         </form>
+        <a href="/login">Login</a>
     </article>
 
     
     <script language='javascript' type='text/javascript'>
         function passwordChecker(password){
-            if(password.value == document.getElementById('psw1').value){
+            if(password.value == document.getElementById('password').value){
                 document.getElementById('passwordVailidityOutput').innerHTML = "&#10004 Passwords match"
             }else{
                 document.getElementById('passwordVailidityOutput').innerHTML = "&#10005 Passwords do not match"

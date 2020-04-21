@@ -50,7 +50,7 @@ router.get('/login', checkNotAuthenticated, (req, res) => {
 })
 
 router.post('/login', checkNotAuthenticated, passport.authenticate('local', {
-    successRedirect: '/',
+    successRedirect: '/dashboard',
     failureRedirect: '/login',
     failureFlash: true
 }))
@@ -72,8 +72,6 @@ router.post('/register', checkNotAuthenticated, async (req,res) => {
             email: req.body.email,
             password: hashedPassword
         })
-        console.log(users)
-
         
 
         res.redirect('/login')
