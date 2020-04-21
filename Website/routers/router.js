@@ -41,7 +41,7 @@ router.get('/email', function EmailGetHandler(req, res) {
     })
 })
 
-router.get('/', checkAuthenticated, (req, res) => {
+router.get('/dashboard', checkAuthenticated, (req, res) => {
     res.render('../views/dashboard.ejs', {name: req.user.name})
 })
 
