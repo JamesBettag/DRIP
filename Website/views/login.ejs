@@ -14,7 +14,7 @@
     <header>
         <h2>Login</h2>
     </header>
-    <form method="input" action="/login" method="POST">
+    <form action="/login" method="POST">
     <div class="row">
         <label for="email"><b></b></label>
         <input type="text" placeholder="Enter Email" name="email" id="email" required>
@@ -24,11 +24,13 @@
         
         <div class="col-12">
             <ul class="actions">
-                <li><input type="submit" value="Sign In" /></li>
+                <li><a href="index.html" class="button style3">Cancel</a></li>
+                <li><input type="submit" value="Sign In"/></li>
+                <li><a href="/register"  class="button style3">New User?</a></li>
+                <li><a href="#" class="button style3">Forgot Password?</a></li>
             </ul>
+      
         </div>
     </div>
-        <a href="index.html" class="button style3">Cancel</a>
-        <a href="#" style="float: right;" class="button style3">Forgot Password?</a>
     </form>
 </article>
