@@ -1,6 +1,7 @@
 var express = require('express')
 var router = express.Router()
 var model = require('../models/model')
+var emailVerification = require('../verification-email')
 const bcrypt = require('bcryptjs')
 const passport = require('passport')
 const flash = require('express-flash')
@@ -60,18 +61,24 @@ router.get('/register', checkNotAuthenticated, (req, res) => {
     res.render('register.ejs')
 })
 
+
 router.post('/register', checkNotAuthenticated, async (req,res) => {
     var hashedPassword
+    var hashedAccount
     try {
         hashedPassword = await bcrypt.hash(req.body.password, 10)
+        hashedAccount = await bcrypt.hash(req.body.email, 10)
         
+        /*
         //IF USING DB DONT NEED THIS
         users.push({
             id: Date.now().toString(),
             name: req.body.name,
             email: req.body.email,
             password: hashedPassword
-        })
+            //emailHash: hashedAccount
+            //verify: 1
+        })*/
         
 
         res.redirect('/login')
@@ -79,20 +86,32 @@ router.post('/register', checkNotAuthenticated, async (req,res) => {
         res.redirect('/register')
     }
     try {
-        model.insertNewUser(req.body.name, req.body.name, req.body.email, hashedPassword, function DoneInsertingUser(err, result) {
+        model.insertNewUser(req.body.name, req.body.name, req.body.email, hashedPassword, hashedAccount, function DoneInsertingUser(err, result) {
             if(err) {
                 console.log('Error Inserting')
                 console.log(err)
             } else {
                 console.log('Successful Insertion')
+                //Send the email
+                emailVerification.sendVerificationEmail(req.body.email, hashedAccount);
+
             }
         })
     } catch (err) {
         console.log('Error from InsertNewUser')
     }    
 
-    console.log(users)
+    //console.log(users)
 })
+
+
+//Verify the user's account
+router.get('/verification?:hash', function verifyUser(req, res){
+    //Fix this later
+    console.log(req.params.hash)
+})
+
+
 
 //Logout
 router.delete('/logout', (req, res) => {
