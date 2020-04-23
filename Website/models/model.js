@@ -26,3 +26,14 @@ exports.getUserEmail = function GetUserEmailHandler(email, done) {
         }
     )
 }
+
+exports.updateUserVerification = function UpdateUserVerificationHandler(hash, done) {
+    db.get().query(
+        'UPDATE account SET verify = 1 WHERE account_hash = ?', hash, function UpdateUserVerificationQueryHandler(err, result) {
+            if (err) {
+                return done(err)
+            }
+            done(null, result.affectedRows)
+        }
+    )
+}
