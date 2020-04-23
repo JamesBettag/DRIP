@@ -8,11 +8,14 @@ const app = express()
 const flash = require('express-flash')
 const session = require('express-session')
 var db = require('./db')
-var bodyParser = require('body-parser');  //James
+var router = require('./routers/router')
+const bodyParser = require('body-parser');  //James
+const url = require('url')
+const queryString = require('querystring')
 const key = process.env.SENDGRID_API_KEY
 const port = 3000
 
-app.use(bodyParser.urlencoded({ extended: true })); //James
+//app.use(bodyParser.urlencoded({ extended: true })); //James
 app.use(bodyParser.json()); //James
 
 app.set('view-engine', 'ejs')
@@ -36,7 +39,7 @@ db.connect(function ConnectionHandler(err) {
 })
 
 
-var router = require('./routers/router')
+
 //app.use(express.static('public'))
 
 app.use('/', router)

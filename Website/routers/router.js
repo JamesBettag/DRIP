@@ -108,7 +108,8 @@ router.post('/register', checkNotAuthenticated, async (req,res) => {
 //Verify the user's account
 router.get('/verification?:hash', function verifyUser(req, res){
     //Fix this later
-    console.log(req.params.hash)
+    let myhash = req.query.hash
+    console.log(myhash)
 })
 
 
