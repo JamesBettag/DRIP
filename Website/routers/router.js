@@ -115,7 +115,7 @@ router.get('/verification?:hash', function verifyUser(req, res){
             console.log(err)
         } else {
             console.log('Verification Successful')
-            res.send(result)
+            res.redirect('/login')
         }
     })    
 })
