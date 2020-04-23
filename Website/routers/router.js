@@ -109,13 +109,15 @@ router.post('/register', checkNotAuthenticated, async (req,res) => {
 router.get('/verification?:hash', function verifyUser(req, res){
     //Fix this later
     let myhash = req.query.hash
-    model.updateUserVerification(myhash)
-    if(err) {
-        console.log('Error updating verification')
-        console.log(err)
-    } else {
-        console.log('Verification Successful')
-    }
+    model.updateUserVerification(myhash, function DoneUpdatingUserVerification(err, result) {
+        if(err) {
+            console.log('Error updating verification')
+            console.log(err)
+        } else {
+            console.log('Verification Successful')
+            res.send(result)
+        }
+    })    
 })
 
 
