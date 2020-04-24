@@ -14,7 +14,7 @@ exports.sendVerificationEmail = function sendVerificationEmailFunction(email, ac
     from: 'notifications.drip@gmail.com',
     subject: 'DRIP Account Verification',
     text: '?',    //This field does not seem to appear on emails
-    html: "<strong>Account has been created!</strong><br><p>Validate your email here:<br>http://localhost:3000/verification?hash=</p>"
+    html: "<strong>Account has been created!</strong><br><p>Validate your email here:<br>  <a href=\"http://leia.cs.spu.edu:3000/verification?hash=" + accHash + "\"</p>"
     //html: "<strong>Account has been created!</strong><br><p>Validate your email here:<br><a href='http://localhost:3000/verification?hash=" + accHash +"'>Validate</a></p>"
                                                             // "<a " + target + "href='YourURLHere?dbid=db&id=" + openLink +"'>HyperLinkText</a>";
 

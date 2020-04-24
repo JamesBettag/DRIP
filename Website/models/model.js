@@ -7,7 +7,7 @@ exports.insertNewUser = function InserNewUserHandler(fname, lname, email, pass, 
                 if(err) {
                     return done(err)
                 }
-                done(null, result.insertId)
+                done(null, true)
             }
         )
     }
