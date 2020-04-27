@@ -69,18 +69,7 @@ router.post('/register', checkNotAuthenticated, async (req,res) => {
     try {
         hashedPassword = await bcrypt.hash(req.body.password, 10)
         hashedAccount = await bcrypt.hash(req.body.email, 10)
-        
-        /*
-        //IF USING DB DONT NEED THIS
-        users.push({
-            id: Date.now().toString(),
-            name: req.body.name,
-            email: req.body.email,
-            password: hashedPassword
-            //emailHash: hashedAccount
-            //verify: 1
-        })*/
-        
+        //hashedPasswordChange = await bcrypt.hash((Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15)), 10)
 
         res.redirect('/login')
     } catch (e){
@@ -97,6 +86,8 @@ router.post('/register', checkNotAuthenticated, async (req,res) => {
                 emailVerification.sendVerificationEmail(req.body.email, hashedAccount);
             }
         })
+
+
     } catch (err) {
         console.log('Error from InsertNewUser')
     }    
