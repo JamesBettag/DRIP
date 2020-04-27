@@ -1,13 +1,13 @@
 var db = require('../db')
 
-exports.insertNewUser = function InserNewUserHandler(fname, lname, email, pass, done) {
+exports.insertNewUser = function InserNewUserHandler(fname, lname, email, pass, acchash, done) {
     try{
         db.get().query(
-            'INSERT INTO account (first_name, last_name, email, password) VALUES (?, ?, ?, ?)', [fname, lname, email, pass], function InserNewUserQueryHandler(err, result) {
+            'INSERT INTO account (first_name, last_name, email, password, account_hash) VALUES (?, ?, ?, ?, ?)', [fname, lname, email, pass, acchash], function InserNewUserQueryHandler(err, result) {
                 if(err) {
                     return done(err)
                 }
-                done(null, result.insertId)
+                done(null, true)
             }
         )
     }
@@ -23,6 +23,17 @@ exports.getUserEmail = function GetUserEmailHandler(email, done) {
                 return done(err)
             }
             done(null, result, fields)
+        }
+    )
+}
+
+exports.updateUserVerification = function UpdateUserVerificationHandler(hash, done) {
+    db.get().query(
+        "UPDATE account SET verify = '1' WHERE account_hash = ?", hash, function UpdateUserVerificationQueryHandler(err, result) {
+            if (err) {
+                return done(err)
+            }
+            done(null, result.affectedRows)
         }
     )
 }
