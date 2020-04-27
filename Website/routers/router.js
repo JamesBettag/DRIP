@@ -2,6 +2,7 @@ var express = require('express')
 var router = express.Router()
 var model = require('../models/model')
 var emailVerification = require('../verification-email')
+var passwordChange = require('../password-change.js')   //Tad's
 const bcrypt = require('bcryptjs')
 const passport = require('passport')
 const flash = require('express-flash')
@@ -94,7 +95,6 @@ router.post('/register', checkNotAuthenticated, async (req,res) => {
                 console.log('Successful Insertion')
                 //Send the email
                 emailVerification.sendVerificationEmail(req.body.email, hashedAccount);
-
             }
         })
     } catch (err) {
@@ -119,6 +119,72 @@ router.get('/verification?:hash', function verifyUser(req, res){
         }
     })    
 })
+
+
+//Tad's. #1. Display the form for user to enter email
+router.get('/password-change', checkNotAuthenticated, (req, res) => {
+    res.render('../views/forgotpassword.ejs')
+})
+
+//Tad's
+//Change the password, this is the link coming from the email
+router.get('/passwordchange?:hash', function verifyUser(req, res){
+    //Fix this later
+    let myhash = req.query.hash
+    model.updateUserVerification(myhash, function DoneUpdatingUserVerification(err, result) {
+        if(err) {
+            console.log('Error updating password')
+            console.log(err)
+        } else {
+            console.log('Moving on to password change page')
+            res.redirect('/passwordchangeform')
+        }
+    })    
+})
+
+//Tad's. #2. Send that email to the user
+//Send the password change request email
+router.post('/passwordchangerequest', checkNotAuthenticated, async (req,res) => {
+    try {
+        passwordChange.sendPasswordChangeEmail(req.body.email, hashedAccount);
+        res.redirect('/login')
+    } catch (e){
+        res.redirect('/register')
+        console.log('account does not exist')
+    }
+})
+
+
+//Tad's. #
+//Insert the newly changed password into the database, this is broken
+router.post('/passwordchange', checkNotAuthenticated, async (req,res) => {
+    var hashedPassword
+    try {
+        hashedPassword = await bcrypt.hash(req.body.password, 10)
+        res.redirect('/login')
+    } catch (e){
+        res.redirect('/register')
+    }
+    try {
+        model.insertNewUser(req.body.name, req.body.name, req.body.email, hashedPassword, hashedAccount, function DoneInsertingUser(err, result) {
+            if(err) {
+                console.log('Error changing password')
+                console.log(err)
+            } else {
+                console.log('Successfully changed password')
+                //Send the email
+                //passwordChange.sendPasswordChangeEmail(req.body.email, hashedAccount);
+
+            }
+        })
+    } catch (err) {
+        console.log('Error from InsertNewUser')
+    }    
+
+    //console.log(users)
+})
+
+
 
 
 
