@@ -2,18 +2,17 @@ var express = require('express')
 var router = express.Router()
 var model = require('../models/model')
 const bcrypt = require('bcryptjs')
-const passport = require('passport')
-const flash = require('express-flash')
-const session = require('express-session')
+const passport = require('passport') //Compares passwords
+const flash = require('express-flash') //Displays messages if failed login used inside of passport
+const session = require('express-session') //So we can store and access users over multiple sessions
 const methodOverride = require('method-override')
 
 
-const users = [] //PLACE HOLDER FOR DB
-
+//I think this is for signing in?
 const initializePassport = require('../passport-config')
 initializePassport(
     passport, 
-    email => users.find(user => user.email === email),
+    email => users.find(user => user.email === email), //Need to Get email from DB
     id => users.find(user => user.id === id)
 )
 
@@ -41,43 +40,34 @@ router.get('/email', function EmailGetHandler(req, res) {
     })
 })
 
+//Open dashboard if you are currently logged in 
 router.get('/dashboard', checkAuthenticated, (req, res) => {
     res.render('../views/dashboard.ejs', {name: req.user.name})
 })
 
+//Open login page if you are not alredy logged in 
 router.get('/login', checkNotAuthenticated, (req, res) => {
     res.render('../views/login.ejs')
 })
 
+//What happens when you click login button on login screen
 router.post('/login', checkNotAuthenticated, passport.authenticate('local', {
-    successRedirect: '/dashboard',
-    failureRedirect: '/login',
-    failureFlash: true
+    successRedirect: '/dashboard', //Where do we go if success
+    failureRedirect: '/login', //Where do we go if failure 
+    failureFlash: true //Display messages 
+    //Using passport middleware to authenticate the user
+    //Using passports local strategy 
 }))
 
-
+//Open register page if you are not already logged in 
 router.get('/register', checkNotAuthenticated, (req, res) => {
     res.render('register.ejs')
 })
 
+//Hashes password and pushes regestration info to DB
 router.post('/register', checkNotAuthenticated, async (req,res) => {
     var hashedPassword
-    try {
-        hashedPassword = await bcrypt.hash(req.body.password, 10)
-        
-        //IF USING DB DONT NEED THIS
-        users.push({
-            id: Date.now().toString(),
-            name: req.body.name,
-            email: req.body.email,
-            password: hashedPassword
-        })
-        
-
-        res.redirect('/login')
-    } catch (e){
-        res.redirect('/register')
-    }
+    hashedPassword = await bcrypt.hash(req.body.password, 10)
     try {
         model.insertNewUser(req.body.name, req.body.name, req.body.email, hashedPassword, function DoneInsertingUser(err, result) {
             if(err) {
@@ -90,31 +80,30 @@ router.post('/register', checkNotAuthenticated, async (req,res) => {
     } catch (err) {
         console.log('Error from InsertNewUser')
     }    
-
     console.log(users)
 })
 
 //Logout
 router.delete('/logout', (req, res) => {
-    req.logOut()
-    res.redirect('/login')
+    req.logOut() //Passport fuction to terminate session
+    res.redirect('/login') //Sends back to login screen
 })
 
 //This will stop you from entering our dashbaord if you are not registered/signed in
 function checkAuthenticated(req, res, next){
     if(req.isAuthenticated()){
-        return next()
+        return next() //Sends to dashboard
     }
 
-    res.redirect('/login')
+    res.redirect('/login') //Sends back to login
 }
 
 //Wont send you back to login page if your already logedin
 function checkNotAuthenticated(req, res, next){
     if(req.isAuthenticated()){
-        return res.redirect('/')
+        return res.redirect('/') //Sends you to dashboard
     }
-    next()
+    next() //Sends to login
 }
 
 module.exports = router

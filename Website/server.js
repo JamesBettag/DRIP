@@ -1,5 +1,5 @@
 if(process.env.NODE_ENV !== 'production'){
-    require('dotenv').config()
+    require('dotenv').config() //Loads in process variables from .env
 }
 
 //require('dotenv').config()
@@ -13,13 +13,13 @@ const port = 3000
 
 app.set('view-engine', 'ejs')
 app.use(require('express-session')({ secret: 'keyboard cat', resave: true, saveUninitialized: true })) //This solved an error for me "Error: secret option required for sessions"
-app.use(express.static(__dirname + '/public')) //global variable so we can access stuff in /public 
-app.use(express.urlencoded({ extended: false }))
+app.use(express.static(__dirname + '/public')) //Global variable so we can access stuff in /public 
+app.use(express.urlencoded({ extended: false })) //Allows us to take input from .ejs fourms and use as req inside of post methods 
 app.use(flash())
 app.use(session({
-    secret: process.env.SESSION_SECRET,
-    resave: false,
-    saveUninitialized: false
+    secret: process.env.SESSION_SECRET, //Keye the encrypts information for the current session
+    resave: false, //Dont resave if nothing has changed
+    saveUninitialized: false //Dont save empty values in the session
 }))
 
 
