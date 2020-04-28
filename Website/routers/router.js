@@ -136,8 +136,39 @@ router.get('/passwordchange?:hash', function verifyUser(req, res){
 //Tad's. #2. Send that email to the user
 //Send the password change request email
 router.post('/passwordchangerequest', checkNotAuthenticated, async (req,res) => {
+
+    var accountId = -1  //Holds Id for use when inserting into reset_password table
+    var passHash = await bcrypt.hash(req.body.email, 10)
+
     try {
-        passwordChange.sendPasswordChangeEmail(req.body.email, hashedAccount);
+        model.getAccountId(req.body.email, function DoneGettingAccountId(err, result, fields) {
+            if(err) {
+                console.log('Unable to retrieve account id')
+                console.log(err)
+            } else {
+                console.log('Retrieved account id')
+                if(!result.length) {
+                    //Comes here if account_id is empty
+                    console.log('This is empty')
+                } else {
+                    //
+                    console.log('This is not empty')
+                    accountId = result[0].account_id
+                    console.log(result[0].account_id)   //result[0].account_id outputs id of first instance
+                }
+            }
+
+        })
+
+        if(accountId != -1) {
+            model.insertResetPasswordRequest(accountId, passHash, function DoneInsertingResetPassword(err, result, fields){
+                
+            }) //Needs id, then passhash, then done function thing
+        }
+
+
+
+        //passwordChange.sendPasswordChangeEmail(req.body.email, hashedAccount);  //Send the password change email
         res.redirect('/login')
     } catch (e){
         res.redirect('/register')
