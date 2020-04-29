@@ -1,4 +1,4 @@
-exports.sendPasswordChangeEmail = function sendpasswordChangeFunction(email, accHash) {
+exports.sendPasswordChangeEmail = function sendpasswordChangeFunction(email, passHash) {
 
     require('dotenv').config()
     const key = process.env.SENDGRID_API_KEY
@@ -10,10 +10,7 @@ exports.sendPasswordChangeEmail = function sendpasswordChangeFunction(email, acc
       from: 'notifications.drip@gmail.com',
       subject: 'DRIP Password Change',
       text: '?',    //This field does not seem to appear on emails
-      html: "<strong>You have requested a password change</strong><br><p>Copy and paste this link:<br><p>http://localhost:3000/passwordchange?hash=' + accHash + '</p>"
-      //html: "<strong>Account has been created!</strong><br><p>Validate your email here:<br><a href='http://localhost:3000/verification?hash=" + accHash +"'>Validate</a></p>"
-                                                              // "<a " + target + "href='YourURLHere?dbid=db&id=" + openLink +"'>HyperLinkText</a>";
-  
+      html: "<strong>You have requested a password change</strong><br><p>Click this link:<br>  <a href=\"http://localhost:3000/passwordchange?hash=" + passHash + "\">Change</a></p>"
       ,     //End html words in text box
     };
     //ES6
