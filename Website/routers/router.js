@@ -122,17 +122,23 @@ router.get('/password-change', checkNotAuthenticated, (req, res) => {
 router.get('/passwordchange?:hash', function verifyUser(req, res){
     //Fix this later
     let myhash = req.query.hash
-    model.updateUserVerification(myhash, function DoneUpdatingUserVerification(err, result) {
-        if(err) {
-            console.log('Error updating password')
+    model.checkUserPasswordHash(myhash, function DoneCheckingUserPasswordHash(err, result, fields) {
+        if(err) { // check for mysql errors
+            console.log('Error Checking User Pass Hash')
             console.log(err)
         } else {
-            console.log('Moving on to password change page')
-            res.redirect('/passwordchangeform')
+            if(!result.length) { // empty if no valid hashes were found
+                console.log('Invalid Password Change Hash')
+                res.redirect('/login')
+            } else { // found a valid password hash, redirect to change password form
+
+                // NEED TO LOGIN USER FIRST BEFORE REDIRECTING TO CHANGE PASSWORD
+                
+                res.redirect('/passwordchangeform')
+            }            
         }
     })    
 })
-
 
 //Tad's. #2. Send that email to the user
 //Send the password change request email
@@ -159,6 +165,13 @@ router.post('/passwordchangerequest', checkNotAuthenticated, async (req,res) => 
                     if(accountId >= '0') {
                         console.log('Hi james')
                         try {
+                            // invalidate previous requested hashes
+                            model.invalidatePreviousChangePasswordHashes(accountId, function DoneInvalidatingPreviousChangePasswordHashes(err, result) {
+                                if(err) {
+                                    console.log('Could Not Invalidate Previous Change Password Hashes: MYSQL Error')
+                                    console.log(err)
+                                }
+                            })
                             model.insertResetPasswordRequest(accountId, passHash, function DoneInsertingResetPassword(err, result){
                                 if(err) {
                                     console.log(err)

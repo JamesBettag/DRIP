@@ -66,3 +66,25 @@ exports.getAccountId = function GetAccountIdHandler(email, done) {
         }
     )
 }
+
+exports.invalidatePreviousChangePasswordHashes = function invalidatePreviousChangePasswordHashesHandler(accId, done) {
+    db.get().query(
+        "UPDATE reset_password SET valid = '0' WHERE account_id = ?", accId, function InvalidatePreviousChangePasswordHashesQueryHandler(err, result) {
+            if(err) {
+                return done(err)
+            }
+            done(null, result.affectedRows)
+        }
+    )
+}
+
+exports.checkUserPasswordHash = function checkUserPasswordHashHandler(hash, done) {
+    db.get().query(
+        "SELECT account_id FROM reset_password WHERE valid = '1' AND reset_password_hash = ?", hash, function CheckUserPasswordHashQueryHandler(err, result, fields) {
+            if(err) {
+                return done(err)
+            }
+            done(null, result, fields)
+        }
+    )
+}
