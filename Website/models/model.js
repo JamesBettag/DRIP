@@ -16,9 +16,26 @@ exports.insertNewUser = function InserNewUserHandler(fname, lname, email, pass, 
     }    
 }
 
+
 exports.getUserEmail = function GetUserEmailHandler(email, done) {
     db.get().query(
-        'SELECT first_name FROM account WHERE email = ?', email, function GetUserEmailQueryHandler(err, result, fields) {
+        'SELECT email FROM account WHERE email = ?', email, function GetUserEmailQueryHandler(err, result, fields) {
+            if(err) {
+                return done(err)
+            }
+            
+            if(!result.length) {
+                done(null, null, fields)
+            } else {
+                done(null, result, fields)
+            }
+        }
+    )
+}
+
+exports.getUserPasswordHash = function GetUserPasswordHashHandler(email, done) {
+    db.get().query(
+        'SELECT password FROM account WHERE email = ?', email, function GetUserPasswordHashQueryHandler(err, result, fields) {
             if(err) {
                 return done(err)
             }

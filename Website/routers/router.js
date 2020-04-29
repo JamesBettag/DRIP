@@ -11,9 +11,20 @@ const methodOverride = require('method-override')
 //I think this is for signing in?
 const initializePassport = require('../passport-config')
 initializePassport(
-    passport, 
-    email => users.find(user => user.email === email), //Need to Get email from DB
-    id => users.find(user => user.id === id)
+    passport,
+    email => model.getUserEmail(email, function DoneGettingUserEmail(err, result, fields) {
+        if(err) {
+            console.log('Error getting email')
+            console.log(err)
+        } else {
+            if(result == null) {
+                console.log('There is no email')
+            } else {
+                console.log('Found an email')
+                return email
+            }
+        }
+    })
 )
 
 router.use(flash())
