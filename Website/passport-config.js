@@ -1,15 +1,16 @@
 const localStrategy = require('passport-local').Strategy
 const bcrypt = require('bcryptjs')
 
-function initialize(passport, getUserByEmail, getUserById){
+//Initialize passport configuration
+function initialize(passport, getUserByEmail){
     const authenticateUser = async (email, password, done) => {
-        const user = getUserByEmail(email)
+        const user = getUserByEmail(email) //Need to query for user by email
         if (user == null){
             return done(null, false, {message: 'No user with that email'})
         }
-
         try {
-            if(await bcrypt.compare(password, user.password)){
+            //Need to query for password associated with email 
+            if(await bcrypt.compare(password, user.password)){ //Password being entered from fourm compared to stored password associated to the email entered
                 return done(null, user)
             }
             else{
@@ -21,10 +22,10 @@ function initialize(passport, getUserByEmail, getUserById){
     }
 
     passport.use(new localStrategy({usernameField: 'email' }, 
-    authenticateUser))
-    passport.serializeUser((user, done) => done(null, user.id))
-    passport.deserializeUser((id, done) => {
-        return done(null, getUserById(id))
+    authenticateUser)) //Tells passport to authenticate on email and password
+    passport.serializeUser((user, done) => done(null, user.id)) //Stores the user inside of current session
+    passport.deserializeUser((id, done) => { //Opposite of serializing the user for current session
+        return done(null)
     })
 }
 

@@ -6,9 +6,10 @@
     <noscript><link rel="stylesheet" href="assets/css/noscript.css"/></noscript>
 </head>
 
+<!--Allows us to display error messages-->
 <% if (messages.error){ %>
     <%= messages.error %>
-<% } %>
+<% } %> 
 
 <article class="container box style3">
     <header>
@@ -28,10 +29,18 @@
                 <li><a href="index.html" class="button style3">Cancel</a></li>
                 <li><input type="submit" value="Sign In"/></li>
                 <li><a href="/register"  class="button style3">New User?</a></li>
+<<<<<<< HEAD
             </ul>      
         </div>
         <div style="display: block; margin: 0 auto; padding: 20px;">
             <a href="/password-change"  class="button style3">Forgot Password?</a>
+=======
+                
+            </ul>
+        </div>
+        <div style="display: block; margin: 0 auto;">
+            <a href="#"  class="button style3">Forgot Password?</a>
+>>>>>>> MathewLoginPullFromDB
         </div>
     </div>
     </form>
