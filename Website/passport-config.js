@@ -4,12 +4,13 @@ const bcrypt = require('bcryptjs')
 //Initialize passport configuration
 function initialize(passport, getUserByEmail, getUserPass){
     const authenticateUser = async (email, password, done) => {
-        const user = getUserByEmail(email)//Need to query for user by email
+        const user = await getUserByEmail(email)//Need to query for user by email
         const userPass = await getUserPass(email)
         console.log("PASSPORT-CONFIG: ")
         console.log(userPass)
         console.log(user)
         if (user == null){
+            console.log("Could not find user")
             return done(null, false, {message: 'No user with that email'})
         }
         try {
