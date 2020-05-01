@@ -17,7 +17,7 @@ exports.insertNewUser = function InserNewUserHandler(fname, lname, email, pass, 
 }
 
 
-exports.getUserEmail = function GetUserEmailHandler(email, done) {
+exports.getUserEmail = async function GetUserEmailHandler(email, done) {
     db.get().query(
         'SELECT email FROM account WHERE email = ?', email, function GetUserEmailQueryHandler(err, result, fields) {
             if(err) {
@@ -33,7 +33,7 @@ exports.getUserEmail = function GetUserEmailHandler(email, done) {
     )
 }
 
-exports.getUserPasswordHash = function GetUserPasswordHashHandler(email, done) {
+exports.getUserPasswordHash = async function GetUserPasswordHashHandler(email, done) {
     db.get().query(
         'SELECT password FROM account WHERE email = ?', email, function GetUserPasswordHashQueryHandler(err, result, fields) {
             if(err) {
@@ -45,7 +45,6 @@ exports.getUserPasswordHash = function GetUserPasswordHashHandler(email, done) {
         }
     )
 }
-<<<<<<< HEAD
 
 exports.updateUserVerification = function UpdateUserVerificationHandler(hash, done) {
     db.get().query(
@@ -108,5 +107,3 @@ exports.checkUserPasswordHash = function checkUserPasswordHashHandler(hash, done
         }
     )
 }
-=======
->>>>>>> MathewLoginPullFromDB

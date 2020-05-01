@@ -23,23 +23,25 @@ initializePassport(
                 console.log('There is no email')
             } else {
                 console.log('Found an email')
-                console.log(email)
-                return email
+                console.log(result[0].email)
+                return result[0].email
             }
         }
     }),
     
     userPass => model.getUserPasswordHash(userPass, function DoneGettingUserPassword(err, result, fields) {
-        if(err) {
+        if (err) {
             console.log('Error getting password')
             console.log(err)
-        } else {
-            if(!result.length) {
+        }
+        else {
+            if (!result.length) {
                 console.log('There is no password')
-            } else {
+            }
+            else {
                 console.log('Found a hashed password')
-                console.log(result)
-                return result
+                console.log(result[0].password)
+                return result[0].password
             }
         }
     })
@@ -122,8 +124,6 @@ router.post('/register', checkNotAuthenticated, async (req,res) => {
     } catch (err) {
         console.log('Error from InsertNewUser')
     }    
-
-    //console.log(users)
 })
 
 
