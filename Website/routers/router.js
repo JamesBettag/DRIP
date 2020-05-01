@@ -23,7 +23,23 @@ initializePassport(
                 console.log('There is no email')
             } else {
                 console.log('Found an email')
+                console.log(email)
                 return email
+            }
+        }
+    }),
+    
+    userPass => model.getUserPasswordHash(userPass, function DoneGettingUserPassword(err, result, fields) {
+        if(err) {
+            console.log('Error getting password')
+            console.log(err)
+        } else {
+            if(!result.length) {
+                console.log('There is no password')
+            } else {
+                console.log('Found a hashed password')
+                console.log(result)
+                return result
             }
         }
     })

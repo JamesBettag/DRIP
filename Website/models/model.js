@@ -39,6 +39,8 @@ exports.getUserPasswordHash = function GetUserPasswordHashHandler(email, done) {
             if(err) {
                 return done(err)
             }
+            //console.log("SQL: ")
+            //console.log(result)
             done(null, result, fields)
         }
     )
