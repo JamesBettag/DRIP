@@ -14,37 +14,21 @@ const methodOverride = require('method-override')
 const initializePassport = require('../passport-config')
 initializePassport(
     passport,
-    email => model.getUserEmail(email, function DoneGettingUserEmail(err, result, fields) {
-        if(err) {
-            console.log('Error getting email')
-            console.log(err)
-        } else {
-            if(result == null) {
-                console.log('There is no email')
-            } else {
-                console.log('Found an email')
-                console.log(result[0].email)
-                return result[0].email
-            }
-        }
-    }),
+    email => async function() {
+        let x = await model.getUserEmail(email).then(function(result) {
+            console.log(result)
+            return result
+        }).catch((err) => setImmediate(() => { console.log(err) }))
+        return x
+    },
     
-    userPass => model.getUserPasswordHash(userPass, function DoneGettingUserPassword(err, result, fields) {
-        if (err) {
-            console.log('Error getting password')
-            console.log(err)
-        }
-        else {
-            if (!result.length) {
-                console.log('There is no password')
-            }
-            else {
-                console.log('Found a hashed password')
-                console.log(result[0].password)
-                return result[0].password
-            }
-        }
-    })
+    userPass => async function() {
+        let x = await model.getUserPasswordHash(userPass).then(function(result) {
+            console.log(result)
+            return result
+        }).catch((err) => setImmediate(() => { console.log(err) }))
+        return x
+    }
 )
 
 router.use(flash())

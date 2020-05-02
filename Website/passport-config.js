@@ -3,9 +3,14 @@ const bcrypt = require('bcryptjs')
 
 //Initialize passport configuration
 function initialize(passport, getUserByEmail, getUserPass){
-    const authenticateUser = async (email, password, done) => {
-        const user = await getUserByEmail(email)//Need to query for user by email
-        const userPass = await getUserPass(email)
+
+    const comparePasswords = async (password, userPass) => {
+        return (await bcrypt.compare(password, userPass))
+    }
+
+    function authenticateUser(email, password, done) {
+        let user = getUserByEmail(email)//Need to query for user by email
+        let userPass = getUserPass(email)
         console.log("PASSPORT-CONFIG: ")
         console.log(userPass)
         console.log(user)
@@ -15,7 +20,7 @@ function initialize(passport, getUserByEmail, getUserPass){
         }
         try {
             //Need to query for password associated with email 
-            if(await bcrypt.compare(password, userPass)){ //Password being entered from fourm compared to stored password associated to the email entered
+            if(comparePasswords(password, userPass)){ //Password being entered from fourm compared to stored password associated to the email entered
                 return done(null, user)
             }
             else{
@@ -28,9 +33,9 @@ function initialize(passport, getUserByEmail, getUserPass){
 
     passport.use(new localStrategy({usernameField: 'email' }, 
     authenticateUser)) //Tells passport to authenticate on email and password
-    passport.serializeUser((user, done) => done(null, user.email)) //Stores the user inside of current session
-    passport.deserializeUser((id, done) => { //Opposite of serializing the user for current session
-        return done(null)
+    passport.serializeUser((user, done) => done(null, user)) //Stores the user inside of current session
+    passport.deserializeUser((email, done) => { //Opposite of serializing the user for current session
+        return done(null, email)
     })
 }
 

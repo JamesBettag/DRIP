@@ -18,32 +18,39 @@ exports.insertNewUser = function InserNewUserHandler(fname, lname, email, pass, 
 
 
 exports.getUserEmail = async function GetUserEmailHandler(email, done) {
-    db.get().query(
-        'SELECT email FROM account WHERE email = ?', email, function GetUserEmailQueryHandler(err, result, fields) {
-            if(err) {
-                return done(err)
+    return new Promise(function(resolve, reject) {
+        db.get().query(
+            'SELECT email FROM account WHERE email = ?', email, function GetUserEmailQueryHandler(err, result, fields) {
+                if(err) {
+                    return reject(err)
+                }                
+                if(!result.length) {
+                    resolve(null)
+                } else {
+                    resolve(result[0].email)
+                }
             }
-            
-            if(!result.length) {
-                done(null, null, fields)
-            } else {
-                done(null, result, fields)
-            }
-        }
-    )
+        )
+    })
+    
 }
 
 exports.getUserPasswordHash = async function GetUserPasswordHashHandler(email, done) {
-    db.get().query(
-        'SELECT password FROM account WHERE email = ?', email, function GetUserPasswordHashQueryHandler(err, result, fields) {
-            if(err) {
-                return done(err)
+    return new Promise(function(resolve, reject) {
+        db.get().query(
+            'SELECT password FROM account WHERE email = ?', email, function GetUserPasswordHashQueryHandler(err, result, fields) {
+                if(err) {
+                    reject(err)
+                }
+                if(!result.length) {
+                    resolve(null)
+                } else {
+                    resolve(result[0].password)
+                }
             }
-            //console.log("SQL: ")
-            //console.log(result)
-            done(null, result, fields)
-        }
-    )
+        )
+    })
+    
 }
 
 exports.updateUserVerification = function UpdateUserVerificationHandler(hash, done) {
