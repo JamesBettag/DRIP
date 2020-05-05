@@ -1,6 +1,6 @@
 var express = require('express')
 var router = express.Router()
-var model = require('../models/model')
+var accountModel = require('../models/accountModel')
 var emailVerification = require('../verification-email')
 var passwordChange = require('../password-change.js')   //Tad's
 const bcrypt = require('bcryptjs')
@@ -62,75 +62,46 @@ router.post('/register', checkNotAuthenticated, (req,res) => {
     } catch (e){
         console.log(e)
     }
+    // TODO : CHECK FOR PASS LENGTH?
 
-    // TODO 1. CHECK FOR PASS LENGTH?
-    //      2. no need for cascading if statements now, just check each with an if, and push errors into error.
-    //          if there are no errors at the end, we can push user to DB and send email
     // check if passwords match
     if(password !== psw2) {
         errors.push({ msg: 'Passwords do not match' })
-    } else {
-
-        //Check if email already exists
-        try {
-            model.getUserEmail(req.body.email, function DoneGettingUserEmail(err, result, fields) {
-                if(err) {
-                    console.log('Error getting email')
-                    console.log(err)
-                } else {
-                    if(result == null) {
-                        console.log('There is no email - good to insert')
-                        try {
-                            model.insertNewUser(name, email, hashedPassword, hashedAccount, function DoneInsertingUser(err, result) {
-                                if(err) {
-                                    console.log('Error Inserting')
-                                    console.log(err)
-                                } else {
-                                    console.log('Successful Insertion')
-                                    //Send the email
-                                    //res.redirect('/login')
-                                    emailVerification.sendVerificationEmail(req.body.email, hashedAccount);
-                                }
-                            })
-                        } catch (err) {
-                            console.log('Error from InsertNewUser')
-                        }    
-                    } else {
-                        console.log('Email already in use')
-                        console.log(result[0].email)
-                        errors.push({ msg: 'Email already in use' })
-                        //res.redirect('/register')
-                        
-                    }
-                }
-            }) 
-        }catch (err) {
-            console.log('Error from getUserEmail')
+    } 
+    //Check if email already exists
+    accountModel.getUserEmail(email, (err, result, fields) => {
+        if(err) {
+            console.log('Could not execute getUserEmail in register.post\n' + err)
+        } else if(result.length) {    // check if email was returned (email was not taken)
+            errors.push({ msg: 'Email already registered' })
         }
-    }
+    })
     // check if register post encountered user errors
     if (errors.length > 0) {
         // if there are errors, reload page, flash errors to user and enter input back into fields
-        res.render('/register', {
-            errors,
-            name,
-            email,
-            password,
-            psw2
-        })
+        res.render('/register', { errors, name, email, password, psw2 })
     } else {
-        // no errors found, flash success and redirect
-        req.flash('success_msg', 'Registration Complete. Please Verify Email Address')
-        res.redirect('/login')
+        // no errors found, flash success, insert user and redirect
+        accountModel.insertNewUser(name, name, email, hashedPassword, hashedAccount, (err, result) => {
+            if(err) {
+                console.log(err)
+                errors.push({ msg: 'The server could not create new user with those credentials' })
+                res.render('/register', { errors, name, email, password, psw2 })
+            } else {
+                // if no errors were found, flash confirmation and redirect to login
+                console.log("Inserted user: " + name)
+                req.flash('success_msg', 'Registration Complete. Please Verify Email Address')
+                res.redirect('/login')
+            }
+        })
     }
 })
-
 
 //Verify the user's account
 router.get('/verification?:hash', function verifyUser(req, res){
     //Fix this later
     let myhash = req.query.hash
-    model.updateUserVerification(myhash, function DoneUpdatingUserVerification(err, result) {
+    accountModel.updateUserVerification(myhash, function DoneUpdatingUserVerification(err, result) {
         if(err) {
             console.log('Error updating verification')
             console.log(err)
@@ -152,7 +123,7 @@ router.get('/password-change', checkNotAuthenticated, (req, res) => {
 router.get('/passwordchange?:hash', function verifyUser(req, res){
     //Fix this later
     let myhash = req.query.hash
-    model.checkUserPasswordHash(myhash, function DoneCheckingUserPasswordHash(err, result, fields) {
+    accountModel.checkUserPasswordHash(myhash, function DoneCheckingUserPasswordHash(err, result, fields) {
         if(err) { // check for mysql errors
             console.log('Error Checking User Pass Hash')
             console.log(err)
@@ -178,7 +149,7 @@ router.post('/passwordchangerequest', checkNotAuthenticated, async (req,res) => 
     var passHash = await bcrypt.hash(Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15), 10)
 
     try {
-        model.getAccountId(req.body.email, function DoneGettingAccountId(err, result, fields) {
+        accountModel.getAccountId(req.body.email, function DoneGettingAccountId(err, result, fields) {
             if(err) {
                 console.log('Unable to retrieve account id')
                 console.log(err)
@@ -196,13 +167,13 @@ router.post('/passwordchangerequest', checkNotAuthenticated, async (req,res) => 
                         console.log('Hi james')
                         try {
                             // invalidate previous requested hashes
-                            model.invalidatePreviousChangePasswordHashes(accountId, function DoneInvalidatingPreviousChangePasswordHashes(err, result) {
+                            accountModel.invalidatePreviousChangePasswordHashes(accountId, function DoneInvalidatingPreviousChangePasswordHashes(err, result) {
                                 if(err) {
                                     console.log('Could Not Invalidate Previous Change Password Hashes: MYSQL Error')
                                     console.log(err)
                                 }
                             })
-                            model.insertResetPasswordRequest(accountId, passHash, function DoneInsertingResetPassword(err, result){
+                            accountModel.insertResetPasswordRequest(accountId, passHash, function DoneInsertingResetPassword(err, result){
                                 if(err) {
                                     console.log(err)
                                 } else {
@@ -241,7 +212,7 @@ router.post('/passwordchange', checkNotAuthenticated, async (req,res) => {
         res.redirect('/register')
     }
     try {
-        model.insertNewUser(req.body.name, req.body.name, req.body.email, hashedPassword, hashedAccount, function DoneInsertingUser(err, result) {
+        accountModel.insertNewUser(req.body.name, req.body.name, req.body.email, hashedPassword, hashedAccount, function DoneInsertingUser(err, result) {
             if(err) {
                 console.log('Error changing password')
                 console.log(err)
