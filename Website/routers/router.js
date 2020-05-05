@@ -9,20 +9,7 @@ const flash = require('express-flash') //Displays messages if failed login used 
 const session = require('express-session') //So we can store and access users over multiple sessions
 const methodOverride = require('method-override')
 
-
 router.use(methodOverride('_method'))
-
-//testing
-router.get('/email', function EmailGetHandler(req, res) {
-    model.getUserEmail('bettagj@spu.edu', function DoneGettingEmail(err, result, fields) {
-        if(err) {
-            console.log('Error getting email')
-            console.log(err)
-        } else {
-            res.json(result)
-        }
-    })
-})
 
 //Open dashboard if you are currently logged in 
 router.get('/dashboard', checkAuthenticated, (req, res) => {
@@ -57,7 +44,7 @@ router.post('/register', checkNotAuthenticated, async (req,res) => {
         hashedAccount = await bcrypt.hash(req.body.email, 10)
         //hashedPasswordChange = await bcrypt.hash((Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15)), 10)
 
-        res.redirect('/login')
+        
     } catch (e){
         res.redirect('/register')
     }
@@ -69,7 +56,10 @@ router.post('/register', checkNotAuthenticated, async (req,res) => {
             } else {
                 console.log('Successful Insertion')
                 //Send the email
+                
                 emailVerification.sendVerificationEmail(req.body.email, hashedAccount);
+                req.flash('success_msg', 'You are now registered. please verify email')
+                res.redirect('/login')
             }
         })
 
