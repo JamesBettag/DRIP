@@ -30,30 +30,27 @@
 		<link rel="stylesheet" href="assets/css/main.css" />
 		<noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
     </head>
-    
-    <!--Allows us to display error messages-->
-    <% if (messages.error){ %>
-        <%= messages.error %>
-    <% } %> 
+
     
 	<!-- Registration Form -->
     <article class="container box style3">
         <header>
             <h2>Register</h2>
         </header>
+        <% include ./partials/messages %>
         <form action="/register" method="POST">
         <div class="row">
             <label for="name"><b></b></label>
-            <input type="text" placeholder="Enter Name" name="name" id="name" required>
+            <input type="text" placeholder="Enter Name" name="name" id="name" value="<%= typeof name != 'undefined' ? name : '' %>" required>
 
             <label for="email"><b></b></label>
-            <input type="text" placeholder="Enter Email" name="email" id="email" required>
+            <input type="text" placeholder="Enter Email" name="email" id="email" value="<%= typeof email != 'undefined' ? email : '' %>"required>
 
             <label for="psw"><b></b></label>
-            <input type="password" placeholder="Enter Password" name="password" id="password" required>
+            <input type="password" placeholder="Enter Password" name="password" id="password" value="<%= typeof email != 'undefined' ? password : '' %>" required>
 
             <label for="psw"><b></b></label>
-            <input type="password" placeholder="Reenter Password" name="psw2" id="psw2" oninput="passwordChecker(this)" required>
+            <input type="password" placeholder="Reenter Password" name="psw2" id="psw2" value="<%= typeof email != 'undefined' ? psw2 : '' %>" required>
             
             <p id="passwordVailidityOutput">&#10005; Passwords do not match<br></p>
             <p id="willItSend">&#10005; Will not send<br></p>

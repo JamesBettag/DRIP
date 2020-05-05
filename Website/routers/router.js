@@ -37,51 +37,90 @@ router.get('/register', checkNotAuthenticated, (req, res) => {
 
 //TODO:Get DeviceID --> Check if exists in DB
 //TODO:FLasg error messages
-router.post('/register', checkNotAuthenticated, async (req,res) => {
+router.post('/register', checkNotAuthenticated, (req,res) => {
     var hashedPassword
     var hashedAccount
+    let errors = []     // initialize empty error array
+    const { name, email, password, psw2 } = req.body
     try {
-        hashedPassword = await bcrypt.hash(req.body.password, 10)
-        hashedAccount = await bcrypt.hash(req.body.email, 10)
+        bcrypt.hash(password, 10, (err, hash) => {
+            if (err) {
+                console.log("Problem with bcrypt hash\n" + err)
+            } else {
+                hashedPassword = hash
+            }
+        })
+        bcrypt.hash(email, 10, (err, hash) => {
+            if (err) {
+                console.log("Problem with bcrypt hash\n" + err)
+            } else {
+                hashedAccount = hash
+            }
+        })
         //hashedPasswordChange = await bcrypt.hash((Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15)), 10)
 
     } catch (e){
-        res.redirect('/register')
+        console.log(e)
     }
-    //Check if email already exists
-    try {
-        model.getUserEmail(req.body.email, function DoneGettingUserEmail(err, result, fields) {
-            if(err) {
-                console.log('Error getting email')
-                console.log(err)
-            } else {
-                if(result == null) {
-                    console.log('There is no email - good to insert')
-                    try {
-                        model.insertNewUser(req.body.name, req.body.name, req.body.email, hashedPassword, hashedAccount, function DoneInsertingUser(err, result) {
-                            if(err) {
-                                console.log('Error Inserting')
-                                console.log(err)
-                            } else {
-                                console.log('Successful Insertion')
-                                //Send the email
-                                res.redirect('/login')
-                                emailVerification.sendVerificationEmail(req.body.email, hashedAccount);
-                            }
-                        })
-                    } catch (err) {
-                        console.log('Error from InsertNewUser')
-                    }    
+
+    // TODO CHECK FOR PASS LENGTH?
+
+    // check if passwords match
+    if(password !== psw2) {
+        errors.push({ msg: 'Passwords do not match' })
+    } else {
+
+        //Check if email already exists
+        try {
+            model.getUserEmail(req.body.email, function DoneGettingUserEmail(err, result, fields) {
+                if(err) {
+                    console.log('Error getting email')
+                    console.log(err)
                 } else {
-                    console.log('Email already in use')
-                    console.log(result[0].email)
-                    res.redirect('/register')
-                    
+                    if(result == null) {
+                        console.log('There is no email - good to insert')
+                        try {
+                            model.insertNewUser(name, email, hashedPassword, hashedAccount, function DoneInsertingUser(err, result) {
+                                if(err) {
+                                    console.log('Error Inserting')
+                                    console.log(err)
+                                } else {
+                                    console.log('Successful Insertion')
+                                    //Send the email
+                                    //res.redirect('/login')
+                                    emailVerification.sendVerificationEmail(req.body.email, hashedAccount);
+                                }
+                            })
+                        } catch (err) {
+                            console.log('Error from InsertNewUser')
+                        }    
+                    } else {
+                        console.log('Email already in use')
+                        console.log(result[0].email)
+                        errors.push({ msg: 'Email already in use' })
+                        //res.redirect('/register')
+                        
+                    }
                 }
-            }
-        }) 
-    }catch (err) {
-        console.log('Error from getUserEmail')
+            }) 
+        }catch (err) {
+            console.log('Error from getUserEmail')
+        }
+    }
+    // check if register post encountered user errors
+    if (errors.length > 0) {
+        // if there are errors, reload page, flash errors to user and enter input back into fields
+        res.render('/register', {
+            errors,
+            name,
+            email,
+            password,
+            psw2
+        })
+    } else {
+        // no errors found, flash success and redirect
+        req.flash('success_msg', 'Registration Complete. Please Verify Email Address')
+        res.redirect('/login')
     }
 })
 
