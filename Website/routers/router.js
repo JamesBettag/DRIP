@@ -13,7 +13,7 @@ router.use(methodOverride('_method'))
 
 //Open dashboard if you are currently logged in 
 router.get('/dashboard', checkAuthenticated, (req, res) => {
-    res.render('../views/dashboard.ejs', {name: req.user.name})
+    res.render('../views/dashboard.ejs', {name: req.user.email})
 })
 
 //Open login page if you are not alredy logged in 
