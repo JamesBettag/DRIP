@@ -50,28 +50,26 @@ router.post('/register', checkNotAuthenticated, async (req,res) => {
         errors.push({ msg: 'Passwords do not match' })
     } 
     //Check if email already exists
-    accountModel.getUserEmail(email, (err, result, fields) => {
-        if(err) {
-            console.log('Could not execute getUserEmail in register.post\n' + err)
-        } else if(result.length) {    // check if email was returned (email was not taken)
-            errors.push({ msg: 'Email already registered' })
+    accountModel.getUserEmail(email)
+    .then(async (values) => {
+        if(values.length) {
+            errors.push({ msg: 'email already registered' })
         }
-    })
-    // check if register post encountered user errors
-    if (errors.length > 0) {
-        // if there are errors, reload page, flash errors to user and enter input back into fields
-        res.render('/register', { errors, name, email, password, psw2 })
-    } else {
-        // no errors were found, hash passwords and account
-        const passHash = await bcrypt.hash(password, 10)
-        const accHash = await bcrypt.hash(email, 10)
-        Promise.all([passHash, accHash])
+        // check if register post encountered user errors
+        if (errors.length > 0) {
+            // if there are errors, reload page, flash errors to user and enter input back into fields
+            res.render('../views/register.ejs', { errors, name, email, password, psw2 })
+        } else {
+            // no errors were found, hash passwords and account
+            const passHash = await bcrypt.hash(password, 10)
+            const accHash = await bcrypt.hash(email, 10)
+            Promise.all([passHash, accHash])
             .then((values) => {
                 accountModel.insertNewUser(name, name, email, values[0], values[1], (err, result) => {
                     if(err) {
                         console.log(err)
                         errors.push({ msg: 'The server could not create new user with those credentials' })
-                        res.render('/register', { errors, name, email, password, psw2 })
+                        res.render('../views/register.ejs', { errors, name, email, password, psw2 })
                     } else {
                         // if no errors were found, flash confirmation and redirect to login
                         console.log("Inserted user: " + name)
@@ -81,7 +79,12 @@ router.post('/register', checkNotAuthenticated, async (req,res) => {
                 })
             })
             .catch((err) => { console.log(err) })
-    }
+        }
+    })
+    .catch((err) => console.log(err))
+    
+    /*
+     */
 })
 
 //Verify the user's account

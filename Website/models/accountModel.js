@@ -17,18 +17,18 @@ exports.insertNewUser = function(fname, lname, email, pass, acchash, done) {
 }
 
 
-exports.getUserEmail = function(email, done) {
-    //return new Promise(function(resolve, reject) {
+exports.getUserEmail = function(email) {
+    return new Promise(function(resolve, reject) {
         db.get().query(
             'SELECT email FROM account WHERE email = ?', email, (err, result, fields) => {
                 if(err) {
-                    done(err)
+                    reject(err)
                 } else {
-                    done(null, result, fields)
+                    resolve(result)
                 }
             }
         )
-    //})
+    })
     
 }
 
