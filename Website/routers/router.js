@@ -95,7 +95,8 @@ router.get('/register', checkNotAuthenticated, (req, res) => {
     res.render('register.ejs')
 })
 
-
+//TODO:Get DeviceID --> Check if exists in DB
+//TODO:FLasg error messages
 router.post('/register', checkNotAuthenticated, async (req,res) => {
     var hashedPassword
     var hashedAccount
@@ -104,26 +105,44 @@ router.post('/register', checkNotAuthenticated, async (req,res) => {
         hashedAccount = await bcrypt.hash(req.body.email, 10)
         //hashedPasswordChange = await bcrypt.hash((Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15)), 10)
 
-        res.redirect('/login')
     } catch (e){
         res.redirect('/register')
     }
+    //Check if email already exists
     try {
-        model.insertNewUser(req.body.name, req.body.name, req.body.email, hashedPassword, hashedAccount, function DoneInsertingUser(err, result) {
+        model.getUserEmail(req.body.email, function DoneGettingUserEmail(err, result, fields) {
             if(err) {
-                console.log('Error Inserting')
+                console.log('Error getting email')
                 console.log(err)
             } else {
-                console.log('Successful Insertion')
-                //Send the email
-                emailVerification.sendVerificationEmail(req.body.email, hashedAccount);
+                if(result == null) {
+                    console.log('There is no email - good to insert')
+                    try {
+                        model.insertNewUser(req.body.name, req.body.name, req.body.email, hashedPassword, hashedAccount, function DoneInsertingUser(err, result) {
+                            if(err) {
+                                console.log('Error Inserting')
+                                console.log(err)
+                            } else {
+                                console.log('Successful Insertion')
+                                //Send the email
+                                res.redirect('/login')
+                                emailVerification.sendVerificationEmail(req.body.email, hashedAccount);
+                            }
+                        })
+                    } catch (err) {
+                        console.log('Error from InsertNewUser')
+                    }    
+                } else {
+                    console.log('Email already in use')
+                    console.log(result[0].email)
+                    res.redirect('/register')
+                    
+                }
             }
-        })
-
-
-    } catch (err) {
-        console.log('Error from InsertNewUser')
-    }    
+        }) 
+    }catch (err) {
+        console.log('Error from getUserEmail')
+    }
 })
 
 

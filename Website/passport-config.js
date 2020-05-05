@@ -4,8 +4,8 @@ const bcrypt = require('bcryptjs')
 //Initialize passport configuration
 function initialize(passport, getUserByEmail, getUserPass){
     const authenticateUser = async (email, password, done) => {
-        const user = await getUserByEmail(email)//Need to query for user by email
-        const userPass = await getUserPass(email)
+        const user = getUserByEmail(email)//Need to query for user by email
+        const userPass = getUserPass(email)
         console.log("PASSPORT-CONFIG: ")
         console.log(userPass)
         console.log(user)
