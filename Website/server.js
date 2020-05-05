@@ -14,6 +14,10 @@ const url = require('url')
 const queryString = require('querystring')
 const key = process.env.SENDGRID_API_KEY
 const port = 3000
+const passport = require('passport')
+
+// passport config
+require('./passport-config')(passport)
 
 //app.use(bodyParser.urlencoded({ extended: true })); //James
 app.use(bodyParser.json()); //James
@@ -28,6 +32,11 @@ app.use(session({
     resave: false, //Dont resave if nothing has changed
     saveUninitialized: false //Dont save empty values in the session
 }))
+
+app.use(passport.initialize())
+app.use(passport.session()) 
+
+app.use(flash())
 
 
 db.connect(function ConnectionHandler(err) {

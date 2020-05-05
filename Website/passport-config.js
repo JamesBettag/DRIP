@@ -1,42 +1,58 @@
 const localStrategy = require('passport-local').Strategy
 const bcrypt = require('bcryptjs')
+const model = require('./models/model')
 
 //Initialize passport configuration
-function initialize(passport, getUserByEmail, getUserPass){
+module.exports = function(passport) {
+    passport.use(
+        new localStrategy({ usernameField: 'email' }, (email, password, done) => {
+            // match user
+            model.getUserEmailPasswordId(email, function DoneGettingUserEmailAndPass(err, result, fields) {
+                if(err) {
+                    console.log(err)
+                } else if(!result.length) { // check if email exists
+                    // no email was found
+                    return done(null, false, { message: 'Email has not been registered' })
+                } else {
+                    // email was found and no error
+                    bcrypt.compare(password, result[0].password, (err, isMatch) => {
+                        if(err) throw err
+                        // create user object to send back
+                        user = {
+                            id: result[0].account_id,
+                            email: email,
+                            password: result[0].password
+                        }
+                        // return user if password match
+                        if(isMatch) {
+                            return done(null, user)
+                        } else {
+                            return done(null, false, { message: 'Password Incorrect' })
+                        }
+                    })
+                }
+            })
+        })
+    )
 
-    const comparePasswords = async (password, userPass) => {
-        return (await bcrypt.compare(password, userPass))
-    }
-
-    function authenticateUser(email, password, done) {
-        let user = getUserByEmail(email)//Need to query for user by email
-        let userPass = getUserPass(email)
-        console.log("PASSPORT-CONFIG: ")
-        console.log(userPass)
-        console.log(user)
-        if (user == null){
-            console.log("Could not find user")
-            return done(null, false, {message: 'No user with that email'})
-        }
-        try {
-            //Need to query for password associated with email 
-            if(comparePasswords(password, userPass)){ //Password being entered from fourm compared to stored password associated to the email entered
-                return done(null, user)
-            }
-            else{
-                return done(null, false, {message: 'Password incorrect'})
-            }
-        } catch (error) {
-            return done(error)
-        }
-    }
-
-    passport.use(new localStrategy({usernameField: 'email' }, 
-    authenticateUser)) //Tells passport to authenticate on email and password
-    passport.serializeUser((user, done) => done(null, user)) //Stores the user inside of current session
-    passport.deserializeUser((email, done) => { //Opposite of serializing the user for current session
-        return done(null, email)
+    passport.serializeUser(function(user, done) {
+        done(null, user.id)
     })
-}
 
-module.exports = initialize
+    passport.deserializeUser(function(id, done) {
+        model.findUserById(id, function DoneFindingById(err, result, fields) {
+            if(!result.length) {
+                // empty set
+                done(err, null)
+            } else {
+                user = {
+                    id: result[0].account_id,
+                    email: result[0].email,
+                    password: result[0].password
+                }
+                done(err, user)
+            }
+        })
+    })
+
+}

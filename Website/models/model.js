@@ -17,40 +17,58 @@ exports.insertNewUser = function InserNewUserHandler(fname, lname, email, pass, 
 }
 
 
-exports.getUserEmail = async function GetUserEmailHandler(email, done) {
-    return new Promise(function(resolve, reject) {
+exports.getUserEmail = function GetUserEmailHandler(email, done) {
+    //return new Promise(function(resolve, reject) {
         db.get().query(
             'SELECT email FROM account WHERE email = ?', email, function GetUserEmailQueryHandler(err, result, fields) {
                 if(err) {
-                    return reject(err)
-                }                
-                if(!result.length) {
-                    resolve(null)
+                    done(err)
                 } else {
-                    resolve(result[0].email)
+                    done(null, result, fields)
                 }
             }
         )
-    })
+    //})
     
 }
 
-exports.getUserPasswordHash = async function GetUserPasswordHashHandler(email, done) {
-    return new Promise(function(resolve, reject) {
+exports.getUserPasswordHash = function GetUserPasswordHashHandler(email, done) {
+    //return new Promise(function(resolve, reject) {
         db.get().query(
             'SELECT password FROM account WHERE email = ?', email, function GetUserPasswordHashQueryHandler(err, result, fields) {
                 if(err) {
-                    reject(err)
-                }
-                if(!result.length) {
-                    resolve(null)
+                    done(err)
                 } else {
-                    resolve(result[0].password)
+                    done(null, result, fields)
                 }
             }
         )
-    })
+    //})
     
+}
+
+exports.getUserEmailPasswordId = function GetUserEmailAndPassHandler(email, done) {
+    db.get().query(
+        'SELECT email, password, account_id FROM account WHERE email = ?', email, function GetUserEmailAndPassQueryHandler(err, result, fields) {
+            if(err) {
+                return done(err)
+            } else {
+                done(null, result, fields)
+            }
+        }
+    )
+}
+
+exports.findUserById = function findByIdHandler(id, done) {
+    db.get().query(
+        'SELECT account_id, email, password FROM account WHERE account_id = ?', id, function findUserByIdQueryHandler(err, result, fields) {
+            if(err) {
+                return done(err)
+            } else {
+                done(null, result, fields)
+            }
+        }
+    )
 }
 
 exports.updateUserVerification = function UpdateUserVerificationHandler(hash, done) {

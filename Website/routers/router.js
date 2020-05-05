@@ -10,38 +10,7 @@ const session = require('express-session') //So we can store and access users ov
 const methodOverride = require('method-override')
 
 
-//I think this is for signing in?
-const initializePassport = require('../passport-config')
-initializePassport(
-    passport,
-    email => async function() {
-        let x = await model.getUserEmail(email).then(function(result) {
-            console.log(result)
-            return result
-        }).catch((err) => setImmediate(() => { console.log(err) }))
-        return x
-    },
-    
-    userPass => async function() {
-        let x = await model.getUserPasswordHash(userPass).then(function(result) {
-            console.log(result)
-            return result
-        }).catch((err) => setImmediate(() => { console.log(err) }))
-        return x
-    }
-)
-
-router.use(flash())
-
-router.use(passport.initialize())
-router.use(passport.session()) 
 router.use(methodOverride('_method'))
-
-router.use(session({
-    secret: process.env.SESSION_SECRET,
-    resave: false,
-    saveUninitialized: false
-}))
 
 //testing
 router.get('/email', function EmailGetHandler(req, res) {
