@@ -9,71 +9,11 @@ const flash = require('express-flash') //Displays messages if failed login used 
 const session = require('express-session') //So we can store and access users over multiple sessions
 const methodOverride = require('method-override')
 
-
-//I think this is for signing in?
-const initializePassport = require('../passport-config')
-initializePassport(
-    passport,
-    email => model.getUserEmail(email, function DoneGettingUserEmail(err, result, fields) {
-        if(err) {
-            console.log('Error getting email')
-            console.log(err)
-        } else {
-            if(result == null) {
-                console.log('There is no email')
-            } else {
-                console.log('Found an email')
-                console.log(result[0].email)
-                return result[0].email
-            }
-        }
-    }),
-    
-    userPass => model.getUserPasswordHash(userPass, function DoneGettingUserPassword(err, result, fields) {
-        if (err) {
-            console.log('Error getting password')
-            console.log(err)
-        }
-        else {
-            if (!result.length) {
-                console.log('There is no password')
-            }
-            else {
-                console.log('Found a hashed password')
-                console.log(result[0].password)
-                return result[0].password
-            }
-        }
-    })
-)
-
-router.use(flash())
-
-router.use(passport.initialize())
-router.use(passport.session()) 
 router.use(methodOverride('_method'))
-
-router.use(session({
-    secret: process.env.SESSION_SECRET,
-    resave: false,
-    saveUninitialized: false
-}))
-
-//testing
-router.get('/email', function EmailGetHandler(req, res) {
-    model.getUserEmail('bettagj@spu.edu', function DoneGettingEmail(err, result, fields) {
-        if(err) {
-            console.log('Error getting email')
-            console.log(err)
-        } else {
-            res.json(result)
-        }
-    })
-})
 
 //Open dashboard if you are currently logged in 
 router.get('/dashboard', checkAuthenticated, (req, res) => {
-    res.render('../views/dashboard.ejs', {name: req.user.name})
+    res.render('../views/dashboard.ejs', {name: req.user.email})
 })
 
 //Open login page if you are not alredy logged in 

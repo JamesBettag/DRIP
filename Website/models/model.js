@@ -16,14 +16,52 @@ exports.insertNewUser = function InserNewUserHandler(fname, lname, email, pass, 
     }    
 }
 
+<<<<<<< HEAD
+
 exports.getUserEmail = function GetUserEmailHandler(email, done) {
+    //return new Promise(function(resolve, reject) {
+        db.get().query(
+            'SELECT email FROM account WHERE email = ?', email, function GetUserEmailQueryHandler(err, result, fields) {
+                if(err) {
+                    done(err)
+                } else {
+                    done(null, result, fields)
+                }
+            }
+        )
+    //})
+    
+}
+
+exports.getUserPasswordHash = function GetUserPasswordHashHandler(email, done) {
+    //return new Promise(function(resolve, reject) {
+        db.get().query(
+            'SELECT password FROM account WHERE email = ?', email, function GetUserPasswordHashQueryHandler(err, result, fields) {
+                if(err) {
+                    done(err)
+                } else {
+                    done(null, result, fields)
+                }
+            }
+        )
+    //})
+    
+}
+
+exports.getUserEmailPasswordId = function GetUserEmailAndPassHandler(email, done) {
+=======
+exports.getUserEmail = function GetUserEmailHandler(email, done) {
+>>>>>>> master
     db.get().query(
-        'SELECT email FROM account WHERE email = ?', email, function GetUserEmailQueryHandler(err, result, fields) {
+        'SELECT email, password, account_id FROM account WHERE email = ?', email, function GetUserEmailAndPassQueryHandler(err, result, fields) {
             if(err) {
                 return done(err)
+<<<<<<< HEAD
+=======
             }
             if(!result.length) {
                 done(null, null, fields)
+>>>>>>> master
             } else {
                 done(null, result, fields)
             }
@@ -31,15 +69,18 @@ exports.getUserEmail = function GetUserEmailHandler(email, done) {
     )
 }
 
+<<<<<<< HEAD
+exports.findUserById = function findByIdHandler(id, done) {
+=======
 exports.getUserPasswordHash = function GetUserPasswordHashHandler(email, done) {
+>>>>>>> master
     db.get().query(
-        'SELECT password FROM account WHERE email = ?', email, function GetUserPasswordHashQueryHandler(err, result, fields) {
+        'SELECT account_id, email, password FROM account WHERE account_id = ?', id, function findUserByIdQueryHandler(err, result, fields) {
             if(err) {
                 return done(err)
+            } else {
+                done(null, result, fields)
             }
-            //console.log("SQL: ")
-            //console.log(result)
-            done(null, result, fields)
         }
     )
 }

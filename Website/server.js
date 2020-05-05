@@ -14,6 +14,10 @@ const url = require('url')
 const queryString = require('querystring')
 const key = process.env.SENDGRID_API_KEY
 const port = 3000
+const passport = require('passport')
+
+// passport config
+require('./passport-config')(passport)
 
 //app.use(bodyParser.urlencoded({ extended: true })); //James
 app.use(bodyParser.json()); //James
@@ -29,6 +33,19 @@ app.use(session({
     saveUninitialized: false //Dont save empty values in the session
 }))
 
+app.use(passport.initialize())
+app.use(passport.session()) 
+
+app.use(flash())
+
+// Global variables (for flash)
+app.use((req, res, next) => {
+  res.locals.success_msg = req.flash('success_msg')
+  res.locals.error_msg = req.flash('error_msg')
+  res.locals.error = req.flash('error')
+  next()
+})
+
 
 db.connect(function ConnectionHandler(err) {
   if(err) {
@@ -38,51 +55,9 @@ db.connect(function ConnectionHandler(err) {
   console.log('Connection to MySQL Successful')
 })
 
-
-
 //app.use(express.static('public'))
 
 app.use('/', router)
 
 app.listen(port) 
 console.log('Listening on port ' + port)
-
-
-
-
-
-
-/*
-send email code
-const sgMail = require('@sendgrid/mail');
-sgMail.setApiKey(key);
-const msg = {
-  to: 'bettagj@spu.edu',
-  from: 'notifications.drip@gmail.com',
-  subject: 'Test1',
-  text: 'This is a test',
-  html: '<strong>and easy to do anywhere, even with Node.js</strong>',
-};
-//ES6
-sgMail
-  .send(msg)
-  .then(() => {}, error => {
-    console.error(error);
- 
-    if (error.response) {
-      console.error(error.response.body)
-    }
-  });
-//ES8
-(async () => {
-  try {
-    await sgMail.send(msg);
-  } catch (error) {
-    console.error(error);
- 
-    if (error.response) {
-      console.error(error.response.body)
-    }
-  }
-})();
-*/
