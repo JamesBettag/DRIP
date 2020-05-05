@@ -16,6 +16,7 @@ exports.insertNewUser = function InserNewUserHandler(fname, lname, email, pass, 
     }    
 }
 
+<<<<<<< HEAD
 
 exports.getUserEmail = function GetUserEmailHandler(email, done) {
     //return new Promise(function(resolve, reject) {
@@ -48,10 +49,19 @@ exports.getUserPasswordHash = function GetUserPasswordHashHandler(email, done) {
 }
 
 exports.getUserEmailPasswordId = function GetUserEmailAndPassHandler(email, done) {
+=======
+exports.getUserEmail = function GetUserEmailHandler(email, done) {
+>>>>>>> master
     db.get().query(
         'SELECT email, password, account_id FROM account WHERE email = ?', email, function GetUserEmailAndPassQueryHandler(err, result, fields) {
             if(err) {
                 return done(err)
+<<<<<<< HEAD
+=======
+            }
+            if(!result.length) {
+                done(null, null, fields)
+>>>>>>> master
             } else {
                 done(null, result, fields)
             }
@@ -59,7 +69,11 @@ exports.getUserEmailPasswordId = function GetUserEmailAndPassHandler(email, done
     )
 }
 
+<<<<<<< HEAD
 exports.findUserById = function findByIdHandler(id, done) {
+=======
+exports.getUserPasswordHash = function GetUserPasswordHashHandler(email, done) {
+>>>>>>> master
     db.get().query(
         'SELECT account_id, email, password FROM account WHERE account_id = ?', id, function findUserByIdQueryHandler(err, result, fields) {
             if(err) {
