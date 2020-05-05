@@ -37,31 +37,12 @@ router.get('/register', checkNotAuthenticated, (req, res) => {
 
 //TODO:Get DeviceID --> Check if exists in DB
 //TODO:FLasg error messages
-router.post('/register', checkNotAuthenticated, (req,res) => {
-    var hashedPassword
-    var hashedAccount
+router.post('/register', checkNotAuthenticated, async (req,res) => {
     let errors = []     // initialize empty error array
     const { name, email, password, psw2 } = req.body
-    try {
-        bcrypt.hash(password, 10, (err, hash) => {
-            if (err) {
-                console.log("Problem with bcrypt hash\n" + err)
-            } else {
-                hashedPassword = hash
-            }
-        })
-        bcrypt.hash(email, 10, (err, hash) => {
-            if (err) {
-                console.log("Problem with bcrypt hash\n" + err)
-            } else {
-                hashedAccount = hash
-            }
-        })
-        //hashedPasswordChange = await bcrypt.hash((Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15)), 10)
+    
+    //hashedPasswordChange = await bcrypt.hash((Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15)), 10)
 
-    } catch (e){
-        console.log(e)
-    }
     // TODO : CHECK FOR PASS LENGTH?
 
     // check if passwords match
@@ -81,19 +62,25 @@ router.post('/register', checkNotAuthenticated, (req,res) => {
         // if there are errors, reload page, flash errors to user and enter input back into fields
         res.render('/register', { errors, name, email, password, psw2 })
     } else {
-        // no errors found, flash success, insert user and redirect
-        accountModel.insertNewUser(name, name, email, hashedPassword, hashedAccount, (err, result) => {
-            if(err) {
-                console.log(err)
-                errors.push({ msg: 'The server could not create new user with those credentials' })
-                res.render('/register', { errors, name, email, password, psw2 })
-            } else {
-                // if no errors were found, flash confirmation and redirect to login
-                console.log("Inserted user: " + name)
-                req.flash('success_msg', 'Registration Complete. Please Verify Email Address')
-                res.redirect('/login')
-            }
-        })
+        // no errors were found, hash passwords and account
+        const passHash = await bcrypt.hash(password, 10)
+        const accHash = await bcrypt.hash(email, 10)
+        Promise.all([passHash, accHash])
+            .then((values) => {
+                accountModel.insertNewUser(name, name, email, values[0], values[1], (err, result) => {
+                    if(err) {
+                        console.log(err)
+                        errors.push({ msg: 'The server could not create new user with those credentials' })
+                        res.render('/register', { errors, name, email, password, psw2 })
+                    } else {
+                        // if no errors were found, flash confirmation and redirect to login
+                        console.log("Inserted user: " + name)
+                        req.flash('success_msg', 'Registration Complete. Please Verify Email Address')
+                        res.redirect('/login')
+                    }
+                })
+            })
+            .catch((err) => { console.log(err) })
     }
 })
 
