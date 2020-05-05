@@ -63,8 +63,9 @@ router.post('/register', checkNotAuthenticated, (req,res) => {
         console.log(e)
     }
 
-    // TODO CHECK FOR PASS LENGTH?
-
+    // TODO 1. CHECK FOR PASS LENGTH?
+    //      2. no need for cascading if statements now, just check each with an if, and push errors into error.
+    //          if there are no errors at the end, we can push user to DB and send email
     // check if passwords match
     if(password !== psw2) {
         errors.push({ msg: 'Passwords do not match' })
