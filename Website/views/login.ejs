@@ -6,9 +6,10 @@
     <noscript><link rel="stylesheet" href="assets/css/noscript.css"/></noscript>
 </head>
 
+<!--Allows us to display error messages-->
 <% if (messages.error){ %>
     <%= messages.error %>
-<% } %>
+<% } %> 
 
 <article class="container box style3">
     <header>
@@ -31,7 +32,7 @@
             </ul>      
         </div>
         <div style="display: block; margin: 0 auto; padding: 20px;">
-            <a href="#"  class="button style3">Forgot Password?</a>
+            <a href="/password-change"  class="button style3">Forgot Password?</a>
         </div>
     </div>
     </form>
