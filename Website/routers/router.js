@@ -52,6 +52,7 @@ router.post('/register', checkNotAuthenticated, async (req,res) => {
     //Check if email already exists
     accountModel.getUserEmail(email)
     .then(async (values) => {
+        // check if an email was returned
         if(values.length) {
             errors.push({ msg: 'email already registered' })
         }
