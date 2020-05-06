@@ -1,13 +1,13 @@
 const localStrategy = require('passport-local').Strategy
 const bcrypt = require('bcryptjs')
-const model = require('./models/model')
+const accountModel = require('./models/accountModel')
 
 //Initialize passport configuration
 module.exports = function(passport) {
     passport.use(
         new localStrategy({ usernameField: 'email' }, (email, password, done) => {
             // match user
-            model.getUserEmailPasswordId(email, function DoneGettingUserEmailAndPass(err, result, fields) {
+            accountModel.getUserEmailPasswordId(email, (err, result, fields) => {
                 if(err) {
                     console.log(err)
                 } else if(!result.length) { // check if email exists
@@ -40,7 +40,7 @@ module.exports = function(passport) {
     })
 
     passport.deserializeUser(function(id, done) {
-        model.findUserById(id, function DoneFindingById(err, result, fields) {
+        accountModel.findUserById(id, (err, result, fields) => {
             if(!result.length) {
                 // empty set
                 done(err, null)
