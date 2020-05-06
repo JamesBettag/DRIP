@@ -1,4 +1,4 @@
-var db = require('../db')
+const db = require('../db')
 
 exports.insertNewUser = function(fname, lname, email, pass, acchash, done) {
     try{
@@ -15,7 +15,6 @@ exports.insertNewUser = function(fname, lname, email, pass, acchash, done) {
         console.log(err)
     }    
 }
-
 
 exports.getUserEmail = function(email) {
     return new Promise(function(resolve, reject) {
@@ -83,52 +82,20 @@ exports.updateUserVerification = function(hash, done) {
 }
 
 //Tad's
-exports.insertResetPasswordRequest = function(accid, hash, done){
-    try{
+exports.getAccountId = function(email) {
+    return new Promise(function(resolve, reject) {
         db.get().query(
-            'INSERT INTO reset_password (account_id, reset_password_hash) VALUES (?, ?)', [accid, hash], (err, result) => {
+            'SELECT account_id FROM account WHERE email = ?', [email],(err, result, fields) => {
                 if(err) {
-                    return done(err)
+                    reject(err)
+                } else {
+                    if(result.length) {
+                        resolve(result[0].account_id)
+                    } else {
+                        resolve(null)
+                    }
                 }
-                done(null, true)
             }
         )
-    }
-    catch(err) {
-        console.log(err)
-    }    
-}
-
-//Tad's
-exports.getAccountId = function(email, done) {
-    db.get().query(
-        'SELECT account_id FROM account WHERE email = ?', [email],(err, result, fields) => {
-            if(err) {
-                return done(err)
-            }
-            done(null, result, fields)
-        }
-    )
-}
-
-exports.invalidatePreviousChangePasswordHashes = function(accId, done) {
-    db.get().query(
-        "UPDATE reset_password SET valid = '0' WHERE account_id = ?", accId, (err, result) => {
-            if(err) {
-                return done(err)
-            }
-            done(null, result.affectedRows)
-        }
-    )
-}
-
-exports.checkUserPasswordHash = function(hash, done) {
-    db.get().query(
-        "SELECT account_id FROM reset_password WHERE valid = '1' AND reset_password_hash = ?", hash, (err, result, fields) => {
-            if(err) {
-                return done(err)
-            }
-            done(null, result, fields)
-        }
-    )
+    })
 }

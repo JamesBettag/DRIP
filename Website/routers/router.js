@@ -1,6 +1,7 @@
 var express = require('express')
 var router = express.Router()
 var accountModel = require('../models/accountModel')
+const resetPassModel = require('../models/resetPassModel')
 var emailVerification = require('../verification-email')
 var passwordChange = require('../password-change.js')   //Tad's
 const bcrypt = require('bcryptjs')
@@ -100,8 +101,8 @@ router.get('/verification?:hash', function verifyUser(req, res){
 
 
 //Tad's. #1. Display the form for user to enter email
-router.get('/password-change', checkNotAuthenticated, (req, res) => {
-    res.render('../views/forgotpassword.ejs')
+router.get('/forgot-password', checkNotAuthenticated, (req, res) => {
+    res.render('../views/forgot-password.ejs')
 })
 
 //Tad's #3, broken
@@ -109,7 +110,7 @@ router.get('/password-change', checkNotAuthenticated, (req, res) => {
 router.get('/passwordchange?:hash', function verifyUser(req, res){
     //Fix this later
     let myhash = req.query.hash
-    accountModel.checkUserPasswordHash(myhash, function DoneCheckingUserPasswordHash(err, result, fields) {
+    resetPassModel.checkUserPasswordHash(myhash, function DoneCheckingUserPasswordHash(err, result, fields) {
         if(err) { // check for mysql errors
             console.log('Error Checking User Pass Hash')
             console.log(err)
@@ -129,59 +130,31 @@ router.get('/passwordchange?:hash', function verifyUser(req, res){
 
 //Tad's. #2. Send that email to the user
 //Send the password change request email
-router.post('/passwordchangerequest', checkNotAuthenticated, async (req,res) => {
-
-    var accountId = -1  //Holds Id for use when inserting into reset_password table
-    var passHash = await bcrypt.hash(Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15), 10)
-
-    try {
-        accountModel.getAccountId(req.body.email, function DoneGettingAccountId(err, result, fields) {
-            if(err) {
-                console.log('Unable to retrieve account id')
-                console.log(err)
-            } else {
-                console.log('Retrieved account id')
-                if(!result.length) {
-                    //Comes here if account_id is empty
-                    console.log('This is empty')
-                } else {
-                    //
-                    console.log('This is not empty')
-                    accountId = result[0].account_id
-                    console.log(result[0].account_id)   //result[0].account_id outputs id of first instance
-                    if(accountId >= '0') {
-                        console.log('Hi james')
-                        try {
-                            // invalidate previous requested hashes
-                            accountModel.invalidatePreviousChangePasswordHashes(accountId, function DoneInvalidatingPreviousChangePasswordHashes(err, result) {
-                                if(err) {
-                                    console.log('Could Not Invalidate Previous Change Password Hashes: MYSQL Error')
-                                    console.log(err)
-                                }
-                            })
-                            accountModel.insertResetPasswordRequest(accountId, passHash, function DoneInsertingResetPassword(err, result){
-                                if(err) {
-                                    console.log(err)
-                                } else {
-                                    console.log('Inserting reset password request was successful')
-                                    passwordChange.sendPasswordChangeEmail(req.body.email, passHash);  //Send the password change email
-                                }
-                            }) //Needs id, then passhash, then done function thing
-                        } catch (e){
-                            console.log('Error sending email for password request')
-                        }
-                    }
-                }
-            }
-
-        })
-        
-
-        //passwordChange.sendPasswordChangeEmail(req.body.email, hashedAccount);  //Send the password change email
-        res.redirect('/login')
-    } catch (e){
-        res.redirect('/register')
-        console.log('account does not exist')
+router.post('/forgot-password', checkNotAuthenticated, async (req,res) => {
+    let errors = []
+    let email = req.body.email
+    // get account ID from email
+    let accountId = await accountModel.getAccountId(email)
+    if(accountId != null) {
+        // make previous change pass hashes invalid, and generate new hash
+        await resetPassModel.invalidatePreviousChangePasswordHashes(accountId)
+        let passHash = await bcrypt.hash((Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15)), 10)
+        // insert new hash for account
+        let inserted = await resetPassModel.insertResetPasswordRequest(accountId, passHash)
+        if (inserted) {
+            // if hash was inserted, send email and flash success message, then redirect
+            passwordChange.sendPasswordChangeEmail(email, passHash)
+            req.flash('success_msg', 'Email Sent!')
+            res.redirect('/login')
+        } else {
+            // hash was not inserted, mysql problem
+            errors.push({ msg: 'Could Not make a new password request' })
+            res.render('../views/forgot-password.ejs', { errors, email })
+        }
+    } else {
+        // no account ID found from email
+        errors.push({ msg: 'Email has not been registered' })
+        res.render('../views/forgot-password.ejs', { errors, email })
     }
 })
 
