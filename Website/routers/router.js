@@ -93,45 +93,21 @@ router.get('/verification?:hash', function verifyUser(req, res){
             console.log('Error updating verification')
             console.log(err)
         } else {
-            console.log('Verification Successful')
+            req.flash('success_msg', 'Verification Successful')
             res.redirect('/login')
         }
     })    
 })
-
 
 //Tad's. #1. Display the form for user to enter email
 router.get('/forgot-password', checkNotAuthenticated, (req, res) => {
     res.render('../views/forgot-password.ejs')
 })
 
-//Tad's #3, broken
-//Change the password, this is the link coming from the email
-router.get('/passwordchange?:hash', function verifyUser(req, res){
-    //Fix this later
-    let myhash = req.query.hash
-    resetPassModel.checkUserPasswordHash(myhash, function DoneCheckingUserPasswordHash(err, result, fields) {
-        if(err) { // check for mysql errors
-            console.log('Error Checking User Pass Hash')
-            console.log(err)
-        } else {
-            if(!result.length) { // empty if no valid hashes were found
-                console.log('Invalid Password Change Hash')
-                res.redirect('/login')
-            } else { // found a valid password hash, redirect to change password form
-
-                // NEED TO LOGIN USER FIRST BEFORE REDIRECTING TO CHANGE PASSWORD
-                
-                res.redirect('/passwordchangeform')
-            }            
-        }
-    })    
-})
-
 //Tad's. #2. Send that email to the user
 //Send the password change request email
 router.post('/forgot-password', checkNotAuthenticated, async (req,res) => {
-    let errors = []
+    let errors = []     // push errors to this empty array
     let email = req.body.email
     // get account ID from email
     let accountId = await accountModel.getAccountId(email)
@@ -158,40 +134,66 @@ router.post('/forgot-password', checkNotAuthenticated, async (req,res) => {
     }
 })
 
+//Tad's #3, broken
+//Change the password, this is the link coming from the email
+router.get('/passwordchange?:hash', async function verifyUser(req, res){
+    // TODO: JUST DELETE INVALID HASHES?
 
-/*
-//Tad's. #
-//Insert the newly changed password into the database, this is broken
-router.post('/passwordchange', checkNotAuthenticated, async (req,res) => {
-    var hashedPassword
-    try {
-        hashedPassword = await bcrypt.hash(req.body.password, 10)
-        res.redirect('/login')
-    } catch (e){
-        res.redirect('/register')
-    }
-    try {
-        accountModel.insertNewUser(req.body.name, req.body.name, req.body.email, hashedPassword, hashedAccount, function DoneInsertingUser(err, result) {
-            if(err) {
-                console.log('Error changing password')
-                console.log(err)
-            } else {
-                console.log('Successfully changed password')
-                //Send the email
-                //passwordChange.sendPasswordChangeEmail(req.body.email, hashedAccount);
-
+    // get pass hash
+    // compare pass hash
+    // if valid, log user in and redirect to change pass page
+    let emailedHash = req.query.hash
+    let accountId = await resetPassModel.checkUserPasswordHash(emailedHash)
+    if (accountId != null) {
+        // hash was valid. invalidate previous hashes. login and redirect to change pass page
+        await resetPassModel.invalidatePreviousChangePasswordHashes(accountId)
+        let userInfo = await accountModel.getAccountInfoByID(accountId)
+        if (userInfo != null) {
+            // create a user object and set fields
+            let user = {
+                id: userInfo[0].account_id,
+                email: userInfo[0].email,
+                password: userInfo[0].password
             }
-        })
-    } catch (err) {
-        console.log('Error from InsertNewUser')
-    }    
-
-    //console.log(users)
+            // log user in and redirect to change password page
+            req.login(user, function(err) {
+                if(err) { return next(err) }
+                return res.redirect('/change-password')
+            })
+        } else {
+            // could not find user info from account id (mysql problem)
+            req.flash('error_msg', 'Invalid Code')
+            res.redirect('/login')
+        }
+    } else {
+        // not a valid hash
+        req.flash('error_msg', 'Invalid Code')
+        res.redirect('/login')
+    }
 })
-*/
 
+router.get('/change-password', checkAuthenticated, (req, res) => {
+    res.render('../views/password-change.ejs')
+})
 
+//Tad's. #
+//Insert the newly changed password into the database
+router.post('/passwordchange', checkNotAuthenticated, async (req,res) => {
 
+    let hashedPassword = await bcrypt.hash(req.body.password, 10)
+    let inserted = await accountModel.updatePasswordById(req.user.id, hashedPassword)
+
+    if(inserted) {
+        // password was changed
+        req.flash('success_msg', 'Password Changed Successfully')
+        res.redirect('/dashboard')
+    } else {
+        // password was not changed. could not find an account with that id (big problem: user serialized on website without logging in)
+        // process.exit(1)
+        req.logOut()
+        res.redirect('/login')
+    }
+})
 
 //Logout
 router.delete('/logout', (req, res) => {

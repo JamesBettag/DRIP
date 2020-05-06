@@ -28,26 +28,15 @@ exports.invalidatePreviousChangePasswordHashes = function(accId) {
     })
 }
 
-exports.checkUserPasswordHash = function(hash, done) {
-    db.get().query(
-        "SELECT account_id FROM reset_password WHERE valid = '1' AND reset_password_hash = ?", hash, (err, result, fields) => {
-            if(err) {
-                return done(err)
-            }
-            done(null, result, fields)
-        }
-    )
-}
-
-exports.newestPassHash = function(accId) {
+exports.checkUserPasswordHash = function(hash) {
     return new Promise(function(resolve, reject) {
         db.get().query(
-            "SELECT reset_password_hash FROM reset_password WHERE account_id = ? LIMIT 1", accId, (err, result, fields) => {
+            "SELECT account_id FROM reset_password WHERE valid = '1' AND reset_password_hash = ?", hash, (err, result, fields) => {
                 if(err) {
                     reject(err)
                 } else {
                     if(result.length) {
-                        resolve(result[0].reset_password_hash)
+                        resolve(result[0].account_id)
                     } else {
                         resolve(null)
                     }

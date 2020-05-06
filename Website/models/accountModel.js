@@ -58,6 +58,24 @@ exports.getUserEmailPasswordId = function(email, done) {
     )
 }
 
+exports.getAccountInfoByID = function(accId) {
+    return new Promise(function(resolve, reject) {
+        db.get().query(
+            'SELECT account_id, email, password FROM account WHERE account_id = ?', accId, (err, result, fields) => {
+                if(err) {
+                    reject(err)
+                } else {
+                    if(result.length) {
+                        resolve(result)
+                    } else {
+                        resolve(null)
+                    }
+                }
+            }
+        )
+    })
+}
+
 exports.findUserById = function(id, done) {
     db.get().query(
         'SELECT account_id, email, password FROM account WHERE account_id = ?', id, (err, result, fields) => {
@@ -94,6 +112,20 @@ exports.getAccountId = function(email) {
                     } else {
                         resolve(null)
                     }
+                }
+            }
+        )
+    })
+}
+
+exports.updatePasswordById = function(accId, password) {
+    return new Promise(function(resolve, reject) {
+        db.get().query(
+            "UPDATE account SET password = ? WHERE account_id = ?", [password, accId], (err, result) => {
+                if(err) {
+                    reject(err)
+                } else {
+                    resolve(result.affectedRows)
                 }
             }
         )
