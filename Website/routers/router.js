@@ -134,7 +134,7 @@ router.post('/forgot-password', checkNotAuthenticated, async (req,res) => {
     }
 })
 
-//Tad's #3, broken
+//Tad's #3
 //Change the password, this is the link coming from the email
 router.get('/passwordchange?:hash', async function verifyUser(req, res){
     // TODO: JUST DELETE INVALID HASHES?
@@ -178,20 +178,28 @@ router.get('/change-password', checkAuthenticated, (req, res) => {
 
 //Tad's. #
 //Insert the newly changed password into the database
-router.post('/passwordchange', checkNotAuthenticated, async (req,res) => {
+router.post('/passwordchange', checkAuthenticated, async (req,res) => {
+    let errors = []
+    const { password, psw2 } = req.body
 
-    let hashedPassword = await bcrypt.hash(req.body.password, 10)
-    let inserted = await accountModel.updatePasswordById(req.user.id, hashedPassword)
-
-    if(inserted) {
-        // password was changed
-        req.flash('success_msg', 'Password Changed Successfully')
-        res.redirect('/dashboard')
+    // check if password match
+    if(password !== psw2) {
+        errors.push({ msg: 'Passwords Do Not Match' })
+        res.render('../views/password-change.ejs', { errors, password, psw2 })
     } else {
-        // password was not changed. could not find an account with that id (big problem: user serialized on website without logging in)
-        // process.exit(1)
-        req.logOut()
-        res.redirect('/login')
+        let hashedPassword = await bcrypt.hash(password, 10)
+        let inserted = await accountModel.updatePasswordById(req.user.id, hashedPassword)
+
+        if(inserted) {
+            // password was changed
+            req.flash('success_msg', 'Password Changed Successfully')
+            res.redirect('/dashboard')
+        } else {
+            // password was not changed. could not find an account with that id (big problem: user serialized on website without logging in)
+            // process.exit(1)
+            req.logOut()
+            res.redirect('/login')
+        }
     }
 })
 
