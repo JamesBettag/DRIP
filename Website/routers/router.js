@@ -12,6 +12,8 @@ const methodOverride = require('method-override')
 
 router.use(methodOverride('_method'))
 
+// TODO: handle invalid routes
+
 //Open dashboard if you are currently logged in 
 router.get('/dashboard', checkAuthenticated, (req, res) => {
     res.render('../views/dashboard.ejs', {name: req.user.email})
