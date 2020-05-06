@@ -40,8 +40,6 @@ router.get('/register', checkNotAuthenticated, (req, res) => {
 router.post('/register', checkNotAuthenticated, async (req,res) => {
     let errors = []     // initialize empty error array
     const { name, email, password, psw2 } = req.body
-    
-    //hashedPasswordChange = await bcrypt.hash((Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15)), 10)
 
     // TODO : CHECK FOR PASS LENGTH?
 
@@ -58,14 +56,14 @@ router.post('/register', checkNotAuthenticated, async (req,res) => {
         }
         // check if register post encountered user errors
         if (errors.length > 0) {
-            // if there are errors, reload page, flash errors to user and enter input back into fields
+            // if there are flash errors to user and enter input back into fields
             res.render('../views/register.ejs', { errors, name, email, password, psw2 })
         } else {
             // no errors were found, hash passwords and account
             const passHash = await bcrypt.hash(password, 10)
             const accHash = await bcrypt.hash(email, 10)
             Promise.all([passHash, accHash])
-            .then((values) => {
+            .then((values) => {     // wait for bcrypt to hash pass and account
                 accountModel.insertNewUser(name, name, email, values[0], values[1], (err, result) => {
                     if(err) {
                         console.log(err)
@@ -82,10 +80,7 @@ router.post('/register', checkNotAuthenticated, async (req,res) => {
             .catch((err) => { console.log(err) })
         }
     })
-    .catch((err) => console.log(err))
-    
-    /*
-     */
+    .catch((err) => { console.log(err) })
 })
 
 //Verify the user's account
