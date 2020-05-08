@@ -6,6 +6,9 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "files": [
+    "assets/bootstrap-4.4.1/dist"
+  ],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/bettagj/DRIP.git"
