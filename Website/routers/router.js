@@ -14,10 +14,7 @@ router.use(methodOverride('_method'))
 
 // TODO: handle invalid routes
 
-//Open dashboard if you are currently logged in 
-router.get('/dashboard', checkAuthenticated, (req, res) => {
-    res.render('../views/dashboard.ejs', {name: req.user.email})
-})
+
 
 //Open login page if you are not alredy logged in 
 router.get('/login', checkNotAuthenticated, (req, res) => {
@@ -26,7 +23,7 @@ router.get('/login', checkNotAuthenticated, (req, res) => {
 
 //What happens when you click login button on login screen
 router.post('/login', checkNotAuthenticated, passport.authenticate('local', {
-    successRedirect: '/dashboard', //Where do we go if success
+    successRedirect: '/users/dashboard', //Where do we go if success
     failureRedirect: '/login', //Where do we go if failure 
     failureFlash: true //Display messages 
     //Using passport middleware to authenticate the user

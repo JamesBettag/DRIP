@@ -15,12 +15,15 @@ const queryString = require('querystring')
 const key = process.env.SENDGRID_API_KEY
 const port = 3000
 const passport = require('passport')
+const userRouter = require('./routers/userRouter.js')
+
 
 // passport config
 require('./passport-config')(passport)
 
 //app.use(bodyParser.urlencoded({ extended: true })); //James
 app.use(bodyParser.json()); //James
+
 
 app.set('view-engine', 'ejs')
 app.use(require('express-session')({ secret: 'keyboard cat', resave: true, saveUninitialized: true })) //This solved an error for me "Error: secret option required for sessions"
@@ -58,6 +61,8 @@ db.connect(function ConnectionHandler(err) {
 //app.use(express.static('public'))
 
 app.use('/', router)
+// route all /user router through the router file userRouter.js
+app.use('/users', userRouter)
 
 app.listen(port) 
 console.log('Listening on port ' + port)
