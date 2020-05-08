@@ -18,6 +18,21 @@ router.get('/dashboard', checkAuthenticated, (req, res) => {
     res.render('../views/dashboard.ejs', {name: req.user.email})
 })
 
+//Open plants if you are currently logged in 
+router.get('/plants.ejs', checkAuthenticated, (req, res) => {
+    res.render('../views/plants.ejs', {name: req.user.email})
+})
+
+//Open devices if you are currently logged in
+router.get('/devices.ejs', checkAuthenticated, (req, res) => {
+    res.render('../views/devices.ejs', {name: req.user.email})
+})
+
+//Open account if you are currently logged in
+router.get('/account.ejs', checkAuthenticated, (req, res) => {
+    res.render('../views/account.ejs', {name: req.user.email})
+})
+
 //Logout
 router.delete('/logout', (req, res) => {
     req.logOut() //Passport fuction to terminate session
@@ -27,7 +42,7 @@ router.delete('/logout', (req, res) => {
 //This will stop you from entering our dashbaord if you are not registered/signed in
 function checkAuthenticated(req, res, next){
     if(req.isAuthenticated()){
-        return next() //Sends to dashboard
+        return next() //Allows you to proceed 
     }
 
     res.redirect('/login') //Sends back to login

@@ -1,90 +1,67 @@
-<!---
-<h1>Register</h1>
-<form action="/register" method="POST">
-    <div>
-        <label for="name">Name</label>
-        <input type="text" name="name" id="name" required>
-    </div>
-
-    <div>
-        <label for="email">Email</label>
-        <input type="text" name="email" id="email" required>
-    </div>
-
-    <div>
-        <label for="password">Password</label>
-        <input type="text" name="password" id="password" required>
-    </div>
-    <button type="submit">Register</button>
-</form>
-<a href="/login">Login</a>
--->
-
+<!--TODO: Device id? and CLEAN UP-->>
 <!--
 	Place holder for register screen
 -->
-    <head>
-		<title>DRIP</title>
-		<meta charset="utf-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
-        <link rel="stylesheet" href="assets/css/main.css" />
-        <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+<head>
+	<title>DRIP</title>
+	<meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+    <meta name="User register page">
+    <meta name="Tad, James, Mathew">
+    <link rel="stylesheet" href="assets/css/main.css" />
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
-		<noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
-    </head>
+	<noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
+</head>
 
-    
-	<!-- Registration Form -->
-    <article class="container box style3">
-        <header>
+<body>
+        <!-- Registration Form -->
+        <article class="container box style3">
             <h2>Register</h2>
-        </header>
-        <% include ./partials/messages %>
-        <form action="/register" method="POST">
-        <div class="row">
-            <label for="name"><b></b></label>
-            <input type="text" placeholder="Enter Name" name="name" id="name" value="<%= typeof name != 'undefined' ? name : '' %>" required>
+            <% include ./partials/messages %>
+            <form action="/register" method="POST">
+                <div class="row">
+                    <label for="name"><b></b></label>
+                    <input type="text" placeholder="Enter Name" name="name" id="name" value="<%= typeof name != 'undefined' ? name : '' %>" required>
+                    <label for="email"><b></b></label>
+                    <input type="text" placeholder="Enter Email" name="email" id="email" value="<%= typeof email != 'undefined' ? email : '' %>"required>
+                    <label for="psw"><b></b></label>
+                    <input type="password" placeholder="Enter Password" name="password" id="password" value="<%= typeof password != 'undefined' ? password : '' %>" required>
+                    <label for="psw"><b></b></label>
+                    <input type="password" placeholder="Reenter Password" name="psw2" id="psw2" value="<%= typeof psw2 != 'undefined' ? psw2 : '' %>" required>   
+                    <p id="passwordVailidityOutput">&#10005; Passwords do not match<br></p>
+                    <p id="willItSend">&#10005; Will not send<br></p>
 
-            <label for="email"><b></b></label>
-            <input type="text" placeholder="Enter Email" name="email" id="email" value="<%= typeof email != 'undefined' ? email : '' %>"required>
-
-            <label for="psw"><b></b></label>
-            <input type="password" placeholder="Enter Password" name="password" id="password" value="<%= typeof password != 'undefined' ? password : '' %>" required>
-
-            <label for="psw"><b></b></label>
-            <input type="password" placeholder="Reenter Password" name="psw2" id="psw2" value="<%= typeof psw2 != 'undefined' ? psw2 : '' %>" required>
-            
-            <p id="passwordVailidityOutput">&#10005; Passwords do not match<br></p>
-            <p id="willItSend">&#10005; Will not send<br></p>
-
-            <div class="col-12">
-                <ul class="actions">
-                    <li><button type="submit">Create Account</button></li>
-                </ul>
-            </div>
-        </div>
-            <a href="index.html" class="button style3">Cancel</a>
-        </form>
+                    <div class="col-12">
+                        <ul class="actions">
+                            <li><button type="submit">Create Account</button></li>
+                        </ul>
+                    </div>  
+                </div>
+                <a href="index.html" class="button style3">Cancel</a>
+            </form>
         <a href="/login">Login</a>
-    </article>
+        </article>
 
     
-    <script language='javascript' type='text/javascript'>
-        function passwordChecker(password){
-            if(password.value == document.getElementById('password').value){
-                document.getElementById('passwordVailidityOutput').innerHTML = "&#10004 Passwords match"
-            }else{
-                document.getElementById('passwordVailidityOutput').innerHTML = "&#10005 Passwords do not match"
+        <script language='javascript' type='text/javascript'>
+            function passwordChecker(password){
+                if(password.value == document.getElementById('password').value){
+                    document.getElementById('passwordVailidityOutput').innerHTML = "&#10004 Passwords match"
+                }else{
+                    document.getElementById('passwordVailidityOutput').innerHTML = "&#10005 Passwords do not match"
+                }
             }
-        }
-        function accountCreation(){
-            document.getElementById('willItSend').innerHTML = "Hi"
-            /*
-            if(document.getElementById('passwordValidityOutput').value == "&#10004 Passwords match"){
+            function accountCreation(){
+                document.getElementById('willItSend').innerHTML = "Hi"
+                /*
+                if(document.getElementById('passwordValidityOutput').value == "&#10004 Passwords match"){
                 document.getElementById('willItSend').innerHTML = "&#10004 Will send"
-            }else{
-                document.getElementById('willItSend').innerHTML = "&#10005; Will not send"
-            }*/
-        }
-    </script>
+                }else{
+                    document.getElementById('willItSend').innerHTML = "&#10005; Will not send"
+                }*/
+            }
+        </script>
+    </body>
+	
