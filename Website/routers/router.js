@@ -14,7 +14,10 @@ router.use(methodOverride('_method'))
 
 // TODO: handle invalid routes
 
-
+//Open dashboard if you are currently logged in 
+router.get('/dashboard', checkAuthenticated, (req, res) => {
+    res.render('../views/dashboard.ejs', {name: req.user.email})
+})
 
 //Open login page if you are not alredy logged in 
 router.get('/login', checkNotAuthenticated, (req, res) => {
@@ -211,7 +214,7 @@ router.delete('/logout', (req, res) => {
 //This will stop you from entering our dashbaord if you are not registered/signed in
 function checkAuthenticated(req, res, next){
     if(req.isAuthenticated()){
-        return next() //Sends to dashboard
+        return next() //Allows you to proceed
     }
 
     res.redirect('/login') //Sends back to login
