@@ -14,22 +14,22 @@ router.use(methodOverride('_method'))
 
 
 //Open dashboard if you are currently logged in 
-router.get('/dashboard', checkAuthenticated, (req, res) => {
+router.get('/dashboard', checkAuthenticated, nocache, (req, res) => {
     res.render('../views/dashboard.ejs', {name: req.user.email})
 })
 
 //Open plants if you are currently logged in 
-router.get('/plants.ejs', checkAuthenticated, (req, res) => {
+router.get('/plants', checkAuthenticated, nocache, (req, res) => {
     res.render('../views/plants.ejs', {name: req.user.email})
 })
 
 //Open devices if you are currently logged in
-router.get('/devices.ejs', checkAuthenticated, (req, res) => {
+router.get('/devices', checkAuthenticated, nocache, (req, res) => {
     res.render('../views/devices.ejs', {name: req.user.email})
 })
 
 //Open account if you are currently logged in
-router.get('/account.ejs', checkAuthenticated, (req, res) => {
+router.get('/account', checkAuthenticated, nocache, (req, res) => {
     res.render('../views/account.ejs', {name: req.user.email})
 })
 
@@ -55,5 +55,13 @@ function checkNotAuthenticated(req, res, next){
     }
     next() //Sends to login
 }
+
+//Disables cache
+function nocache(req, res, next) {
+    res.header('Cache-Control', 'private, no-cache, no-store, must-revalidate');
+    res.header('Expires', '-1');
+    res.header('Pragma', 'no-cache');
+    next();
+  }
 
 module.exports = router
