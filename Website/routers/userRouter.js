@@ -20,31 +20,40 @@ router.get('/dashboard', checkAuthenticated, nocache, async (req, res) => {
     // first get graph data and device info
     let name = req.user.email
     var stopDate = moment(new Date()).format("YYYY-MM-DD HH:mm:ss")
-    var startDate = moment(stopDate).subtract(1, 'week').format("YYYY-MM-DD HH:mm:ss")
+    var startDate = moment(stopDate).subtract(1, 'year').format("YYYY-MM-DD HH:mm:ss")
     //console.log(startDate)
     //console.log(stopDate)
     var data = await dataModel.getGraphData(req.user.email, startDate, stopDate)
     // check if query returned anything
     if(data != null) {
+        console.log(data)
+        let moistureData = []
+        let labelData = []
+        data.forEach(function(row) {
+            labelData.push(row.time)
+            moistureData.push(row.moisture)
+        })
+
         let chartData = {        
             // The type of chart we want to create
             type: 'line',
     
             // The data for our dataset
             data: {
-                labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+                labels: labelData,
                 datasets: [{
                     label: 'DEVICE / PLANT ID GOES HERE',
                     backgroundColor: '#00ADB4',
                     borderColor: '#00ADB4',
                     pointBackgroundColor: '#77C425',
                     pointBorderColor: '#77C425',
-                    data: [0, 10, 5, 2, 20, 30, 45]
+                    data: moistureData
                 }]
             },
             // Configuration options go here
             options: {}
         }
+        
         // push timestamps labels and moisture data into data
         res.render('../views/dashboard.ejs', { chartData, name })
     } else {
