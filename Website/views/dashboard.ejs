@@ -7,7 +7,7 @@
     <meta name="Tad, James, Mathew">
     <link rel="icon" href="/docs/4.0/assets/img/favicons/favicon.ico">
     <title><%= name %>'s Dashboard</title>
-    <link rel="canonical" href="https://getbootstrap.com/docs/4.0/examples/dashboard/">
+    <link rel="canonical" href="//getbootstrap.com/docs/4.0/examples/dashboard/">
     <!-- Bootstrap core CSS -->
     <link href="../assets/bootstrap-4.4.1/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Custom styles for this template -->
@@ -234,29 +234,8 @@
     <!-- Graphs -->
     <!-- Tad's Test Graphs -->
     <canvas id="myChart"></canvas>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
-    <script>
-    var ctx = document.getElementById('myChart').getContext('2d');
-    var chart = new Chart(ctx, {
-      // The type of chart we want to create
-      type: 'line',
-
-      // The data for our dataset
-      data: {
-        labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
-        datasets: [{
-            label: 'My First dataset',
-            backgroundColor: '#00ADB4',
-            borderColor: '#00ADB4',
-            pointBackgroundColor: '#77C425',
-            pointBorderColor: '#77C425',
-            data: [0, 10, 5, 2, 20, 30, 45]
-        }]
-    },
-    // Configuration options go here
-      options: {}
-    });
-    </script>
+    <script src="//cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+    <% include ./partials/chartData %>
 
 
 <!-- End of Tad's Test Graphs -->

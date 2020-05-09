@@ -1,0 +1,33 @@
+<% if(typeof chartData != 'undefined'){ %>
+  <script>
+    var ctx = document.getElementById('myChart').getContext('2d');
+    // VS will show an error in the code in the next line but the code works
+    var chart = new Chart( ctx, <%- JSON.stringify(chartData) %> );
+  </script>
+<% } else { %>
+  <script>
+    // placeholder for empty data titles 'no active devices'
+    // decide on what to display if there are no active devices
+    var ctx = document.getElementById('myChart').getContext('2d');
+    var chart = new Chart(ctx, {
+      // The type of chart we want to create
+      type: 'line',
+
+      // The data for our dataset
+      data: {
+        labels: "",
+        datasets: [{
+            label: 'No Active Devices',
+            backgroundColor: '#00ADB4',
+            borderColor: '#00ADB4',
+            pointBackgroundColor: '#77C425',
+            pointBorderColor: '#77C425',
+            data: []
+        }]
+    },
+    // Configuration options go here
+      options: {}
+    });
+  </script>
+<% } %> 
+

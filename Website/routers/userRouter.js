@@ -14,8 +14,35 @@ router.use(methodOverride('_method'))
 
 
 //Open dashboard if you are currently logged in 
-router.get('/dashboard', checkAuthenticated, nocache, (req, res) => {
-    res.render('../views/dashboard.ejs', {name: req.user.email})
+router.get('/dashboard', checkAuthenticated, (req, res) => {
+    // first get graph data and device info
+    let name = req.user.email
+    data = 5     // put dataModel query here
+    if(data != null) {
+        let chartData = {        
+            // The type of chart we want to create
+            type: 'line',
+    
+            // The data for our dataset
+            data: {
+                labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+                datasets: [{
+                    label: 'DEVICE / PLANT ID GOES HERE',
+                    backgroundColor: '#00ADB4',
+                    borderColor: '#00ADB4',
+                    pointBackgroundColor: '#77C425',
+                    pointBorderColor: '#77C425',
+                    data: [0, 10, 5, 2, 20, 30, 45]
+                }]
+            },
+            // Configuration options go here
+            options: {}
+        }
+        // push timestamps labels and moisture data into data
+        res.render('../views/dashboard.ejs', { chartData, name })
+    } else {
+        res.render('../views/dashboard.ejs', { name })
+    }    
 })
 
 //Open plants if you are currently logged in 
