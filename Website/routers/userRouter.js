@@ -30,7 +30,7 @@ router.get('/dashboard', checkAuthenticated, nocache, async (req, res) => {
         let moistureData = []
         let labelData = []
         data.forEach(function(row) {
-            labelData.push(row.time)
+            labelData.push(moment(row.time).format("MM-DD HH:mm"))
             moistureData.push(row.moisture)
         })
 
