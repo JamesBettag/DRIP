@@ -16,7 +16,7 @@ const key = process.env.SENDGRID_API_KEY
 const port = 3000
 const passport = require('passport')
 const userRouter = require('./routers/userRouter.js')
-
+const moment = require('moment')
 
 // passport config
 require('./passport-config')(passport)
@@ -66,3 +66,9 @@ app.use('/users', userRouter)
 
 app.listen(port) 
 console.log('Listening on port ' + port)
+
+// James testing dates here
+//var stopDate = moment(new Date()).format("YYYY-MM-DD HH:mm:ss")
+//var startDate = moment(stopDate).subtract(1, 'week').format("YYYY-MM-DD HH:mm:ss")
+//console.log(startDate)
+//console.log(stopDate)

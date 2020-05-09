@@ -1,6 +1,7 @@
 var express = require('express')
 var router = express.Router()
 var accountModel = require('../models/accountModel')
+const dataModel = require('../models/dataModel')
 const resetPassModel = require('../models/resetPassModel')
 var emailVerification = require('../verification-email')
 var passwordChange = require('../password-change.js')   //Tad's
@@ -9,15 +10,21 @@ const passport = require('passport') //Compares passwords
 const flash = require('express-flash') //Displays messages if failed login used inside of passport
 const session = require('express-session') //So we can store and access users over multiple sessions
 const methodOverride = require('method-override')
+const moment = require('moment')
 
 router.use(methodOverride('_method'))
 
 
 //Open dashboard if you are currently logged in 
-router.get('/dashboard', checkAuthenticated, (req, res) => {
+router.get('/dashboard', checkAuthenticated, nocache, async (req, res) => {
     // first get graph data and device info
     let name = req.user.email
-    data = 5     // put dataModel query here
+    var stopDate = moment(new Date()).format("YYYY-MM-DD HH:mm:ss")
+    var startDate = moment(stopDate).subtract(1, 'week').format("YYYY-MM-DD HH:mm:ss")
+    //console.log(startDate)
+    //console.log(stopDate)
+    var data = await dataModel.getGraphData(req.user.email, startDate, stopDate)
+    // check if query returned anything
     if(data != null) {
         let chartData = {        
             // The type of chart we want to create
@@ -41,6 +48,7 @@ router.get('/dashboard', checkAuthenticated, (req, res) => {
         // push timestamps labels and moisture data into data
         res.render('../views/dashboard.ejs', { chartData, name })
     } else {
+        // no data was found within the last week
         res.render('../views/dashboard.ejs', { name })
     }    
 })
