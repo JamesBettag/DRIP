@@ -223,7 +223,7 @@ function checkAuthenticated(req, res, next){
 //Wont send you back to login page if your already logedin
 function checkNotAuthenticated(req, res, next){
     if(req.isAuthenticated()){
-        return res.redirect('/dashboard') //Sends you to dashboard
+        return res.redirect('/users/dashboard') //Sends you to dashboard
     }
     next() //Sends to login
 }
