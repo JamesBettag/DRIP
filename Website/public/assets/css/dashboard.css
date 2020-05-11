@@ -58,6 +58,11 @@ body {
     color: #77C425;
   }
   
+  .sidebar .nav-link.active .plantIcon {
+    color: #77C425;
+    opacity: 1;
+  }
+
   .sidebar .nav-link:hover .feather,
   .sidebar .nav-link.active .feather {
     color: inherit;
