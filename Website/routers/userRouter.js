@@ -21,12 +21,12 @@ router.get('/dashboard', checkAuthenticated, nocache, async (req, res) => {
     let name = req.user.email
     var stopDate = moment(new Date()).format("YYYY-MM-DD HH:mm:ss")
     var startDate = moment(stopDate).subtract(1, 'year').format("YYYY-MM-DD HH:mm:ss")
-    //console.log(startDate)
-    //console.log(stopDate)
+    // console.log(startDate)
+    // console.log(stopDate)
     var data = await dataModel.getGraphData(req.user.email, startDate, stopDate)
     // check if query returned anything
     if(data != null) {
-        console.log(data)
+        // console.log(data)
         let moistureData = []
         let labelData = []
         data.forEach(function(row) {
