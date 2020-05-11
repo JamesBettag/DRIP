@@ -16,7 +16,6 @@ const key = process.env.SENDGRID_API_KEY
 const port = 3000
 const passport = require('passport')
 const userRouter = require('./routers/userRouter.js')
-const moment = require('moment')
 
 // passport config
 require('./passport-config')(passport)
@@ -49,7 +48,6 @@ app.use((req, res, next) => {
   next()
 })
 
-
 db.connect(function ConnectionHandler(err) {
   if(err) {
     console.log('Unable to connect to MySQL')
@@ -58,17 +56,13 @@ db.connect(function ConnectionHandler(err) {
   console.log('Connection to MySQL Successful')
 })
 
-//app.use(express.static('public'))
-
 app.use('/', router)
 // route all /user router through the router file userRouter.js
 app.use('/users', userRouter)
+// handle invalid routes
+app.use(function(req, res) {
+  res.redirect('/')
+})
 
 app.listen(port) 
 console.log('Listening on port ' + port)
-
-// James testing dates here
-//var stopDate = moment(new Date()).format("YYYY-MM-DD HH:mm:ss")
-//var startDate = moment(stopDate).subtract(1, 'week').format("YYYY-MM-DD HH:mm:ss")
-//console.log(startDate)
-//console.log(stopDate)

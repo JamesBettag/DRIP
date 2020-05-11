@@ -5,8 +5,6 @@ const dataModel = require('../models/dataModel')
 const resetPassModel = require('../models/resetPassModel')
 var emailVerification = require('../verification-email')
 var passwordChange = require('../password-change.js')   //Tad's
-const bcrypt = require('bcryptjs')
-const passport = require('passport') //Compares passwords
 const flash = require('express-flash') //Displays messages if failed login used inside of passport
 const session = require('express-session') //So we can store and access users over multiple sessions
 const methodOverride = require('method-override')
@@ -14,13 +12,12 @@ const moment = require('moment')
 
 router.use(methodOverride('_method'))
 
-
 //Open dashboard if you are currently logged in 
 router.get('/dashboard', checkAuthenticated, nocache, async (req, res) => {
     // first get graph data and device info
     let name = req.user.email
     var stopDate = moment(new Date()).format("YYYY-MM-DD HH:mm:ss")
-    var startDate = moment(stopDate).subtract(1, 'year').format("YYYY-MM-DD HH:mm:ss")
+    var startDate = moment(stopDate).subtract(1, 'day').format("YYYY-MM-DD HH:mm:ss")
     // console.log(startDate)
     // console.log(stopDate)
     var data = await dataModel.getGraphData(req.user.email, startDate, stopDate)
