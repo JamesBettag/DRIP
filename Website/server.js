@@ -61,7 +61,7 @@ app.use('/', router)
 app.use('/users', userRouter)
 // handle invalid routes
 app.use(function(req, res) {
-  res.redirect('/')
+  res.redirect('/index')
 })
 
 app.listen(port) 

@@ -13,6 +13,10 @@ const methodOverride = require('method-override')
 router.use(methodOverride('_method'))
 
 // TODO: handle invalid routes
+//Open index
+router.get('/index', (req, res) => {
+    res.render('../views/index.ejs')
+})
 
 //Open dashboard if you are currently logged in 
 router.get('/dashboard', checkAuthenticated, (req, res) => {
