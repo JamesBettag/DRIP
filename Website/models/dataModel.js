@@ -19,3 +19,53 @@ exports.getGraphData = function(email, startDate, stopDate) {
         )
     })
 }
+
+exports.getPlantID = function(mac) {
+    return new Promise(function(resolve, reject) {
+        db.get().query(
+            "SELECT plant_id FROM device WHERE device_id = ?", mac, (err, result, fields) => {
+                if(err) {
+                    reject(err)
+                } else {
+                    if(result.length) {
+                        resolve(result.plant_id)
+                    } else {
+                        resolve(null)
+                    }
+                }
+            }
+        )
+    })
+}
+
+exports.insertMoistureData = function(plantId, moisture) {
+    return new Promise(function(resolve, reject) {
+        db.get().query(
+            "INSERT INTO data (plant_id, moisture) VALUES (?, ?)", [plantId, moisture], (err, result) => {
+                if(err) {
+                    reject(err)
+                } else {
+                    resolve(result)
+                }
+            }
+        )
+    })
+}
+
+exports.getDeviceID = function(mac) {
+    return new Promise(function(resolve, reject) {
+        db.get().query(
+            "SELECT device_id FROM device WHERE device_id = ?", mac, (err, result, fields) => {
+                if(err) {
+                    reject(err)
+                } else {
+                    if(result.length) {
+                        resolve(result.device_id)
+                    } else {
+                        resolve(null)
+                    }
+                }
+            }
+        )
+    })
+}
