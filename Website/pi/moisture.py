@@ -11,7 +11,7 @@ from getmac import get_mac_address
 mac_addr = get_mac_address()
 
 #
-URL = "http://leia.cs.spu.edu:3000/pi"
+URL = "http://leia.cs.spu.edu:3000/pi/insert"
 
 # create the spi bus
 spi = busio.SPI(clock=board.SCK, MISO=board.MISO, MOSI=board.MOSI)
