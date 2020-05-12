@@ -28,8 +28,9 @@ exports.getPlantID = function(mac) {
                     reject(err)
                 } else {
                     if(result.length) {
-                        resolve(result.plant_id)
+                        resolve(result[0].plant_id)
                     } else {
+			console.log("no plant found")
                         resolve(null)
                     }
                 }

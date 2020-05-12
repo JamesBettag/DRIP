@@ -6,9 +6,8 @@ const methodOverride = require('method-override')
 router.use(methodOverride('_method'))
 
 router.get('/insert', async (req, res) => {
-    mac = req.query.mac
-    data = req.query.data
-    const plantId = await dataModel.getPlantID(mac)
+    const { mac, data } = req.query
+    plantId = await dataModel.getPlantID(mac)
     if(plantId != null) {
         await dataModel.insertMoistureData(plantId, data)
         res.send("0")
