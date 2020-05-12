@@ -1,13 +1,10 @@
 import time
-import mysql.connector
-from mysql.connector import Error
-from mysql.connector import errorcode
-import pymysql
 import busio
 import digitalio
 import board
 import adafruit_mcp3xxx.mcp3008 as MCP
 from adafruit_mcp3xxx.analog_in import AnalogIn
+import requests
 
 # sensor ID (from user)
 plant_id = 1
