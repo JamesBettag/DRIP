@@ -9,6 +9,8 @@ from getmac import get_mac_address
 
 # mac address of device (device id)
 mac_addr = get_mac_address()
+# remove possible spaces from mac address
+mac_addr.strip()
 
 #
 URL = "http://leia.cs.spu.edu:3001/pi/insert"
@@ -28,11 +30,11 @@ try:
     while True:
         #print("Raw ADC Value: ", chan.value)
         #print("ADC Voltage: " + str(chan.voltage) + "V")
-        data = (chan.value / 65536) * 100
+        data = round(100 - ((chan.value / 65536) * 100), 2)
         PARAMS = { 'mac': mac_addr, 'data': data }
         r = requests.get(url = URL, params = PARAMS)
         if (r.text == "0") :
-            print("inserted data: " + data)
+            print("inserted data: " + str(data))
         elif (r.text == "1") :
             print("this device does not have a registered plant. please go online and create/connect a plant with this device")
             exit()
@@ -40,9 +42,8 @@ try:
             print("this device has not been registered with your account. please login to your accound and register this device. Device ID: " + mac_addr)
             exit()
 
-        # pause for half a second
-        # change to 15 min intervals
-        time.sleep(1.5)
+        # pause for 15 minutes
+        time.sleep(15 * 60)
 
 except KeyboardInterrupt:
     print("cancel")
