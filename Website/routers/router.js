@@ -2,8 +2,8 @@ var express = require('express')
 var router = express.Router()
 var accountModel = require('../models/accountModel')
 const resetPassModel = require('../models/resetPassModel')
-var emailVerification = require('../verification-email')
-var passwordChange = require('../password-change.js')   //Tad's
+var emailVerification = require('../config/verification-email')
+var passwordChange = require('../config/password-change.js')   //Tad's
 const bcrypt = require('bcryptjs')
 const passport = require('passport') //Compares passwords
 const flash = require('express-flash') //Displays messages if failed login used inside of passport
@@ -13,6 +13,10 @@ const methodOverride = require('method-override')
 router.use(methodOverride('_method'))
 
 // TODO: handle invalid routes
+//Open index
+router.get('/index', (req, res) => {
+    res.render('../views/index.ejs')
+})
 
 //Open dashboard if you are currently logged in 
 router.get('/dashboard', checkAuthenticated, (req, res) => {
