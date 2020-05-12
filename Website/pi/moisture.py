@@ -31,7 +31,6 @@ try:
         data = (chan.value / 65536) * 100
         PARAMS = { 'mac': mac_addr, 'data': data }
         r = requests.get(url = URL, params = PARAMS)
-        print(r)
         if (r.text == "0") :
             print("inserted data: " + data)
         elif (r.text == "1") :
