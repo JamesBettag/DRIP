@@ -26,17 +26,18 @@ mcp = MCP.MCP3008(spi, cs)
 chan = AnalogIn(mcp, MCP.P0)
 try:
     while True:
-        print("Raw ADC Value: ", chan.value)
-        print("ADC Voltage: " + str(chan.voltage) + "V")
+        #print("Raw ADC Value: ", chan.value)
+        #print("ADC Voltage: " + str(chan.voltage) + "V")
         data = (chan.value / 65536) * 100
         PARAMS = { 'mac': mac_addr, 'data': data }
         r = requests.get(url = URL, params = PARAMS)
-        if (r == "0") :
+        print(r)
+        if (r.text == "0") :
             print("inserted data: " + data)
-        elif (r == "1") :
+        elif (r.text == "1") :
             print("this device does not have a registered plant. please go online and create/connect a plant with this device")
             exit()
-        elif (r == "2") :
+        elif (r.text == "2") :
             print("this device has not been registered with your account. please login to your accound and register this device. Device ID: " + mac_addr)
             exit()
 
