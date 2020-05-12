@@ -10,3 +10,4 @@ pip
 sudo apt install python3-pip
 sudo pip3 install adafruit-blinka
 sudo pip3 install adafruit-circuitpython-mcp3xxx
+sudo pip3 install get-mac
