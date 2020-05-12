@@ -1,4 +1,4 @@
-const db = require('../db')
+const db = require('../config/db')
 
 exports.insertNewUser = function(fname, lname, email, pass, acchash, done) {
     try{

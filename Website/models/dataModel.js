@@ -1,4 +1,4 @@
-const db = require('../db')
+const db = require('../config/db')
 
 exports.getGraphData = function(email, startDate, stopDate) {
     return new Promise(function(resolve, reject) {

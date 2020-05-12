@@ -7,7 +7,7 @@ const express = require('express')
 const app = express()
 const flash = require('express-flash')
 const session = require('express-session')
-var db = require('./db')
+var db = require('./config/db')
 var router = require('./routers/router')
 const bodyParser = require('body-parser');  //James
 const url = require('url')
@@ -18,7 +18,7 @@ const passport = require('passport')
 const userRouter = require('./routers/userRouter.js')
 
 // passport config
-require('./passport-config')(passport)
+require('./config/passport-config')(passport)
 
 //app.use(bodyParser.urlencoded({ extended: true })); //James
 app.use(bodyParser.json()); //James
