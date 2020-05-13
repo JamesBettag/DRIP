@@ -4,7 +4,7 @@ var path = require('path')
 const methodOverride = require('method-override')
 
 router.use(methodOverride('_method'))
-var dir = path.resolve('.', '../public/assets')
+var dir = "/home/bettagj/GMS/Website/public/assets"
 
 router.get('/css/min', (req, res) => {
     res.sendFile(dir + '/bootstrap-4.4.1/dist/css/bootstrap.min.css')
