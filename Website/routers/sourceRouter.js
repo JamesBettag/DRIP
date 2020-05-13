@@ -23,7 +23,7 @@ router.get('/js/min', (req, res) => {
 })
 
 router.get('/plant', (req, res) => {
-    res.sendFile('/home/bettagj/GMS/Website/public/images/icons/plantIcon.svg')
+    res.sendFile('/home/bettagj/GMS/Website/public/images/Icons/plantIcon.svg')
 })
 
 module.exports = router
