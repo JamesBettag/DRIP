@@ -22,4 +22,8 @@ router.get('/js/min', (req, res) => {
     res.sendFile(dir + '/bootstrap-4.4.1/dist/js/bootstrap.min.js')
 })
 
+router.get('/plant', (req, res) => {
+    res.sendFile('/home/bettagj/GMS/Website/public/images/icons/plantIcon.svg')
+})
+
 module.exports = router
