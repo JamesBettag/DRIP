@@ -8,14 +8,17 @@ const app = express()
 const flash = require('express-flash')
 const session = require('express-session')
 var db = require('./config/db')
-var router = require('./routers/router')
-const bodyParser = require('body-parser');  //James
+const router = require('./routers/router')
+const userRouter = require('./routers/userRouter.js')
+const piRouter = require('./routers/piRouter')
+const sourceRouter = require('./routers/sourceRouter')
+const bodyParser = require('body-parser')
 const url = require('url')
 const queryString = require('querystring')
 const key = process.env.SENDGRID_API_KEY
-const port = 3000
+const port = 3001
 const passport = require('passport')
-const userRouter = require('./routers/userRouter.js')
+
 
 // passport config
 require('./config/passport-config')(passport)
@@ -59,6 +62,10 @@ db.connect(function ConnectionHandler(err) {
 app.use('/', router)
 // route all /user router through the router file userRouter.js
 app.use('/users', userRouter)
+// route all /pi routes through the pi router file piRouter.js
+app.use('/pi', piRouter)
+// route js sources through sourceRouter
+app.use('/source', sourceRouter)
 // handle invalid routes
 app.use(function(req, res) {
   res.redirect('/index')

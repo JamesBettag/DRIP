@@ -1,0 +1,13 @@
+
+busio,
+digitalio,
+board,
+adafruit_mcp3xxx.mcp3008 as MCP,
+from adafruit_mcp3xxx.analog_in import AnalogIn
+requests
+pip
+
+sudo apt install python3-pip
+sudo pip3 install adafruit-blinka
+sudo pip3 install adafruit-circuitpython-mcp3xxx
+sudo pip3 install get-mac

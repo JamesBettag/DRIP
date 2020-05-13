@@ -17,7 +17,7 @@ router.get('/dashboard', checkAuthenticated, nocache, async (req, res) => {
     // first get graph data and device info
     let name = req.user.email
     var stopDate = moment(new Date()).format("YYYY-MM-DD HH:mm:ss")
-    var startDate = moment(stopDate).subtract(1, 'year').format("YYYY-MM-DD HH:mm:ss")
+    var startDate = moment(stopDate).subtract(1, 'day').format("YYYY-MM-DD HH:mm:ss")
     var data = await dataModel.getGraphData(name, startDate, stopDate)
     // check if query returned anything
     if(data != null) {
@@ -26,6 +26,7 @@ router.get('/dashboard', checkAuthenticated, nocache, async (req, res) => {
         let labelData = []
         let minData = []
         let maxData = []
+        var graphTitle = data[0].name
         data.forEach(function(row) {
             labelData.push(moment(row.time).format("MM-DD HH:mm"))
             moistureData.push(row.moisture)
@@ -59,7 +60,7 @@ router.get('/dashboard', checkAuthenticated, nocache, async (req, res) => {
                 },
                 {
                     // TODO get device name
-                    label: 'DEVICE / PLANT ID GOES HERE',
+                    label: graphTitle,
                     backgroundColor: 'rgba(0, 173, 180, 0.55)',
                     borderColor: '#00ADB4',
                     pointBackgroundColor: '#77C425',
@@ -69,7 +70,14 @@ router.get('/dashboard', checkAuthenticated, nocache, async (req, res) => {
                 }]
             },
             // Configuration options go here
-            options: {}
+            options: {
+                scales: {
+                    yAxes: [{
+                        display: true,
+                        ticks: { suggestedMin: 0 }
+                    }]
+                }
+            }
         }
         
         // push timestamps labels and moisture data into data
