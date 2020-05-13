@@ -1,23 +1,25 @@
 var express = require('express')
 var router = express.Router()
+var path = require('path')
 const methodOverride = require('method-override')
 
 router.use(methodOverride('_method'))
+var dir = path.resolve('.', '../public/assets')
 
 router.get('/css/min', (req, res) => {
-    res.sendFile(__dirname + '/../public/assets/bootstrap-4.4.1/dist/css/bootstrap.min.css')
+    res.sendFile(dir + '/bootstrap-4.4.1/dist/css/bootstrap.min.css')
 })
 
 router.get('/css/dash', (req, res) => {
-    res.sendFile(__dirname + '/../public/assets/css/dashboard.css')
+    res.sendFile(dir + '/css/dashboard.css')
 })
 
 router.get('/js/popper', (req, res) => {
-    res.sendFile(__dirname + '/../public/assets/js/popper.min.js')
+    res.sendFile(dir + '/js/popper.min.js')
 })
 
 router.get('/js/min', (req, res) => {
-    res.sendFile(__dirname + '/../public/assets/bootstrap-4.4.1/dist/js/bootstrap.min.js')
+    res.sendFile(dir + '/bootstrap-4.4.1/dist/js/bootstrap.min.js')
 })
 
 module.exports = router
