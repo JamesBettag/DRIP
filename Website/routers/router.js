@@ -188,12 +188,12 @@ router.get('/change-password', checkAuthenticated, (req, res) => {
 //Insert the newly changed password into the database
 router.post('/passwordchange', checkAuthenticated, async (req,res) => {
     let errors = []
-    const { password, psw2 } = req.body
+    const { password, password2 } = req.body
 
     // check if password match
-    if(password !== psw2) {
+    if(password !== password2) {
         errors.push({ msg: 'Passwords Do Not Match' })
-        res.render('../views/password-change.ejs', { errors, password, psw2 })
+        res.render('../views/password-change.ejs', { errors, password, password2 })
     } else {
         let hashedPassword = await bcrypt.hash(password, 10)
         let inserted = await accountModel.updatePasswordById(req.user.id, hashedPassword)
