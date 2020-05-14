@@ -1,88 +1,154 @@
-<!doctype html>
-<html lang="en">
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-        <meta name="Account management page">
-        <meta name="Tad, James, Mathew">
-        <link rel="icon" href="/docs/4.0/assets/img/favicons/favicon.ico">
-        <title>Account</title>
-        <link rel="canonical" href="https://getbootstrap.com/docs/4.0/examples/dashboard/">
-        <!-- Bootstrap core CSS -->
-        <link href="../assets/bootstrap-4.4.1/dist/css/bootstrap.min.css" rel="stylesheet">
-        <!-- Custom styles for this template -->
-        <link href="../assets/css/dashboard.css" rel="stylesheet">
-    </head>
-    
-    <body> 
-        <nav class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0">
-            <a class="navbar-brand col-sm-3 col-md-2 mr-0" href="/index">DRIP</a>
-            <ul class="navbar-nav px-3">
-              <li class="nav-item text-nowrap">
-                <form action="/logout?_method=DELETE" method="POST">
-                  <a onclick="this.closest('form').submit();return false;" class="nav-link" type="submit">Sign out</a>
-                </form>
-              </li>
-            </ul>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="Account management page">
+    <meta name="Tad, James, Mathew">
+    <link rel="icon" href="/docs/4.0/assets/img/favicons/favicon.ico">
+    <title>Account</title>
+    <link rel="canonical" href="https://getbootstrap.com/docs/4.0/examples/dashboard/">
+    <!-- Bootstrap core CSS -->
+    <link href="http://leia.cs.spu.edu:3001/source/css/min" rel="stylesheet">
+    <!-- Custom styles for this template -->
+    <link href="http://leia.cs.spu.edu:3001/source/css/dash" rel="stylesheet">
+</head>
+
+
+<body> 
+    <nav class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0">
+        <a class="navbar-brand col-sm-3 col-md-2 mr-0" href="/index">DRIP</a>
+        <ul class="navbar-nav px-3">
+          <li class="nav-item text-nowrap">
+            <form action="/logout?_method=DELETE" method="POST">
+              <a onclick="this.closest('form').submit();return false;" class="nav-link" type="submit">Sign out</a>
+            </form>
+          </li>
+        </ul>
+    </nav>
+  
+    <div class="container-fluid">
+        <div class="row">
+          <nav class="col-md-2 md-offset-2 d-none d-md-block bg-light sidebar">
+            <div class="sidebar-sticky">
+                <ul class="nav flex-column">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/users/dashboard">
+                            <span data-feather="home"></span>
+                            Dashboard 
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/users/plants">
+                            <span><img src="../images/icons/plantIcon.svg" alt="Plant Icon" onMouseOver="this.style.color='#0F0'"
+                            onMouseOut="this.style.color='#00F'" class="feather plantIcon"></span>
+                            Plants
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/users/devices">
+                            <span data-feather="cpu"></span>
+                            Devices
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="/users/account">
+                            <span data-feather="users"></span>
+                            Account <span class="sr-only">(current)</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
         </nav>
-      
-        <div class="container-fluid">
+
+
+
+    </div>
+    <main role="main" class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
+        <div class="container">
             <div class="row">
-              <nav class="col-md-2 d-none d-md-block bg-light sidebar">
-                <div class="sidebar-sticky">
-                    <ul class="nav flex-column">
-                        <li class="nav-item">
-                            <a class="nav-link" href="/users/dashboard">
-                                <span data-feather="home"></span>
-                                Dashboard 
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="/users/plants">
-                                <span><img src="../images/icons/plantIcon.svg" alt="Plant Icon" onMouseOver="this.style.color='#0F0'"
-                                onMouseOut="this.style.color='#00F'" class="feather plantIcon"></span>
-                                Plants
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="/users/devices">
-                                <span data-feather="cpu"></span>
-                                Devices
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link active" href="/users/account">
-                                <span data-feather="users"></span>
-                                Account <span class="sr-only">(current)</span>
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-            </nav>
-        </div>
+              <div class="col-md-8 order-md-1">
+                <h4 class="mb-3">Billing address</h4>
+                <form class="needs-validation" novalidate>
+                  <div class="row">
+                    <div class="col-md-6 mb-6">
+                      <label for="fullName">Full name</label>
+                      <input type="text" class="form-control" id="fullName" placeholder="" value="" required>
+                      <div class="invalid-feedback">
+                        Valid first name is required.
+                      </div>
+                    </div>
+                  </div>
+          
+                  <!--
+                  <div class="mb-3">
+                    <label for="username">Username</label>
+                    <div class="input-group">
+                      <div class="input-group-prepend">
+                        <span class="input-group-text">@</span>
+                      </div>
+                      <input type="text" class="form-control" id="username" placeholder="Username" required>
+                      <div class="invalid-feedback" style="width: 100%;">
+                        Your username is required.
+                      </div>
+                    </div>
+                  </div>
+                  <div class="mb-3">
+                    <label for="email">Email <span class="text-muted">(Optional)</span></label>
+                    <input type="email" class="form-control" id="email" placeholder="you@example.com">
+                    <div class="invalid-feedback">
+                      Please enter a valid email address for shipping updates.
+                    </div>
+                  </div>
+                    -->
+
+                  <div class="mb-3">
+                    <label for="address">Password</label>
+                    <input type="text" class="form-control" id="passwordOne" placeholder="Passwords must match" required>
+                    <div class="invalid-feedback">
+                      Please enter your password.
+                    </div>
+                  </div>
+
+                  <div class="mb-3">
+                    <label for="address">Reenter Password</label>
+                    <input type="text" class="form-control" id="passwordTwo" placeholder="Passwords must match" required>
+                    <div class="invalid-feedback">
+                      Please enter your password.
+                    </div>
+                  </div>
+                  <button class="btn btn-primary btn-lg btn-block" type="submit">Submit Changes</button>
+                </form>
+              </div>
+            </div>
+          
+            <footer class="my-5 pt-5 text-muted text-center text-small">
+              <p class="mb-1">&copy; 2017-2020 Company Name</p>
+              <ul class="list-inline">
+                <li class="list-inline-item"><a href="#">Privacy</a></li>
+                <li class="list-inline-item"><a href="#">Terms</a></li>
+                <li class="list-inline-item"><a href="#">Support</a></li>
+              </ul>
+            </footer>
+          </div>
+    </main>
+
+
+
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery-slim.min.js"><\/script>')</script>
+    <script src="http://leia.cs.spu.edu:3001/source/js/popper"></script>
+    <script src="http://leia.cs.spu.edu:3001/source/js/min"></script>
     
-         <!-- Bootstrap core JavaScript
-          ================================================== -->
-                <!-- Placed at the end of the document so the pages load faster -->
-                <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
-                    integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
-                    crossorigin="anonymous"></script>
-                <script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery-slim.min.js"><\/script>')</script>
-                <script src="http://leia.cs.spu.edu:3001/source/js/popper"></script>
-                <script src="http://leia.cs.spu.edu:3001/source/js/min"></script>
-    
-                <!--Our JS (We may not need this..?Seems to work without it so far)-->
-                <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
-                    integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
-                    crossorigin="anonymous"></script>
-                <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
-                    integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
-                    crossorigin="anonymous"></script>
-    
-                <!-- Icons -->
-                <script src="https://unpkg.com/feather-icons/dist/feather.min.js"></script>
-                <script>
-                    feather.replace()
-                </script>
-    </body>    
-</html>
+    <!--Our JS (We may not need this..?Seems to work without it so far) -->
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+
+    <!-- Icons -->
+    <script src="https://unpkg.com/feather-icons/dist/feather.min.js"></script>
+    <script>
+      feather.replace()
+    </script>
+</body>
