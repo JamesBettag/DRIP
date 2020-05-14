@@ -1,38 +1,41 @@
-<head>
-    <title>DRIP</title>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
-    <link href="assets/css/main.css" rel="stylesheet" type="text/css">
-    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
-    <noscript><link rel="stylesheet" href="assets/css/noscript.css"/></noscript>
-</head>
-
-<article class="container box style3">
-    <header>
-        <h2>Login</h2>
-    </header>
-    <% include ./partials/messages %>
-    <form action="/login" method="POST">
-    <div class="row">
-        <label for="email"><b></b></label>
-        <input type="text" placeholder="Enter Email" name="email" id="email" required>
-
-        <label for="password"><b></b></label>
-        <input type="text" placeholder="Enter Password" name="password" id="password" required>
-        
-        <div class="col-12">
+<!doctype html>
+<html lang="en">
+    <head>
+        <title>DRIP</title>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+        <link href="assets/css/main.css" rel="stylesheet" type="text/css">
+        <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+        <noscript><link rel="stylesheet" href="assets/css/noscript.css"/></noscript>
+    </head>
+    
+    <article class="container box style3">
+        <header>
+            <h2>Login</h2>
+        </header>
+        <% include ./partials/messages %>
+        <form action="/login" method="POST">
+        <div class="row">
+            <label for="email"><b></b></label>
+            <input type="text" placeholder="Enter Email" name="email" id="email" required>
+    
+            <label for="password"><b></b></label>
+            <input type="text" placeholder="Enter Password" name="password" id="password" required>
             
-            <ul class="actions">
-                <li><a href="/index" class="button style3">Cancel</a></li>
-                <li><input type="submit" value="Sign In"/></li>
-                <li><a href="/register"  class="button style3">New User?</a></li>
-            </ul>      
+            <div class="col-12">
+                
+                <ul class="actions">
+                    <li><a href="/index" class="button style3">Cancel</a></li>
+                    <li><input type="submit" value="Sign In"/></li>
+                    <li><a href="/register"  class="button style3">New User?</a></li>
+                </ul>      
+            </div>
+            <div style="display: block; margin: 0 auto; padding: 20px;">
+                <a href="/forgot-password"  class="button style3">Forgot Password?</a>
+            </div>
         </div>
-        <div style="display: block; margin: 0 auto; padding: 20px;">
-            <a href="/forgot-password"  class="button style3">Forgot Password?</a>
-        </div>
-    </div>
-    </form>
-</article>
+        </form>
+    </article>
+</html>
