@@ -55,11 +55,11 @@ body {
   }
   
   .sidebar .nav-link.active {
-    color: #77C425;
+    color: #57B845;
   }
   
   .sidebar .nav-link.active .plantIcon {
-    color: #77C425;
+    color: #57B845;
     opacity: 1;
   }
 

@@ -63,8 +63,8 @@ router.get('/dashboard', checkAuthenticated, nocache, async (req, res) => {
                     label: graphTitle,
                     backgroundColor: 'rgba(0, 173, 180, 0.55)',
                     borderColor: '#00ADB4',
-                    pointBackgroundColor: '#77C425',
-                    pointBorderColor: '#77C425',
+                    pointBackgroundColor: '#57B845',
+                    pointBorderColor: '#57B845',
                     data: moistureData,
                     lineTension: 0.15
                 }]
