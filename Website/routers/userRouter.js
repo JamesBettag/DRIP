@@ -26,7 +26,7 @@ router.get('/dashboard', checkAuthenticated, nocache, async (req, res) => {
         let labelData = []
         let minData = []
         let maxData = []
-        var graphTitle = data[0].name
+        var graphTitle = data[0].plant_name
         data.forEach(function(row) {
             labelData.push(moment(row.time).format("MM-DD HH:mm"))
             moistureData.push(row.moisture)
@@ -95,7 +95,43 @@ router.get('/plants', checkAuthenticated, nocache, (req, res) => {
 
 //Open devices if you are currently logged in
 router.get('/devices', checkAuthenticated, nocache, (req, res) => {
-    res.render('../views/devices.ejs', {name: req.user.email})
+    let devices = []
+    let plants = []
+    // retrieve user's devices and plants from DB
+    userDevices = dataModel.getUserDevices(req.user.id)
+    userPlants = dataModel.getUserPlants(req.user.id)
+    Promise.all([userDevices, userPlants])
+    .then((values) => {
+        if (values[0] != null && values[1] != null) {
+            // user has both a device and a plant
+            values[0].forEach((row) => {
+                devices.push({ name: row.device_name, id: row.device_id })
+            })
+            values[1].forEach((row) => {
+                plants.push({ name: row.plant_name, id: row.plant_id })
+            })
+            res.render('../views/devices.ejs', { devices, plants })
+        } else if (values[0] != null) {
+            // user has a device but no plant registered
+            values[0].forEach((row) => {
+                devices.push({ name: row.device_name, id: row.device_id })
+            })
+            res.render('../views/devices.ejs', { devices })
+        } else if (values[1] != null) {
+            // user has a plant but no device registered
+            values[1].forEach((row) => {
+                plants.push({ name: row.plant_name, id: row.plant_id })
+            })
+            res.render('../views/devices.ejs', { plants })
+        } else {
+            // user has neither devices nor plants
+            res.render('../views/devices.ejs')
+        }
+    })
+    .catch((err) => { 
+        console.log(err)
+        res.render('../views/devices.ejs')
+     })
 })
 
 //Open account if you are currently logged in
