@@ -1,7 +1,3 @@
-
-//Tad working on this
-//refer to server.js, may need additional sendgrid reference code
-
 exports.sendVerificationEmail = function sendVerificationEmailFunction(email, accHash) {
 
   require('dotenv').config()
@@ -17,7 +13,6 @@ exports.sendVerificationEmail = function sendVerificationEmailFunction(email, ac
     html: "<strong>Account has been created!</strong><br><p>Validate your email here:<br>  <a href=\"http://localhost:3001/verification?hash=" + accHash + "\">Validate</a></p>"
     //Server version located below:
     //"<strong>Account has been created!</strong><br><p>Validate your email here:<br>  <a href=\"http://leia.cs.spu.edu:3000/verification?hash=" + accHash + "\">Validate</a></p>"
-
     ,     //End html words in text box
   };
   //ES6
