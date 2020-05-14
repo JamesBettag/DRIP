@@ -13,16 +13,6 @@ exports.sendPasswordChangeEmail = function sendpasswordChangeFunction(email, pas
       html: "<strong>You have requested a password change</strong><br><p>Click this link:<br>  <a href=\"http://leia.cs.spu.edu:3001/passwordchange?hash=" + passHash + "\">Change</a></p>"
       ,     //End html words in text box
     };
-    //ES6
-    sgMail
-      .send(msg)
-      .then(() => { }, error => {
-        console.error(error);
-  
-        if (error.response) {
-          console.error(error.response.body)
-        }
-      });
     //ES8
     (async () => {
       try {

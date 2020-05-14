@@ -15,16 +15,6 @@ exports.sendVerificationEmail = function sendVerificationEmailFunction(email, ac
     //"<strong>Account has been created!</strong><br><p>Validate your email here:<br>  <a href=\"http://leia.cs.spu.edu:3000/verification?hash=" + accHash + "\">Validate</a></p>"
     ,     //End html words in text box
   };
-  //ES6
-  sgMail
-    .send(msg)
-    .then(() => { }, error => {
-      console.error(error);
-
-      if (error.response) {
-        console.error(error.response.body)
-      }
-    });
   //ES8
   (async () => {
     try {
