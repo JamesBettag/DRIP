@@ -3,7 +3,7 @@ var router = express.Router()
 var accountModel = require('../models/accountModel')
 const dataModel = require('../models/dataModel')
 const resetPassModel = require('../models/resetPassModel')
-var emailVerification = require('../config/verification-email')
+var emailVerification = require('../config/verification-email.js')
 var passwordChange = require('../config/password-change.js')   //Tad's
 const flash = require('express-flash') //Displays messages if failed login used inside of passport
 const session = require('express-session') //So we can store and access users over multiple sessions
@@ -26,7 +26,7 @@ router.get('/dashboard', checkAuthenticated, nocache, async (req, res) => {
         let labelData = []
         let minData = []
         let maxData = []
-        var graphTitle = data[0].name
+        var graphTitle = data[0].plant_name
         data.forEach(function(row) {
             labelData.push(moment(row.time).format("MM-DD HH:mm"))
             moistureData.push(row.moisture)
@@ -63,8 +63,8 @@ router.get('/dashboard', checkAuthenticated, nocache, async (req, res) => {
                     label: graphTitle,
                     backgroundColor: 'rgba(0, 173, 180, 0.55)',
                     borderColor: '#00ADB4',
-                    pointBackgroundColor: '#77C425',
-                    pointBorderColor: '#77C425',
+                    pointBackgroundColor: '#57B845',
+                    pointBorderColor: '#57B845',
                     data: moistureData,
                     lineTension: 0.15
                 }]
@@ -95,7 +95,43 @@ router.get('/plants', checkAuthenticated, nocache, (req, res) => {
 
 //Open devices if you are currently logged in
 router.get('/devices', checkAuthenticated, nocache, (req, res) => {
-    res.render('../views/devices.ejs', {name: req.user.email})
+    let devices = []
+    let plants = []
+    // retrieve user's devices and plants from DB
+    userDevices = dataModel.getUserDevices(req.user.id)
+    userPlants = dataModel.getUserPlants(req.user.id)
+    Promise.all([userDevices, userPlants])
+    .then((values) => {
+        if (values[0] != null && values[1] != null) {
+            // user has both a device and a plant
+            values[0].forEach((row) => {
+                devices.push({ name: row.device_name, id: row.device_id })
+            })
+            values[1].forEach((row) => {
+                plants.push({ name: row.plant_name, id: row.plant_id })
+            })
+            res.render('../views/devices.ejs', { devices, plants })
+        } else if (values[0] != null) {
+            // user has a device but no plant registered
+            values[0].forEach((row) => {
+                devices.push({ name: row.device_name, id: row.device_id })
+            })
+            res.render('../views/devices.ejs', { devices })
+        } else if (values[1] != null) {
+            // user has a plant but no device registered
+            values[1].forEach((row) => {
+                plants.push({ name: row.plant_name, id: row.plant_id })
+            })
+            res.render('../views/devices.ejs', { plants })
+        } else {
+            // user has neither devices nor plants
+            res.render('../views/devices.ejs')
+        }
+    })
+    .catch((err) => { 
+        console.log(err)
+        res.render('../views/devices.ejs')
+     })
 })
 
 //Open account if you are currently logged in
@@ -133,5 +169,4 @@ function nocache(req, res, next) {
     res.header('Pragma', 'no-cache');
     next();
   }
-
 module.exports = router

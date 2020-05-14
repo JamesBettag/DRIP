@@ -2,7 +2,7 @@ var express = require('express')
 var router = express.Router()
 var accountModel = require('../models/accountModel')
 const resetPassModel = require('../models/resetPassModel')
-var emailVerification = require('../config/verification-email')
+var emailVerification = require('../config/verification-email.js')
 var passwordChange = require('../config/password-change.js')   //Tad's
 const bcrypt = require('bcryptjs')
 const passport = require('passport') //Compares passwords
@@ -79,6 +79,8 @@ router.post('/register', checkNotAuthenticated, async (req,res) => {
                     } else {
                         // if no errors were found, flash confirmation and redirect to login
                         console.log("Inserted user: " + name)
+                        // if user was inserted, send email and flash success message, then redirect
+                        emailVerification.sendVerificationEmail(email, accHash)
                         req.flash('success_msg', 'Registration Complete. Please Verify Email Address')
                         res.redirect('/login')
                     }
