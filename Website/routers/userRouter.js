@@ -169,5 +169,4 @@ function nocache(req, res, next) {
     res.header('Pragma', 'no-cache');
     next();
   }
-
 module.exports = router
