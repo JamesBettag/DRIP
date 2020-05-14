@@ -134,6 +134,10 @@ router.get('/devices', checkAuthenticated, nocache, (req, res) => {
      })
 })
 
+router.post('/devices', checkAuthenticated, nocache, (req, res) => {
+    
+})
+
 //Open account if you are currently logged in
 router.get('/account', checkAuthenticated, nocache, (req, res) => {
     res.render('../views/account.ejs', {name: req.user.email})

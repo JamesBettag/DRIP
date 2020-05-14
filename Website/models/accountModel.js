@@ -131,3 +131,14 @@ exports.updatePasswordById = function(accId, password) {
         )
     })
 }
+
+exports.updateActivePlant = function(plantID, deviceID, done) {
+    db.get().query(
+        "UPDATE device SET plant_id = '?' WHERE device_id = ?", plantID, deviceID, (err, result) => {
+            if (err) {
+                return done(err)
+            }
+            done(null, result.affectedRows)
+        }
+    )
+}
