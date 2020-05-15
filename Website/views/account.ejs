@@ -67,67 +67,37 @@
             <div class="row">
               <div class="col-md-8 order-md-1">
                 <h4 class="mb-3">Billing address</h4>
-                <form class="needs-validation" novalidate>
+                <form  action="/users/nameandpasswordchange" method="POST" class="login100-form validate-form p-l-55 p-r-55 p-t-178">
+                  <% include ./partials/messages %>
                   <div class="row">
                     <div class="col-md-6 mb-6">
-                      <label for="fullName">Full name</label>
-                      <input type="text" class="form-control" id="fullName" placeholder="" value="" required>
+                      <label for="name">Full name</label>
+                      <input type="text" class="form-control" name = "user_name" id="user_name" placeholder="Enter new name" value="<%= typeof user_name != 'undefined' ? user_name : '' %>" required>
                       <div class="invalid-feedback">
                         Valid first name is required.
                       </div>
                     </div>
                   </div>
-          
-                  <!--
-                  <div class="mb-3">
-                    <label for="username">Username</label>
-                    <div class="input-group">
-                      <div class="input-group-prepend">
-                        <span class="input-group-text">@</span>
-                      </div>
-                      <input type="text" class="form-control" id="username" placeholder="Username" required>
-                      <div class="invalid-feedback" style="width: 100%;">
-                        Your username is required.
-                      </div>
-                    </div>
-                  </div>
-                  <div class="mb-3">
-                    <label for="email">Email <span class="text-muted">(Optional)</span></label>
-                    <input type="email" class="form-control" id="email" placeholder="you@example.com">
-                    <div class="invalid-feedback">
-                      Please enter a valid email address for shipping updates.
-                    </div>
-                  </div>
-                    -->
 
                   <div class="mb-3">
-                    <label for="address">Password</label>
-                    <input type="text" class="form-control" id="passwordOne" placeholder="Passwords must match" required>
+                    <label for="password">Password</label>
+                    <input type="password" class="form-control" name="password" id="password" placeholder="Passwords must match" required>
                     <div class="invalid-feedback">
                       Please enter your password.
                     </div>
                   </div>
 
                   <div class="mb-3">
-                    <label for="address">Reenter Password</label>
-                    <input type="text" class="form-control" id="passwordTwo" placeholder="Passwords must match" required>
+                    <label for="password2">Reenter Password</label>
+                    <input type="password" class="form-control" name="password2" id="password2" placeholder="Passwords must match" required>
                     <div class="invalid-feedback">
                       Please enter your password.
                     </div>
                   </div>
-                  <button class="btn btn-primary btn-lg btn-block" type="submit">Submit Changes</button>
+                  <button type="submit" value="Submit" class="btn btn-success">Submit</button>
                 </form>
               </div>
             </div>
-          
-            <footer class="my-5 pt-5 text-muted text-center text-small">
-              <p class="mb-1">&copy; 2017-2020 Company Name</p>
-              <ul class="list-inline">
-                <li class="list-inline-item"><a href="#">Privacy</a></li>
-                <li class="list-inline-item"><a href="#">Terms</a></li>
-                <li class="list-inline-item"><a href="#">Support</a></li>
-              </ul>
-            </footer>
           </div>
     </main>
 

@@ -131,3 +131,17 @@ exports.updatePasswordById = function(accId, password) {
         )
     })
 }
+
+exports.updateNameAndPasswordById = function(accId, fname, lname, password) {
+    return new Promise(function(resolve, reject) {
+        db.get().query(
+            "UPDATE account SET first_name = ?, last_name = ?, password = ? WHERE account_id = ?", [fname, lname, password, accId], (err, result) => {
+                if(err) {
+                    reject(err)
+                } else {
+                    resolve(result.affectedRows)
+                }
+            }
+        )
+    })
+}

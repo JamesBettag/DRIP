@@ -9,6 +9,7 @@ const flash = require('express-flash') //Displays messages if failed login used 
 const session = require('express-session') //So we can store and access users over multiple sessions
 const methodOverride = require('method-override')
 const moment = require('moment')
+const bcrypt = require('bcryptjs')
 
 router.use(methodOverride('_method'))
 
@@ -144,6 +145,42 @@ router.delete('/logout', (req, res) => {
     req.logOut() //Passport fuction to terminate session
     res.redirect('/login') //Sends back to login screen
 })
+
+//Tad's Account Name and Password Changer, used in account.ejs and accountModel.js
+//Insert the newly changed password into the database
+router.post('/nameandpasswordchange', checkAuthenticated, async (req,res) => {
+    let success = []
+    let errors = []
+    const { user_name, password, password2 } = req.body
+
+    // check if password match
+    if(password !== password2) {
+        errors.push({ msg: 'Passwords Do Not Match' })
+        res.render('../views/account.ejs', { errors, user_name, password, password2 })
+    } else {
+        let hashedPassword = await bcrypt.hash(password, 10)
+        //let inserted = await accountModel.updatePasswordById(req.user.id, hashedPassword)
+        let fname = user_name;
+        let lname = user_name;
+        let inserted = await accountModel.updateNameAndPasswordById(req.user.id, fname, lname, hashedPassword)
+
+        if(inserted) {
+            // password was changed
+            req.flash('success_msg', 'Name and Password Changed Successfully')
+            //errors.push({ msg: 'Password Successfully Changed' })
+            //res.redirect('/dashboard')
+            res.redirect('/users/account')
+        } else {
+            // password was not changed. could not find an account with that id (big problem: user serialized on website without logging in)
+            // process.exit(1)
+            req.flash('error_msg', 'Name and Password Unsuccessfully Changed')
+            //req.logOut()
+            res.render('../views/account.ejs', { errors, user_name, password, password2 })
+        }
+    }
+})
+
+
 
 //This will stop you from entering our dashbaord if you are not registered/signed in
 function checkAuthenticated(req, res, next){

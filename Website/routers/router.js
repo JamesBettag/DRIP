@@ -42,6 +42,7 @@ router.get('/register', checkNotAuthenticated, (req, res) => {
     res.render('register.ejs')
 })
 
+
 //TODO:Get DeviceID --> Check if exists in DB
 //TODO:FLasg error messages
 router.post('/register', checkNotAuthenticated, async (req,res) => {
@@ -210,6 +211,8 @@ router.post('/passwordchange', checkAuthenticated, async (req,res) => {
         }
     }
 })
+
+
 
 //Logout
 router.delete('/logout', (req, res) => {
