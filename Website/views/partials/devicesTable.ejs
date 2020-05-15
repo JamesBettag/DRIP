@@ -8,7 +8,11 @@
                         <button class="btn btn-secondary dropdown-toggle" type="button"
                             id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
                             aria-expanded="false">
-                            Activate a plant
+                            <% if (device.plant != null) { %>
+                                <%= device.plant %> 
+                            <% } else { %>
+                                Activate a Plant
+                            <% } %> 
                         </button>
                         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                             <% if (typeof plants != 'undefined') { %> 
