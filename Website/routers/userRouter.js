@@ -134,8 +134,10 @@ router.get('/devices', checkAuthenticated, nocache, (req, res) => {
      })
 })
 
-router.post('/devices', checkAuthenticated, nocache, (req, res) => {
-    
+router.get('/changePlant', checkAuthenticated, nocache, async(req,res) => {
+    const {plantid, deviceid} = req.query
+    inserted = await accountModel.updateActivePlant(plantid, deviceid)
+    res.redirect('/users/devices')
 })
 
 //Open account if you are currently logged in

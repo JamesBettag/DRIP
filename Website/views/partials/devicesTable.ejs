@@ -2,7 +2,7 @@
     <% devices.forEach(function(device) { %> 
         <tr>
             <th> <%= device.name %>  </th>
-            <form id="deviceForm" action="/devices" type="POST">
+            <form id= "<%= device.id %>">
                 <td style="text-align: right;">
                     <div class="dropdown" class="col-md-2">
                         <button class="btn btn-secondary dropdown-toggle" type="button"
@@ -13,11 +13,12 @@
                         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                             <% if (typeof plants != 'undefined') { %> 
                                 <% plants.forEach(function(plant) { %> 
-                                    <a type="submit" onclick="document.getElementById('deviceForm').submit();" class="dropdown-item" value="<%= plant.id %>"> <%= plant.name %></a>
+                                    <a href="/users/changePlant?plantid=<%= plant.id %>&deviceid=<%= device.id %>" name="<%= plant.id %>" value="<%= plant.id %>" class="dropdown-item"><%= plant.name %></a>
                                 <% }) %> 
                             <% } else { %>
                                 <a class="dropdown-item" href="#"> No Active Plants </a>
-                            <% } %>  
+                            <% } %>
+                            </select>  
                         </div>
                     </div>
                 </td>
@@ -34,3 +35,7 @@
         </td>
     </tr>
 <% } %> 
+
+<script type="text/javascript"> 
+    function submitform() {   document.myform.submit(); } 
+</script> 
