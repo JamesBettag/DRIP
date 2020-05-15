@@ -2,24 +2,31 @@
     <% devices.forEach(function(device) { %> 
         <tr>
             <th> <%= device.name %>  </th>
-            <td style="text-align: right;">
-                <div class="dropdown" class="col-md-2">
-                    <button class="btn btn-secondary dropdown-toggle" type="button"
-                        id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
-                        aria-expanded="false">
-                        Activate a plant
-                    </button>
-                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                        <% if (typeof plants != 'undefined') { %> 
-                            <% plants.forEach(function(plant) { %> 
-                                <a class="dropdown-item" value="<%= plant.id %>" href="#"> <%= plant.name %>  </a>
-                            <% }) %> 
-                        <% } else { %>
-                            <a class="dropdown-item" href="#"> No Active Plants </a>
-                        <% } %>  
+            <form id= "<%= device.id %>">
+                <td style="text-align: right;">
+                    <div class="dropdown" class="col-md-2">
+                        <button class="btn btn-secondary dropdown-toggle" type="button"
+                            id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
+                            aria-expanded="false">
+                            <% if (device.plant != null) { %>
+                                <%= device.plant %> 
+                            <% } else { %>
+                                Activate a Plant
+                            <% } %> 
+                        </button>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                            <% if (typeof plants != 'undefined') { %> 
+                                <% plants.forEach(function(plant) { %> 
+                                    <a href="/users/changePlant?plantid=<%= plant.id %>&deviceid=<%= device.id %>" name="<%= plant.id %>" value="<%= plant.id %>" class="dropdown-item"><%= plant.name %></a>
+                                <% }) %> 
+                            <% } else { %>
+                                <a class="dropdown-item" href="#"> No Active Plants </a>
+                            <% } %>
+                            </select>  
+                        </div>
                     </div>
-                </div>
-            </td>
+                </td>
+            </form>
         </tr>
     <% }) %> 
 <% } else { %> 
@@ -32,3 +39,7 @@
         </td>
     </tr>
 <% } %> 
+
+<script type="text/javascript"> 
+    function submitform() {   document.myform.submit(); } 
+</script> 

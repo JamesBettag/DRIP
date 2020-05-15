@@ -99,14 +99,14 @@ router.get('/devices', checkAuthenticated, nocache, (req, res) => {
     let devices = []
     let plants = []
     // retrieve user's devices and plants from DB
-    userDevices = dataModel.getUserDevices(req.user.id)
+    userDevices = dataModel.getUserDevicesAndActivePlant(req.user.id)
     userPlants = dataModel.getUserPlants(req.user.id)
     Promise.all([userDevices, userPlants])
     .then((values) => {
         if (values[0] != null && values[1] != null) {
             // user has both a device and a plant
             values[0].forEach((row) => {
-                devices.push({ name: row.device_name, id: row.device_id })
+                devices.push({ name: row.device_name, id: row.device_id, plant: row.plant_name })
             })
             values[1].forEach((row) => {
                 plants.push({ name: row.plant_name, id: row.plant_id })
@@ -133,6 +133,12 @@ router.get('/devices', checkAuthenticated, nocache, (req, res) => {
         console.log(err)
         res.render('../views/devices.ejs')
      })
+})
+
+router.get('/changePlant', checkAuthenticated, nocache, async(req,res) => {
+    const {plantid, deviceid} = req.query
+    inserted = await accountModel.updateActivePlant(plantid, deviceid)
+    res.redirect('/users/devices')
 })
 
 //Open account if you are currently logged in
