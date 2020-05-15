@@ -85,10 +85,12 @@ exports.getUserPlants = function(accountId) {
     })
 }
 
-exports.getUserDevices = function(accountId) {
+exports.getUserDevicesAndActivePlant = function(accountId) {
     return new Promise(function(resolve, reject) {
         db.get().query(
-            "SELECT device_name, device_id FROM device WHERE account_id = ?", accountId, (err, result, fields) => {
+            "SELECT device.device_name, device.device_id, plant.plant_name " +
+            "FROM device LEFT JOIN plant ON device.plant_id = plant.plant_id " +
+            "WHERE device.account_id = ?", accountId, (err, result, fields) => {
                 if(err) { reject(err) }
                 else {
                     if(result.length) { resolve(result) }
