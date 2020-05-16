@@ -26,7 +26,7 @@
             </ul>
         </nav>
     
-        <div class="container-fluid">
+        <div class="container">
             <div class="row">
                 <nav class="col-md-2 d-none d-md-block bg-light sidebar">
                     <div class="sidebar-sticky">
@@ -38,17 +38,17 @@
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="/users/plants">
+                                <a class="nav-link active" href="/users/plants">
                                     <span><img src="http://leia.cs.spu.edu:3001/source/plant" alt="Plant Icon"
                                             onMouseOver="this.style.color='#0F0'" onMouseOut="this.style.color='#00F'"
                                             class="feather plantIcon"></span>
-                                    Plants
+                                    Plants <span class="sr-only">(current)</span>
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link active" href="/users/devices">
+                                <a class="nav-link" href="/users/devices">
                                     <span data-feather="cpu"></span>
-                                    Devices <span class="sr-only">(current)</span>
+                                    Devices 
                                 </a>
                             </li>
                             <li class="nav-item">
@@ -62,12 +62,12 @@
                 </nav>
                 <main role="main" class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
                     <h1 class="h2">Plant Profiles</h1>
-                    <div class="table-responsive">
+                    <div class="table">
                         <table class="table table-striped table-md">
                             <tr>
                                 <th><input type="text" class="form-control" name = "plant_name" id="plant_name" placeholder="Enter plant name" value="<%= typeof user_name != 'undefined' ? user_name : '' %>" required></th>
                                 <td style="text-align: center;">
-                                    <div class="dropdown" class="col-md-2">
+                                    <div class="dropdown">
                                         <button class="btn btn-secondary dropdown-toggle" type="button"
                                             id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
                                             aria-expanded="false">
@@ -76,20 +76,19 @@
                                         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                                             <a class="dropdown-item" href="#">Dry</a>
                                             <a class="dropdown-item" href="#">Moist</a>
-                                            
+                                            <a class="dropdown-item" href="#">Wet</a>
                                         </div>
                                     </div>
                                 </td>
-                                <td style="text-align: right;">
+                                <td style="text-align:left;">
                                 <button type="button" class="btn btn-danger">Remove</button>
                                 </td>
                             </tr>
                         </table>
                     </div>
                 </main>
-    
-    
-                <!-- Bootstrap core JavaScript
+               
+                <!-- Bootstrap core JavaScript  
           ================================================== -->
                 <!-- Placed at the end of the document so the pages load faster -->
                 <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"

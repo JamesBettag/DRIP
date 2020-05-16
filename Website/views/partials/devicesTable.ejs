@@ -1,7 +1,7 @@
 <% if (typeof devices != 'undefined') { %> 
     <% devices.forEach(function(device) { %> 
         <tr>
-            <th> <%= device.name %>  </th>
+            <th> <%= device.name %>  </th> 
             <form id= "<%= device.id %>">
                 <td style="text-align: right;">
                     <div class="dropdown" class="col-md-2">
@@ -22,7 +22,6 @@
                             <% } else { %>
                                 <a class="dropdown-item" href="#"> No Active Plants </a>
                             <% } %>
-                            </select>  
                         </div>
                     </div>
                 </td>
