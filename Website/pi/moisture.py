@@ -26,8 +26,9 @@ mcp = MCP.MCP3008(spi, cs)
 
 # create an analog input channel on pin 0
 chan = AnalogIn(mcp, MCP.P0)
-try:
-    while True:
+
+while True:
+    try:
         #print("Raw ADC Value: ", chan.value)
         #print("ADC Voltage: " + str(chan.voltage) + "V")
         data = round(100 - ((chan.value / 65536) * 100), 2)
@@ -45,6 +46,9 @@ try:
         # pause for 15 minutes
         time.sleep(15 * 60)
 
-except KeyboardInterrupt:
-    print("cancel")
-    exit()
+    except KeyboardInterrupt:
+        print("cancel")
+        exit()
+
+    except:
+        print("could not connect to server")
