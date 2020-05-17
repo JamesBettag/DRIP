@@ -44,7 +44,7 @@ while True:
             exit()
 
         # pause for 15 minutes
-        time.sleep(15 * 60)
+        time.sleep(60 * 60)
 
     except KeyboardInterrupt:
         print("cancel")
