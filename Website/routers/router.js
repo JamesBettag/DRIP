@@ -202,7 +202,7 @@ router.post('/passwordchange', checkAuthenticated, async (req,res) => {
         if(inserted) {
             // password was changed
             req.flash('success_msg', 'Password Changed Successfully')
-            res.redirect('/dashboard')
+            res.redirect('/users/dashboard')
         } else {
             // password was not changed. could not find an account with that id (big problem: user serialized on website without logging in)
             // process.exit(1)
