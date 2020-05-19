@@ -29,13 +29,24 @@ router.get('/login', checkNotAuthenticated, (req, res) => {
 })
 
 //What happens when you click login button on login screen
-router.post('/login', checkNotAuthenticated, passport.authenticate('local', {
-    successRedirect: '/users/dashboard', //Where do we go if success
-    failureRedirect: '/login', //Where do we go if failure 
-    failureFlash: true //Display messages 
-    //Using passport middleware to authenticate the user
-    //Using passports local strategy 
-}))
+router.post('/login', checkNotAuthenticated, (req, res, next) => {
+    passport.authenticate('local', (err, user, info) => {
+        let email = req.body.email
+        let errors = []
+        if (err) { 
+            console.log(err) 
+            return next(err)
+        }
+        if (!user) {
+            errors.push({ msg: info })
+            return res.render('../views/login.ejs', { email, errors })
+        }
+        req.logIn(user, function(err) {
+            if(err) { return next(err) }
+            return res.redirect('/users/dashboard')
+        })
+    }) (req, res, next)
+})
 
 //Open register page if you are not already logged in 
 router.get('/register', checkNotAuthenticated, (req, res) => {
