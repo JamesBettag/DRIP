@@ -173,3 +173,19 @@ exports.insertNewDevice = function(accId, deviceId, deviceName){
         )
     })
 }
+
+exports.deleteDevice = function(accId, deviceId){
+    return new Promise(function(resolve, reject) {
+        db.get().query(
+            //DELETE FROM device WHERE device_id='123' AND account_id='3' 
+            'DELETE FROM device WHERE device_id = ? AND account_id = ?', deviceId, accId, (err, result) => {
+                if(err){
+                    console.log(err)
+                    reject(false)
+                } else {
+                    resolve(true)
+                }
+            }
+        )
+    })
+}
