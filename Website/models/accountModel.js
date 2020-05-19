@@ -160,6 +160,24 @@ exports.updateNameAndPasswordById = function(accId, fname, lname, password) {
     })
 }
 
+exports.getUserName = function(accId) {
+    return new Promise(function(resolve, reject) {
+        db.get().query(
+            'SELECT first_name FROM account WHERE account_id = ?', accId, (err, result, fields) => {
+                if(err) {
+                    reject(err)
+                } else {
+                    if(result.length) {
+                        resolve(result[0].first_name)
+                    } else {
+                        resolve(null)
+                    }
+                }
+            }
+        )
+    })
+}
+
 exports.updateNameById = function(accId, fname, lname) {
     return new Promise(function(resolve, reject) {
         db.get().query(
@@ -174,18 +192,29 @@ exports.updateNameById = function(accId, fname, lname) {
     })
 }
 
-exports.getUserName = function(accId) {
+exports.insertNewDevice = function(accId, deviceId, deviceName){
     return new Promise(function(resolve, reject) {
         db.get().query(
-            'SELECT first_name FROM account WHERE account_id = ?', accId, (err, result, fields) => {
-                if(err) {
-                    reject(err)
+            "INSERT INTO device (device_id, device_name, account_id) VALUES(?, ?, ?)", [deviceId, deviceName, accId], (err, result) => {
+                if(err){
+                    reject(false)
                 } else {
-                    if(result.length) {
-                        resolve(result[0].first_name)
-                    } else {
-                        resolve(null)
-                    }
+                    resolve(true)
+                }
+            }
+        )
+    })
+}
+
+exports.deleteDevice = function(accId, deviceId){
+    return new Promise(function(resolve, reject) {
+        db.get().query(
+            'DELETE FROM device WHERE device_id = ? AND account_id = ?', [deviceId, accId], (err, result) => {
+                if(err){
+                    console.log(err)
+                    reject(false)
+                } else {
+                    resolve(true)
                 }
             }
         )

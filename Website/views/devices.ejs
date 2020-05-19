@@ -62,14 +62,19 @@
                 </nav>
                 <main role="main" class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
                     <h1 class="h2">Devices</h1>
-                    <div class="table-responsive">
+                    <div class="table">
                         <table class="table table-striped table-md">
-                            <% include ./partials/devicesTable %> 
+                            <% include ./partials/devicesTable %>
+                            <form action="/users/addDevice" method="POST">
+                                <tr>
+                                    <th><input type="text" class="form-control" name = "new_device_name" id="new_device_name" placeholder="Enter device name" required></th>
+                                    <td><input type="text" class="form-control" name = "new_device_id" id="new_device_id" placeholder="Enter device ID" required></td>
+                                    <td colspan="2" style="text-align:right;"><button type="submit" value="Submit" class="btn btn-success">Add Device</button></td>
+                                </tr> 
+                            </form>
                         </table>
                     </div>
                 </main>
-    
-    
                 <!-- Bootstrap core JavaScript
           ================================================== -->
                 <!-- Placed at the end of the document so the pages load faster -->
