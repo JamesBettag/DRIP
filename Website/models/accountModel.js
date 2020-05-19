@@ -160,32 +160,30 @@ exports.updateNameAndPasswordById = function(accId, fname, lname, password) {
     })
 }
 
-exports.updateNameById = function(accId, fname, lname) {
+exports.insertNewDevice = function(accId, deviceId, deviceName){
     return new Promise(function(resolve, reject) {
         db.get().query(
-            "UPDATE account SET first_name = ?, last_name = ? WHERE account_id = ?", [fname, lname, accId], (err, result) => {
-                if(err) {
-                    reject(err)
+            "INSERT INTO device (device_id, device_name, account_id) VALUES(?, ?, ?)", [deviceId, deviceName, accId], (err, result) => {
+                if(err){
+                    reject(false)
                 } else {
-                    resolve(result.affectedRows)
+                    resolve(true)
                 }
             }
         )
     })
 }
 
-exports.getUserName = function(accId) {
+exports.deleteDevice = function(accId, deviceId){
     return new Promise(function(resolve, reject) {
         db.get().query(
-            'SELECT first_name FROM account WHERE account_id = ?', accId, (err, result, fields) => {
-                if(err) {
-                    reject(err)
+            //DELETE FROM device WHERE device_id='123' AND account_id='3' 
+            'DELETE FROM device WHERE device_id = ? AND account_id = ?', deviceId, accId, (err, result) => {
+                if(err){
+                    console.log(err)
+                    reject(false)
                 } else {
-                    if(result.length) {
-                        resolve(result[0].first_name)
-                    } else {
-                        resolve(null)
-                    }
+                    resolve(true)
                 }
             }
         )

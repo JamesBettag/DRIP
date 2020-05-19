@@ -1,9 +1,9 @@
 <% if (typeof devices != 'undefined') { %> 
     <% devices.forEach(function(device) { %> 
         <tr>
-            <th> <%= device.name %>  </th>
+            <th><input type="text" class="form-control" name = "device_name" id="device_name" placeholder="Enter device name" value="<%= typeof device.name != 'undefined' ? device.name : '' %>" required></th> 
             <form id= "<%= device.id %>">
-                <td style="text-align: right;">
+                <td style="text-align: left;">
                     <div class="dropdown" class="col-md-2">
                         <button class="btn btn-secondary dropdown-toggle" type="button"
                             id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
@@ -22,9 +22,11 @@
                             <% } else { %>
                                 <a class="dropdown-item" href="#"> No Active Plants </a>
                             <% } %>
-                            </select>  
                         </div>
                     </div>
+                </td>
+                <td colspan="1" style="text-align:right;">
+                    <button class="btn btn-danger" onclick="window.location.href = '/users/removeDevice?deviceid=<%= device.id %>';">Remove</button>
                 </td>
             </form>
         </tr>
@@ -40,6 +42,3 @@
     </tr>
 <% } %> 
 
-<script type="text/javascript"> 
-    function submitform() {   document.myform.submit(); } 
-</script> 
