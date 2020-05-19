@@ -148,8 +148,9 @@ router.get('/addDevice', checkAuthenticated, nocache, async(req,res) => {
 })
 
 //Open account if you are currently logged in
-router.get('/account', checkAuthenticated, nocache, (req, res) => {
-    res.render('../views/account.ejs', {name: req.user.email})
+router.get('/account', checkAuthenticated, nocache, async(req, res) => {
+    user_name = await accountModel.getUserName(req.user.id)
+    res.render('../views/account.ejs', {user_name})
 })
 
 //Logout
@@ -158,6 +159,7 @@ router.delete('/logout', (req, res) => {
     res.redirect('/login') //Sends back to login screen
 })
 
+/*
 //Tad's Account Name and Password Changer, used in account.ejs and accountModel.js
 //Insert the newly changed password into the database
 router.post('/nameandpasswordchange', checkAuthenticated, async (req,res) => {
@@ -189,6 +191,98 @@ router.post('/nameandpasswordchange', checkAuthenticated, async (req,res) => {
             //req.logOut()
             res.render('../views/account.ejs', { errors, user_name, password, password2 })
         }
+    }
+})
+*/
+
+//Tad's Account Name and Password Changer, used in account.ejs and accountModel.js
+//Insert the newly changed password into the database
+router.post('/nameandpasswordchange', checkAuthenticated, async (req,res) => {
+    let success = []
+    let errors = []
+    const { user_name, password, password2 } = req.body
+
+    //If all 3 fields are filled
+    if((user_name != '') && (password != '') && (password2 != ''))
+    {
+        // check if password match
+        if(password !== password2) {
+            errors.push({ msg: 'Passwords Do Not Match' })
+            res.render('../views/account.ejs', { errors, user_name, password, password2 })
+        } else {
+           let hashedPassword = await bcrypt.hash(password, 10)
+            //let inserted = await accountModel.updatePasswordById(req.user.id, hashedPassword)
+            let fname = user_name;
+            let lname = user_name;
+            let inserted = await accountModel.updateNameAndPasswordById(req.user.id, fname, lname, hashedPassword)
+
+            if(inserted) {
+                // Name and password were changed
+                req.flash('success_msg', 'Name and Password Changed Successfully')
+                //errors.push({ msg: 'Password Successfully Changed' })
+                //res.redirect('/dashboard')
+                res.redirect('/users/account')
+            } else {
+                // Name and password were not changed. could not find an account with that id (big problem: user serialized on website without logging in)
+                // process.exit(1)
+                req.flash('error_msg', 'Name and Password Unsuccessfully Changed')
+                //req.logOut()
+                res.render('../views/account.ejs', { errors, user_name, password, password2 })
+            }
+        }
+    }
+    else if((user_name != '') && ((password == '') && (password2 == '')))     //If username is filled AND both of the passwords are not filled
+    {
+            let fname = user_name;
+            let lname = user_name;
+            let inserted = await accountModel.updateNameById(req.user.id, fname, lname)
+
+            if(inserted) {
+                // Name was changed
+                req.flash('success_msg', 'Name Changed Successfully')
+                //res.redirect('/dashboard')
+                res.redirect('/users/account')
+            } else {
+                // Name was not changed. could not find an account with that id (big problem: user serialized on website without logging in)
+                // process.exit(1)
+                req.flash('error_msg', 'Name Unsuccessfully Changed')
+                //req.logOut()
+                res.render('../views/account.ejs', { errors, user_name, password, password2 })
+            }
+    }
+    else if((user_name == '') && (password != '') && (password2 != ''))   //If username is empty AND both password fields are filled
+    {
+        // check if password match
+        if(password !== password2) {
+            errors.push({ msg: 'Passwords Do Not Match' })
+            res.render('../views/account.ejs', { errors, user_name, password, password2 })
+        } else {
+           let hashedPassword = await bcrypt.hash(password, 10)
+            let inserted = await accountModel.updatePasswordById(req.user.id, hashedPassword)
+
+            if(inserted) {
+                // Password was changed
+                req.flash('success_msg', 'Password Changed Successfully')
+                //res.redirect('/dashboard')
+                res.redirect('/users/account')
+            } else {
+                // Password was not changed. could not find an account with that id (big problem: user serialized on website without logging in)
+                // process.exit(1)
+                req.flash('error_msg', 'Password Unsuccessfully Changed')
+                //req.logOut()
+                res.render('../views/account.ejs', { errors, user_name, password, password2 })
+            }
+        }
+    }
+    else if((password == '') || (password2 == ''))   //If only one password field is filled
+    {
+        req.flash('error_msg', 'Both password fields must be filled')
+        res.redirect('/users/account')
+    }
+    else
+    {
+        req.flash('error_msg', 'Enter an input into one of the fields')
+        res.redirect('/users/account')
     }
 })
 

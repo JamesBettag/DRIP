@@ -48,7 +48,7 @@ exports.getUserPasswordHash = function(email, done) {
 
 exports.getUserEmailPasswordId = function(email, done) {
     db.get().query(
-        'SELECT email, password, account_id FROM account WHERE email = ?', email, (err, result, fields) => {
+        'SELECT email, password, account_id, verify FROM account WHERE email = ?', email, (err, result, fields) => {
             if(err) {
                 return done(err)
             } else {
@@ -153,20 +153,6 @@ exports.updateNameAndPasswordById = function(accId, fname, lname, password) {
                 if(err) {
                     reject(err)
                 } else {
-                    resolve(result.affectedRows)
-                }
-            }
-        )
-    })
-}
-
-exports.insertNewDevice = function(accId, deviceName, done) {
-    return new Promise(function(resolve, reject) {
-        db.get().query(
-            "INSERT INTO device SET account_id = ? WHERE device_name = ?", [accId, deviceName], (err, result) => {
-                if (err) {
-                    reject(err)
-                }else{
                     resolve(result.affectedRows)
                 }
             }
