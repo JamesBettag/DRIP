@@ -159,3 +159,17 @@ exports.updateNameAndPasswordById = function(accId, fname, lname, password) {
         )
     })
 }
+
+exports.insertNewDevice = function(accId, deviceId, deviceName){
+    return new Promise(function(resolve, reject) {
+        db.get().query(
+            "INSERT INTO device (device_id, device_name, account_id) VALUES(?, ?, ?)", [deviceId, deviceName, accId], (err, result) => {
+                if(err){
+                    reject(false)
+                } else {
+                    resolve(true)
+                }
+            }
+        )
+    })
+}
