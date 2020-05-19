@@ -141,6 +141,12 @@ router.get('/changePlant', checkAuthenticated, nocache, async(req,res) => {
     res.redirect('/users/devices')
 })
 
+router.get('/addDevice', checkAuthenticated, nocache, async(req,res) => {
+    const {new_device_name} = req.body.new_device_name
+    inserted = await accountModel.insertNewDevice(req.user.id, new_device_name)
+    res.redirect('/users/devices')
+})
+
 //Open account if you are currently logged in
 router.get('/account', checkAuthenticated, nocache, (req, res) => {
     res.render('../views/account.ejs', {name: req.user.email})

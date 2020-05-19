@@ -64,12 +64,16 @@
                     <h1 class="h2">Devices</h1>
                     <div class="table">
                         <table class="table table-striped table-md">
-                            <% include ./partials/devicesTable %> 
+                            <% include ./partials/devicesTable %>
+                            <form action="/addDevice" method="POST">
+                                <tr>
+                                    <th><input type="text" class="form-control" name = "new_device_name" id="new_device_name" value="Enter device name"></th>
+                                    <td colspan="2" style="text-align:right;"><button type="submit" value="Submit" class="btn btn-success">Add Device</button></td>
+                                </tr> 
+                            </form>
                         </table>
                     </div>
                 </main>
-    
-    
                 <!-- Bootstrap core JavaScript
           ================================================== -->
                 <!-- Placed at the end of the document so the pages load faster -->
