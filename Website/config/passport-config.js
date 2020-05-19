@@ -12,13 +12,13 @@ module.exports = function(passport) {
                     console.log(err)
                 } else if(!result.length) { // check if email exists
                     // no email was found
-                    return done(null, false, { message: 'Email has not been registered' })
+                    return done(null, false, 'Email has not been registered')
                 } else {
                     // email was found and no error
 
                     // check if email has been verified
                     if (result[0].verify == "0") {
-                        return done(null, false, { message: 'Please Verify Your Email' })
+                        return done(null, false, 'Please Verify Your Email')
                     }
                     bcrypt.compare(password, result[0].password, (err, isMatch) => {
                         if(err) throw err
@@ -32,7 +32,7 @@ module.exports = function(passport) {
                         if(isMatch) {
                             return done(null, user)
                         } else {
-                            return done(null, false, { message: 'Password Incorrect' })
+                            return done(null, false, 'Password Incorrect')
                         }
                     })
                 }
