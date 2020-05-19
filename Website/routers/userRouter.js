@@ -141,7 +141,7 @@ router.get('/changePlant', checkAuthenticated, nocache, async(req,res) => {
     res.redirect('/users/devices')
 })
 
-router.get('/removeDevice', checkAuthenticated, nocache, async(req,res) => {
+router.get('/removeDevice?:deviceid', checkAuthenticated, nocache, async(req,res) => {
     const {deviceid} = req.query
     removed = await accountModel.deleteDevice(req.user.id, deviceid)
     if(removed){
