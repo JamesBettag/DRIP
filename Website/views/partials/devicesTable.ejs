@@ -2,7 +2,6 @@
     <% devices.forEach(function(device) { %> 
         <tr>
             <th><input type="text" class="form-control" name = "device_name" id="device_name" placeholder="Enter device name" value="<%= typeof device.name != 'undefined' ? device.name : '' %>" required></th> 
-            <form id= "<%= device.id %>">
                 <td style="text-align: left;">
                     <div class="dropdown" class="col-md-2">
                         <button class="btn btn-secondary dropdown-toggle" type="button"
@@ -26,9 +25,11 @@
                     </div>
                 </td>
                 <td colspan="1" style="text-align:right;">
-                    <button class="btn btn-danger" onclick="window.location.href = '/users/removeDevice?deviceid=<%= device.id %>';">Remove</button>
+                    <form method="POST" action="/users/removeDevice">
+                        <input type="hidden" id="deviceid" name="deviceid" value="<%= device.id %>">
+                        <button class="btn btn-danger" type="submit">Remove</button>
+                    </form>
                 </td>
-            </form>
         </tr>
     <% }) %> 
 <% } else { %> 

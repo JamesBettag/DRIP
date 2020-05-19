@@ -141,16 +141,15 @@ router.get('/changePlant', checkAuthenticated, nocache, async(req,res) => {
     res.redirect('/users/devices')
 })
 
-router.get('/removeDevice?:deviceid', checkAuthenticated, nocache, async(req,res) => {
-    const {deviceid} = req.query
-    removed = await accountModel.deleteDevice(req.user.id, deviceid)
+router.post('/removeDevice', checkAuthenticated, nocache, async (req, res) => {
+    deviceId = req.body.deviceid
+    removed = await accountModel.deleteDevice(req.user.id, deviceId)
     if(removed){
         req.flash('success_msg', 'Device Successfully Removed')
-        res.redirect('/users/devices')
     }else {
         req.flash('error_msg', 'Device Not Removed')
-        res.redirect('/users/devices')
     }
+    res.redirect('/users/devices')
 })
 
 router.post('/addDevice', checkAuthenticated, nocache, async(req,res) => {
@@ -158,11 +157,10 @@ router.post('/addDevice', checkAuthenticated, nocache, async(req,res) => {
     inserted = await accountModel.insertNewDevice(req.user.id, new_device_id, new_device_name)
     if(inserted){
         req.flash('success_msg', 'Device Successfully Registered')
-        res.redirect('/users/devices')
     }else {
         req.flash('error_msg', 'Device Not Added')
-        res.redirect('/users/devices')
     }
+    res.redirect('/users/devices')
 })
 
 //Open account if you are currently logged in

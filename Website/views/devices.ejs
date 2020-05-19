@@ -64,7 +64,11 @@
                     <h1 class="h2">Devices</h1>
                     <div class="table">
                         <table class="table table-striped table-md">
+                            <% include ./partials/messages %> 
                             <% include ./partials/devicesTable %>
+                        </table>
+                        <h2>Add New Device</h2>
+                        <table class="table table-striped table-md">
                             <form action="/users/addDevice" method="POST">
                                 <tr>
                                     <th><input type="text" class="form-control" name = "new_device_name" id="new_device_name" placeholder="Enter device name" required></th>
