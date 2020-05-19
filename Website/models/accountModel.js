@@ -48,7 +48,7 @@ exports.getUserPasswordHash = function(email, done) {
 
 exports.getUserEmailPasswordId = function(email, done) {
     db.get().query(
-        'SELECT email, password, account_id FROM account WHERE email = ?', email, (err, result, fields) => {
+        'SELECT email, password, account_id, verify FROM account WHERE email = ?', email, (err, result, fields) => {
             if(err) {
                 return done(err)
             } else {
