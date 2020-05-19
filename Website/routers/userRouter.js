@@ -143,7 +143,6 @@ router.get('/changePlant', checkAuthenticated, nocache, async(req,res) => {
 
 router.get('/removeDevice', checkAuthenticated, nocache, async(req,res) => {
     const {deviceid} = req.query
-    console.log(deviceid)
     removed = await accountModel.deleteDevice(req.user.id, deviceid)
     if(removed){
         req.flash('success_msg', 'Device Successfully Removed')
