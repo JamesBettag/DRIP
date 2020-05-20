@@ -90,8 +90,23 @@ router.get('/dashboard', checkAuthenticated, nocache, async (req, res) => {
 })
 
 //Open plants if you are currently logged in 
-router.get('/plants', checkAuthenticated, nocache, (req, res) => {
-    res.render('../views/plants.ejs', {name: req.user.email})
+router.get('/plants', checkAuthenticated, nocache, async (req, res) => {
+    let plants = []
+    userPlants = await dataModel.getUserPlants(req.user.id)
+    if (userPlants != null) {
+        userPlants.forEach((plant) => {
+            plants.push({ id: plant.plant_id, name: plant.plant_name })
+        })
+        res.render('../views/plants.ejs', { plants })
+    } else {
+        res.render('../views/plants.ejs')
+    }
+    
+})
+
+router.post('/addPlant', checkAuthenticated, nocache, (req, res) => {
+    console.log(req.body)
+    res.redirect('/user/plants')
 })
 
 //Open devices if you are currently logged in
