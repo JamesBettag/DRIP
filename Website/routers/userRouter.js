@@ -104,6 +104,13 @@ router.get('/plants', checkAuthenticated, nocache, async (req, res) => {
     
 })
 
+//Need to make this and use URL to get here
+router.get('/changeMoisture', checkAuthenticated, nocache, async(req,res) => {
+    const {plantid, deviceid} = req.query
+    inserted = await accountModel.updatePlantMoisture(plantid, deviceid)
+    res.redirect('/users/plants')
+})
+
 router.post('/addPlant', checkAuthenticated, nocache, (req, res) => {
     console.log(req.body)
     res.redirect('/user/plants')
