@@ -1,7 +1,16 @@
+<head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</head>
+
 <% if (typeof devices != 'undefined') { %> 
     <% devices.forEach(function(device) { %> 
         <tr>
-            <th><input type="text" class="form-control" name = "device_name" id="device_name" placeholder="Enter device name" value="<%= typeof device.name != 'undefined' ? device.name : '' %>" required></th> 
+            <!--<th><label name = "device_name" id="device_name" placeholder="Enter device name"><%= typeof device.name != 'undefined' ? device.name : '' %></label></th>-->
+            <th><input readonly type="text" class="form-control" name = "device_name" id="device_name" placeholder="Enter device name" value="<%= typeof device.name != 'undefined' ? device.name : '' %>" required></th> 
+            <td colspan="1" style="text-align:right;">
+                <button type="button" id="renameButton" class="btn btn-dark">Rename</button>
+            </td>
+
                 <td style="text-align: left;">
                     <div class="dropdown" class="col-md-2">
                         <button class="btn btn-secondary dropdown-toggle" type="button"
@@ -31,6 +40,9 @@
                     </form>
                 </td>
         </tr>
+        <script>
+            $("#renameButton").click(function() {$("#device_name").removeAttr("readonly");});
+        </script>
     <% }) %> 
 <% } else { %> 
     <tr>
@@ -42,4 +54,3 @@
         </td>
     </tr>
 <% } %> 
-
