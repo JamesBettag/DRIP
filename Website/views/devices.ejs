@@ -122,7 +122,13 @@
                 });
                 function lostFocus(e) {
                     $(e).prop('readonly', true);
-                }
+                };
+                $(document).on("keypress", "input", function(e){
+                    if(e.which == 13){
+                    var inputVal = $(this).val();
+                    alert("You've entered: " + inputVal);
+                    }
+                });
             </script>
     </body>
 </html>
