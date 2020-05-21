@@ -94,6 +94,12 @@ router.get('/plants', checkAuthenticated, nocache, (req, res) => {
     res.render('../views/plants.ejs', {name: req.user.email})
 })
 
+router.get('/changePlant', checkAuthenticated, nocache, async(req,res) => {
+    const {plantid, deviceid} = req.query
+    inserted = await accountModel.updateActivePlant(plantid, deviceid)
+    res.redirect('/users/devices')
+})
+
 //Open devices if you are currently logged in
 router.get('/devices', checkAuthenticated, nocache, (req, res) => {
     let devices = []
@@ -135,9 +141,15 @@ router.get('/devices', checkAuthenticated, nocache, (req, res) => {
      })
 })
 
-router.get('/changePlant', checkAuthenticated, nocache, async(req,res) => {
-    const {plantid, deviceid} = req.query
-    inserted = await accountModel.updateActivePlant(plantid, deviceid)
+router.post('/renameDevice', checkAuthenticated, nocache, async (req, res) => {
+    deviceName = req.body.device_name
+    console.log(deviceName)
+    /*removed = await accountModel.deleteDevice(req.user.id, deviceId)
+    if(removed){
+        req.flash('success_msg', 'Device Successfully Removed')
+    }else {
+        req.flash('error_msg', 'Device Not Removed')
+    }*/
     res.redirect('/users/devices')
 })
 
