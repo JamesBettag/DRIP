@@ -120,6 +120,9 @@
                 $( document ).on( "focusout", function( event ) {
                     $( event.target ).closest( "input" ).attr("readonly");
                 });
+                function lostFocus(e) {
+                    $(e).prop('readonly', true);
+                }
             </script>
     </body>
 </html>
