@@ -7,7 +7,8 @@
         <tr>
             <!--<th><label name = "device_name" id="device_name" placeholder="Enter device name"><%= typeof device.name != 'undefined' ? device.name : '' %></label></th>-->
             <form action="/users/renameDevice" id="renameForm" method="POST">
-                <th><input readonly type="text" class="form-control" onblur="lostFocus(this)" name = "device_name" id="device_name" placeholder="Enter device name" value="<%= typeof device.name != 'undefined' ? device.name : '' %>" required></th> 
+                <th><input readonly type="text" class="form-control" onblur="lostFocus(this)" name = "device_name" id="<%= device.id %>" placeholder="Enter device name" value="<%= typeof device.name != 'undefined' ? device.name : '' %>" required>
+                    <input type="hidden" value="<%= device.name %>" id="original<%= device.id %>"></th> 
             </form>
                 <td style="text-align: left;">
                     <div class="dropdown" class="col-md-2">
