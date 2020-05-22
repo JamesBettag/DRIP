@@ -164,14 +164,19 @@ router.get('/devices', checkAuthenticated, nocache, (req, res) => {
 })
 
 router.post('/renameDevice', checkAuthenticated, nocache, async (req, res) => {
-    deviceName = req.body.device_name
-    console.log(deviceName)
-    /*removed = await accountModel.deleteDevice(req.user.id, deviceId)
-    if(removed){
-        req.flash('success_msg', 'Device Successfully Removed')
-    }else {
-        req.flash('error_msg', 'Device Not Removed')
-    }*/
+    const { device_name, original, device_id } = req.body
+    // check if the user changed the name
+    if (device_name != original) {
+        // user has changed the device name
+        renamed = await accountModel.renameDevice(device_id, device_name)
+        if (renamed) {
+            // device was renamed
+            req.flash('success_msg', 'Device renamed to ' + device_name)
+        } else {
+            // device was not renamed (result.affectedRows = 0)
+            req.flash('error_msg', 'Unable to rename device')
+        }
+    }
     res.redirect('/users/devices')
 })
 
