@@ -1,35 +1,49 @@
+<head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</head>
+
 <% if (typeof plants != 'undefined') { %> 
     <% plants.forEach((plant) => { %> 
         <tr>
-            <th><input type="text" class="form-control" name = "plant_name" id="plant_name" placeholder="Enter Plant Name" value="<%= plant.name %>" required></th>
-            <td style="text-align: center;">
+            <form action="/users/renamePlant" method="POST" id="renameForm<%= plant.id %>">
+                <th>
+                    <input readonly type="text" class="form-control" onblur="lostFocus(this)" name = "plant_name" id="<%= plant.id %>" placeholder="Enter plant name" value="<%= typeof plant.name != 'undefined' ? plant.name : '' %>" required>
+                    <input class="form-control" type="hidden" value="<%= plant.name %>" id="original" name="original">
+                    <input class="form-control" type="hidden" value="<%= plant.id %>" id="plant_id" name="plant_id">
+                </th> 
+            </form>
+            <td style="text-align: left;">
                 <div class="dropdown">
                     <button class="btn btn-secondary dropdown-toggle" type="button"
                         id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
-                        aria-expanded="false" href="#">
-                        <span id="selected<%= plant.id %>">Moisture Level</span>
+                        aria-expanded="false">
+                        <% if (plant.moistureLevel != null) { %>
+                            <%= plant.moistureLevel %> 
+                        <% } else { %>
+                            Moisture Level
+                        <% } %> 
                     </button>
-                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                        <li><a class="dropdown-item" href="#">Dry</a></li>
-                        <li><a class="dropdown-item" href="#">Moist</a></li>
-                        <li><a class="dropdown-item" href="#">Wet</a></li>
-                        <script>
-                            $(document).ready(function(){
-                                $(".dropdown-menu li a").click(function(e){
-                                    $(e.target).closest('.dropdown').closest('selected<%= plant.id %>').text($(this).text());
-                                });
-                            });
-                        </script>
-                    </ul>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        <% if (typeof moistureLevels != 'undefined') { %> 
+                            <% moistureLevels.forEach(function(level) { %> 
+                                <a href="/users/changeMoistureLevel?plantid=<%= plant.id %>" name="<%= plant.id %>" value="<%= plant.id %>" class="dropdown-item"><%= plant.moistureLevel %></a>
+                            <% }) %> 
+                        <% } else { %>
+                            <a class="dropdown-item" href="#"> Something went wrong </a>
+                        <% } %>
+                    </div>
                 </div>
             </td>
-            <td style="text-align:left;">
-            <button type="button" class="btn btn-danger">Remove</button>
+            <td colspan="1" style="text-align:right;">
+                <form method="POST" action="/users/removePlant">
+                    <input type="hidden" id="plantid" name="plantid" value="<%= plant.id %>">
+                    <button class="btn btn-danger" type="submit">Remove</button>
+                </form>
             </td>
         </tr>
     <% }) %> 
 
 <% } else { %> 
-
+    <th>No Plants Linked With This Account</th>
 <% } %> 
 

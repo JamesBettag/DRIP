@@ -5,7 +5,6 @@
 <% if (typeof devices != 'undefined') { %> 
     <% devices.forEach(function(device) { %> 
         <tr>
-            <!--<th><label name = "device_name" id="device_name" placeholder="Enter device name"><%= typeof device.name != 'undefined' ? device.name : '' %></label></th>-->
             <form action="renameDevice" method="POST" id="renameForm<%= device.id %>">
                 <th>
                     <input readonly type="text" class="form-control" onblur="lostFocus(this)" name = "device_name" id="<%= device.id %>" placeholder="Enter device name" value="<%= typeof device.name != 'undefined' ? device.name : '' %>" required>
