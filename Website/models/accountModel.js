@@ -206,6 +206,7 @@ exports.insertNewDevice = function(accId, deviceId, deviceName){
     })
 }
 
+// TODO: put device queries in their own model
 exports.deleteDevice = function(accId, deviceId){
     return new Promise(function(resolve, reject) {
         db.get().query(
@@ -216,6 +217,17 @@ exports.deleteDevice = function(accId, deviceId){
                 } else {
                     resolve(true)
                 }
+            }
+        )
+    })
+}
+
+exports.renameDevice = function(deviceId, deviceName) {
+    return new Promise(function(resolve, reject) {
+        db.get().query(
+            "UPDATE device SET device_name = ? WHERE device_id = ?", [deviceName, deviceId], (err, result) => {
+                if (err) { reject(err) }
+                else { resolve(result.affectedRows) }
             }
         )
     })
