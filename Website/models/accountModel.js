@@ -276,3 +276,17 @@ exports.deletePlant = function(accId, plantId){
         )
     })
 }
+
+exports.updatePlantMoisture = function(accId, plantid, min, max) {
+    return new Promise(function(resolve, reject) {
+        db.get().query(
+            "UPDATE plant SET minimum = ?, maximum = ? WHERE plant_id = ? AND account_id = ?", [min, max, plantid, accId], (err, result) => {
+                if(err) {
+                    reject(false)
+                } else {
+                    resolve(true)
+                }
+            }
+        )
+    })
+}

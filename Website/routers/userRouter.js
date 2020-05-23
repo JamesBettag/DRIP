@@ -114,8 +114,21 @@ router.get('/plants', checkAuthenticated, nocache, async (req, res) => {
 
 //TODO
 router.get('/changeMoistureLevel', checkAuthenticated, nocache, async(req,res) => {
-    const {plantid, deviceid} = req.query
-    inserted = await accountModel.updatePlantMoisture(plantid, deviceid)
+    const {plantid, level} = req.query
+    if(level == "Dry"){
+        min = 40
+        max = 50
+    }else if(level == "Moist"){
+        min = 60
+        max = 70
+    }else{
+        min = 80
+        max = 90
+    }
+    inserted = await accountModel.updatePlantMoisture(req.user.id, plantid, min, max)
+    if(!inserted){
+        req.flash('error_msg', 'Moisture Level Not Changed')    
+    }
     res.redirect('/users/plants')
 })
 
