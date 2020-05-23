@@ -90,6 +90,7 @@ router.get('/dashboard', checkAuthenticated, nocache, async (req, res) => {
 })
 
 //Open plants if you are currently logged in 
+//TODO
 router.get('/plants', checkAuthenticated, nocache, async (req, res) => {
     let plants = []
     userPlants = await dataModel.getUserPlants(req.user.id)
@@ -104,17 +105,45 @@ router.get('/plants', checkAuthenticated, nocache, async (req, res) => {
     
 })
 
-//Need to make this and use URL to get here
-router.get('/changeMoisture', checkAuthenticated, nocache, async(req,res) => {
+//TODO
+router.get('/changeMoistureLevel', checkAuthenticated, nocache, async(req,res) => {
     const {plantid, deviceid} = req.query
     inserted = await accountModel.updatePlantMoisture(plantid, deviceid)
     res.redirect('/users/plants')
 })
 
-router.post('/addPlant', checkAuthenticated, nocache, (req, res) => {
+//TODO
+router.post('/addPlant', checkAuthenticated, nocache, async(req, res) => {
+    plantName = req.body.new_plant_name
+    console.log(plantName)
+    inserted = await accountModel.insertNewPlant(req,user.id, plantName)
+    if(inserted){
+        req.flash('success_msg', 'Plant Profile Successfully Added')    
+    }else{
+        req.flash('error_msg', 'Plant Profile Not Added')
+    }
+    res.redirect('/user/plants')
+})
+
+//TODO
+router.post('/removePlant', checkAuthenticated, nocache, async(req, res) => {
+    plantId = req.body.plantid
+    removed = await accountModel.deletePlant(req.user.id, plantId)
+    if(removed){
+        req.flash('success_msg', 'Plant Profile Successfully Removed')
+    }else{
+        req.flash('error_msg', 'Plant Profile Not Removed')
+    }
+    res.redirect('/user/plants')
+})
+
+//TODO
+router.post('/renamePlant', checkAuthenticated, nocache, (req, res) => {
     console.log(req.body)
     res.redirect('/user/plants')
 })
+
+
 
 router.get('/changePlant', checkAuthenticated, nocache, async(req,res) => {
     const {plantid, deviceid} = req.query

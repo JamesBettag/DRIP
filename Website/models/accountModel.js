@@ -232,3 +232,33 @@ exports.renameDevice = function(deviceId, deviceName) {
         )
     })
 }
+
+exports.insertNewPlant = function(accId, plantName){
+    return new Promise(function(resolve, reject) {
+        db.get().query(
+            "INSERT INTO plant (plant_name, account_id) VALUES(?, ?)", [plantName, accId], (err, result) => {
+                if(err){
+                    console.log(err)
+                    reject(false)
+                } else {
+                    resolve(true)
+                }
+            }
+        )
+    })
+}
+
+exports.deletePlant = function(accId, plantId){
+    return new Promise(function(resolve, reject) {
+        db.get().query(
+            'DELETE FROM plant WHERE plant_id = ? AND account_id = ?', [plantId, accId], (err, result) => {
+                if(err){
+                    console.log(err)
+                    reject(false)
+                } else {
+                    resolve(true)
+                }
+            }
+        )
+    })
+}
