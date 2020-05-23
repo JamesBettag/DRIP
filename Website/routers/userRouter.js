@@ -116,9 +116,19 @@ router.get('/changeMoistureLevel', checkAuthenticated, nocache, async(req,res) =
 router.post('/addPlant', checkAuthenticated, nocache, async(req, res) => {
     level = req.body.new_moisture
     plantName = req.body.new_plant_name
-    console.log(plantName)
-    console.log(level)
-    inserted = await accountModel.insertNewPlant(req,user.id, plantName)
+    var min, max
+    if(level == "Dry"){
+        min = 40
+        max = 50
+    }else if(level == "Moist"){
+        min = 60
+        max = 70
+    }else{
+        min = 80
+        max = 90
+    }
+
+    inserted = await accountModel.insertNewPlant(req.user.id, plantName, min, max)
     if(inserted){
         req.flash('success_msg', 'Plant Profile Successfully Added')    
     }else{

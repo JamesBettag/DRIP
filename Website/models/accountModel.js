@@ -233,10 +233,10 @@ exports.renameDevice = function(deviceId, deviceName) {
     })
 }
 
-exports.insertNewPlant = function(accId, plantName){
+exports.insertNewPlant = function(accId, plantName, min, max){
     return new Promise(function(resolve, reject) {
         db.get().query(
-            "INSERT INTO plant (plant_name, account_id) VALUES(?, ?)", [plantName, accId], (err, result) => {
+            "INSERT INTO plant (plant_name, account_id, minimum, maximum) VALUES(?, ?, ?, ?)", [plantName, accId, min, max], (err, result) => {
                 if(err){
                     console.log(err)
                     reject(false)
