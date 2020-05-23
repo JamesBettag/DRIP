@@ -212,7 +212,6 @@ exports.deleteDevice = function(accId, deviceId){
         db.get().query(
             'DELETE FROM device WHERE device_id = ? AND account_id = ?', [deviceId, accId], (err, result) => {
                 if(err){
-                    console.log(err)
                     reject(false)
                 } else {
                     resolve(true)
@@ -286,6 +285,17 @@ exports.updatePlantMoisture = function(accId, plantid, min, max) {
                 } else {
                     resolve(true)
                 }
+            }
+        )
+    })
+}
+
+exports.renamePlant = function(plantId, plantName) {
+    return new Promise(function(resolve, reject) {
+        db.get().query(
+            "UPDATE plant SET plant_name = ? WHERE plant_id = ?", [plantName, plantId], (err, result) => {
+                if (err) { reject(err) }
+                else { resolve(result.affectedRows) }
             }
         )
     })

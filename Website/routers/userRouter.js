@@ -90,7 +90,6 @@ router.get('/dashboard', checkAuthenticated, nocache, async (req, res) => {
 })
 
 //Open plants if you are currently logged in 
-//TODO
 router.get('/plants', checkAuthenticated, nocache, async (req, res) => {
     let plants = []
     userPlants = await accountModel.getUserPlants(req.user.id)
@@ -112,7 +111,6 @@ router.get('/plants', checkAuthenticated, nocache, async (req, res) => {
     
 })
 
-//TODO
 router.get('/changeMoistureLevel', checkAuthenticated, nocache, async(req,res) => {
     const {plantid, level} = req.query
     if(level == "Dry"){
@@ -132,7 +130,6 @@ router.get('/changeMoistureLevel', checkAuthenticated, nocache, async(req,res) =
     res.redirect('/users/plants')
 })
 
-//TODO
 router.post('/addPlant', checkAuthenticated, nocache, async(req, res) => {
     level = req.body.new_moisture
     plantName = req.body.new_plant_name
@@ -156,7 +153,6 @@ router.post('/addPlant', checkAuthenticated, nocache, async(req, res) => {
     res.redirect('/users/plants')
 })
 
-//TODO
 router.post('/removePlant', checkAuthenticated, nocache, async(req, res) => {
     plantId = req.body.plantid
     removed = await accountModel.deletePlant(req.user.id, plantId)
@@ -169,8 +165,20 @@ router.post('/removePlant', checkAuthenticated, nocache, async(req, res) => {
 })
 
 //TODO
-router.post('/renamePlant', checkAuthenticated, nocache, (req, res) => {
-    console.log(req.body)
+router.post('/renamePlant', checkAuthenticated, nocache, async(req, res) => {
+    const { plant_name, original, plant_id } = req.body
+    // check if the user changed the name
+    if (plant_name != original) {
+        // user has changed the device name
+        renamed = await accountModel.renamePlant(plant_id, plant_name)
+        if (renamed) {
+            // device was renamed
+            req.flash('success_msg', 'Plant renamed to ' + plant_name)
+        } else {
+            // device was not renamed (result.affectedRows = 0)
+            req.flash('error_msg', 'Unable to rename plant')
+        }
+    }
     res.redirect('/users/plants')
 })
 
