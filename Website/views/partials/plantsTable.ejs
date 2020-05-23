@@ -5,7 +5,7 @@
 <% if (typeof plants != 'undefined') { %> 
     <% plants.forEach((plant) => { %> 
         <tr>
-            <form action="renamePlant" method="POST" id="renameForm<%= plant.id %>">
+            <form action="renamePlant" method="POST" id="renameForm">
                 <th>
                     <input readonly type="text" class="form-control" onblur="lostFocus(this)" name = "plant_name" id="<%= plant.id %>" placeholder="Enter plant name" value="<%= typeof plant.name != 'undefined' ? plant.name : '' %>" required>
                     <input class="form-control" type="hidden" value="<%= plant.name %>" id="original" name="original">
@@ -38,7 +38,6 @@
             </td>
         </tr>
     <% }) %> 
-
 <% } else { %> 
     <th>No Plants Linked With This Account</th>
 <% } %> 

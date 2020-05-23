@@ -167,6 +167,9 @@ router.post('/removePlant', checkAuthenticated, nocache, async(req, res) => {
 //TODO
 router.post('/renamePlant', checkAuthenticated, nocache, async(req, res) => {
     const { plant_name, original, plant_id } = req.body
+    console.log(plant_name)
+    console.log(original)
+    console.log(plant_id)
     // check if the user changed the name
     if (plant_name != original) {
         // user has changed the device name
