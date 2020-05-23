@@ -100,3 +100,23 @@ exports.getUserDevicesAndActivePlant = function(accountId) {
         )
     })
 }
+
+exports.getMinimumFromPlant = function(plantId){
+    return new Promise(function(resolve, reject) {
+        db.get().query(
+            "SELECT minimum FROM plant WHERE plant_id = ?", plantId, (err, result, fields) => {
+                if(err) {
+                    reject(err)
+                } else {
+                    if(result.length) {
+                        resolve(result)
+                    } else {
+                        resolve(null)
+                    }
+                }
+            }
+        )
+
+
+    })
+}

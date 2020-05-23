@@ -220,3 +220,23 @@ exports.deleteDevice = function(accId, deviceId){
         )
     })
 }
+
+exports.getUserEmailByPlantId = function(plantId) {
+    return new Promise(function(resolve, reject) {
+        db.get().query(
+            "SELECT account.email " +
+            "FROM account JOIN device ON device.account_id = account.account_id " +
+            "WHERE device.plant_id = ?", [plantId], (err, result, fields) => {
+                if(err) {
+                    reject(err)
+                } else {
+                    if(result.length) {
+                        resolve(result)
+                    } else {
+                        resolve(null)
+                    }
+                }
+            }
+        )
+    })
+}
