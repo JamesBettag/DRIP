@@ -89,9 +89,11 @@
                                                 $(document).ready(function(){
                                                     $("#addNewDropdown li a").click(function(){
                                                         $("#dropdownMenuButtonNew").text($(this).text());
+                                                        $('#new_moisture').val($(this).text());
                                                     });
                                                 });
                                             </script>
+                                            <input class="form-control" type="hidden" value="none" id="new_moisture" name="new_moisture">
                                         </div>
                                     </td>
                                     <td colspan="2" style="text-align:right;"><button type="submit" value="Submit" class="btn btn-success">Add Plant</button></td>                                    
