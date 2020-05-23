@@ -17,76 +17,98 @@ router.use(methodOverride('_method'))
 router.get('/dashboard', checkAuthenticated, nocache, async (req, res) => {
     // first get graph data and device info
     let name = req.user.email
+    let graphData = []
     var stopDate = moment(new Date()).format("YYYY-MM-DD HH:mm:ss")
     var startDate = moment(stopDate).subtract(1, 'day').format("YYYY-MM-DD HH:mm:ss")
-    var data = await dataModel.getGraphData(req.user.id, startDate, stopDate)
-    // check if query returned anything
-    if(data != null) {
-        // console.log(data)
+    userPlants = await dataModel.getUserPlants(req.user.id)
+    // variable to hold number of plants so the same number of canvases can be displayed
+    numCanvas = Object.keys(userPlants).length 
+    if (userPlants != null) {
         let moistureData = []
         let labelData = []
         let minData = []
         let maxData = []
-        var graphTitle = data[0].plant_name
-        data.forEach(function(row) {
-            labelData.push(moment(row.time).format("MM-DD HH:mm"))
-            moistureData.push(row.moisture)
-            minData.push(row.minimum)
-            maxData.push(row.maximum)
-        })
-
-        let chartData = {        
-            // The type of chart we want to create
-            type: 'line',
-    
-            // The data for our dataset
-            data: {
-                labels: labelData,
-                datasets: [
-                {
-                    // threshold for minimum line
-                    label: "minimum",
-                    borderColor: '#424242',
-                    data: minData,
-                    pointBorderWidth: 0,
-                    pointRadius: 0
-                },
-                {
-                    // threshold for maximum line
-                    label: "maximum",
-                    borderColor: '#424242',
-                    data: maxData,
-                    pointBorderWidth: 0,
-                    pointRadius: 0
-                },
-                {
-                    // TODO get device name
-                    label: graphTitle,
-                    backgroundColor: 'rgba(0, 173, 180, 0.55)',
-                    borderColor: '#00ADB4',
-                    pointBackgroundColor: '#57B845',
-                    pointBorderColor: '#57B845',
-                    data: moistureData,
-                    lineTension: 0.15
-                }]
-            },
-            // Configuration options go here
-            options: {
-                scales: {
-                    yAxes: [{
-                        display: true,
-                        ticks: { suggestedMin: 0 }
+        userPlants.forEach(async function(plant) {
+            plantData = await dataModel.getGraphData(req.user.id, plant.plant_id, startDate, stopDate)
+            if (plantData != null) {
+                moistureData = []
+                labelData = []
+                minData = []
+                maxData = []
+                graphTitle = plant.plant_name
+                plantData.forEach(function(row) {
+                    labelData.push(moment(row.time).format("MM-DD HH:mm"))
+                    moistureData.push(row.moisture)
+                    minData.push(row.minimum)
+                    maxData.push(row.maximum)
+                })
+                let myGraph = {        
+                    // The type of chart we want to create
+                    type: 'line',
+            
+                    // The data for our dataset
+                    data: {
+                        labels: labelData,
+                        datasets: [
+                        {
+                            // threshold for minimum line
+                            label: "minimum",
+                            borderColor: '#424242',
+                            data: minData,
+                            pointBorderWidth: 0,
+                            pointRadius: 0
+                        },
+                        {
+                            // threshold for maximum line
+                            label: "maximum",
+                            borderColor: '#424242',
+                            data: maxData,
+                            pointBorderWidth: 0,
+                            pointRadius: 0
+                        },
+                        {
+                            // TODO get device name
+                            label: graphTitle,
+                            backgroundColor: 'rgba(0, 173, 180, 0.55)',
+                            borderColor: '#00ADB4',
+                            pointBackgroundColor: '#57B845',
+                            pointBorderColor: '#57B845',
+                            data: moistureData,
+                            lineTension: 0.15
+                        }]
+                    },
+                    // Configuration options go here
+                    options: {
+                        scales: {
+                            yAxes: [{
+                                display: true,
+                                ticks: { suggestedMin: 0 }
+                            }]
+                        }
+                    }
+                }
+                graphData.push({ graph: myGraph })
+            } else {
+                // plant had no data, push an empty graph
+                let myGraph = {
+                    labels: "",
+                    datasets: [{
+                        label: 'No Active Devices',
+                        backgroundColor: '#00ADB4',
+                        borderColor: '#00ADB4',
+                        pointBackgroundColor: '#77C425',
+                        pointBorderColor: '#77C425',
+                        data: []
                     }]
                 }
+                graphData.push({ graph: myGraph })
             }
-        }
-        
-        // push timestamps labels and moisture data into data
-        res.render('../views/dashboard.ejs', { chartData, name })
+        })
+        console.log(Object.keys(graphData).length)
+        res.render('../views/dashboard.ejs', { graphData, numCanvas, name })
     } else {
-        // no data was found within the last week
         res.render('../views/dashboard.ejs', { name })
-    }    
+    }
 })
 
 //Open plants if you are currently logged in 

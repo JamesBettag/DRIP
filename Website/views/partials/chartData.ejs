@@ -1,9 +1,13 @@
-<% if(typeof chartData != 'undefined'){ %>
-  <script>
-    var ctx = document.getElementById('myChart').getContext('2d');
-    // VS will show an error in the code in the next line but the code works
-    var chart = new Chart( ctx, <%- JSON.stringify(chartData) %> );
-  </script>
+<% if(typeof graphData != 'undefined'){ %>
+  <% console.log('hello') %> 
+  <% index = 0 %>
+  <% for(index; index < numCanvas; index++) { %> 
+    <script>
+      var ctx = document.getElementById('myChart<%= index %>').getContext('2d');
+      // VS will show an error in the code in the next line but the code works
+      var chart<%= index %> = new Chart( ctx, <%- JSON.stringify(graphData[index]) %> );
+    </script>
+  <% } %> 
 <% } else { %>
   <script>
     // placeholder for empty data titles 'no active devices'
