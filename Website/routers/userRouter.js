@@ -93,10 +93,17 @@ router.get('/dashboard', checkAuthenticated, nocache, async (req, res) => {
 //TODO
 router.get('/plants', checkAuthenticated, nocache, async (req, res) => {
     let plants = []
-    userPlants = await dataModel.getUserPlants(req.user.id)
+    userPlants = await accountModel.getUserPlants(req.user.id)
     if (userPlants != null) {
         userPlants.forEach((plant) => {
-            plants.push({ id: plant.plant_id, name: plant.plant_name })
+            if(plant.minimum == 40){
+                plants.push({ id: plant.plant_id, name: plant.plant_name, moisture: "Dry"})
+            }
+            else if(plant.minimum == 60){
+                plants.push({ id: plant.plant_id, name: plant.plant_name, moisture: "Moist"})
+            }else{
+                plants.push({ id: plant.plant_id, name: plant.plant_name, moisture: "Wet"})
+            }    
         })
         res.render('../views/plants.ejs', { plants })
     } else {
@@ -127,14 +134,13 @@ router.post('/addPlant', checkAuthenticated, nocache, async(req, res) => {
         min = 80
         max = 90
     }
-
     inserted = await accountModel.insertNewPlant(req.user.id, plantName, min, max)
     if(inserted){
         req.flash('success_msg', 'Plant Profile Successfully Added')    
     }else{
         req.flash('error_msg', 'Plant Profile Not Added')
     }
-    res.redirect('/user/plants')
+    res.redirect('/users/plants')
 })
 
 //TODO
@@ -146,13 +152,13 @@ router.post('/removePlant', checkAuthenticated, nocache, async(req, res) => {
     }else{
         req.flash('error_msg', 'Plant Profile Not Removed')
     }
-    res.redirect('/user/plants')
+    res.redirect('/users/plants')
 })
 
 //TODO
 router.post('/renamePlant', checkAuthenticated, nocache, (req, res) => {
     console.log(req.body)
-    res.redirect('/user/plants')
+    res.redirect('/users/plants')
 })
 
 

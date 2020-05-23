@@ -233,6 +233,20 @@ exports.renameDevice = function(deviceId, deviceName) {
     })
 }
 
+exports.getUserPlants = function(accountId) {
+    return new Promise(function(resolve, reject) {
+        db.get().query(
+            "SELECT plant_name, plant_id, minimum FROM plant WHERE account_id = ?", accountId, (err, result, fields) => {
+                if(err) { reject(err) }
+                else {
+                    if(result.length) { resolve(result) }
+                    else { resolve(null) }
+                }
+            }
+        )
+    })
+}
+
 exports.insertNewPlant = function(accId, plantName, min, max){
     return new Promise(function(resolve, reject) {
         db.get().query(
