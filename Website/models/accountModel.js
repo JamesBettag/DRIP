@@ -212,7 +212,6 @@ exports.deleteDevice = function(accId, deviceId){
         db.get().query(
             'DELETE FROM device WHERE device_id = ? AND account_id = ?', [deviceId, accId], (err, result) => {
                 if(err){
-                    console.log(err)
                     reject(false)
                 } else {
                     resolve(true)
@@ -226,6 +225,75 @@ exports.renameDevice = function(deviceId, deviceName) {
     return new Promise(function(resolve, reject) {
         db.get().query(
             "UPDATE device SET device_name = ? WHERE device_id = ?", [deviceName, deviceId], (err, result) => {
+                if (err) { reject(err) }
+                else { resolve(result.affectedRows) }
+            }
+        )
+    })
+}
+
+exports.getUserPlants = function(accountId) {
+    return new Promise(function(resolve, reject) {
+        db.get().query(
+            "SELECT plant_name, plant_id, minimum FROM plant WHERE account_id = ?", accountId, (err, result, fields) => {
+                if(err) { reject(err) }
+                else {
+                    if(result.length) { resolve(result) }
+                    else { resolve(null) }
+                }
+            }
+        )
+    })
+}
+
+exports.insertNewPlant = function(accId, plantName, min, max){
+    return new Promise(function(resolve, reject) {
+        db.get().query(
+            "INSERT INTO plant (plant_name, account_id, minimum, maximum) VALUES(?, ?, ?, ?)", [plantName, accId, min, max], (err, result) => {
+                if(err){
+                    console.log(err)
+                    reject(false)
+                } else {
+                    resolve(true)
+                }
+            }
+        )
+    })
+}
+
+exports.deletePlant = function(accId, plantId){
+    return new Promise(function(resolve, reject) {
+        db.get().query(
+            'DELETE FROM plant WHERE plant_id = ? AND account_id = ?', [plantId, accId], (err, result) => {
+                if(err){
+                    console.log(err)
+                    reject(false)
+                } else {
+                    resolve(true)
+                }
+            }
+        )
+    })
+}
+
+exports.updatePlantMoisture = function(accId, plantid, min, max) {
+    return new Promise(function(resolve, reject) {
+        db.get().query(
+            "UPDATE plant SET minimum = ?, maximum = ? WHERE plant_id = ? AND account_id = ?", [min, max, plantid, accId], (err, result) => {
+                if(err) {
+                    reject(false)
+                } else {
+                    resolve(true)
+                }
+            }
+        )
+    })
+}
+
+exports.renamePlant = function(plantId, plantName) {
+    return new Promise(function(resolve, reject) {
+        db.get().query(
+            "UPDATE plant SET plant_name = ? WHERE plant_id = ?", [plantName, plantId], (err, result) => {
                 if (err) { reject(err) }
                 else { resolve(result.affectedRows) }
             }

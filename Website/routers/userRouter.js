@@ -112,9 +112,102 @@ router.get('/dashboard', checkAuthenticated, nocache, async (req, res) => {
 })
 
 //Open plants if you are currently logged in 
-router.get('/plants', checkAuthenticated, nocache, (req, res) => {
-    res.render('../views/plants.ejs', {name: req.user.email})
+router.get('/plants', checkAuthenticated, nocache, async (req, res) => {
+    let plants = []
+    userPlants = await accountModel.getUserPlants(req.user.id)
+    if (userPlants != null) {
+        userPlants.forEach((plant) => {
+            if(plant.minimum == 40){
+                plants.push({ id: plant.plant_id, name: plant.plant_name, moisture: "Dry"})
+            }
+            else if(plant.minimum == 60){
+                plants.push({ id: plant.plant_id, name: plant.plant_name, moisture: "Moist"})
+            }else{
+                plants.push({ id: plant.plant_id, name: plant.plant_name, moisture: "Wet"})
+            }    
+        })
+        res.render('../views/plants.ejs', { plants })
+    } else {
+        res.render('../views/plants.ejs')
+    }
+    
 })
+
+router.get('/changeMoistureLevel', checkAuthenticated, nocache, async(req,res) => {
+    const {plantid, level} = req.query
+    if(level == "Dry"){
+        min = 40
+        max = 50
+    }else if(level == "Moist"){
+        min = 60
+        max = 70
+    }else{
+        min = 80
+        max = 90
+    }
+    inserted = await accountModel.updatePlantMoisture(req.user.id, plantid, min, max)
+    if(!inserted){
+        req.flash('error_msg', 'Moisture Level Not Changed')    
+    }
+    res.redirect('/users/plants')
+})
+
+router.post('/addPlant', checkAuthenticated, nocache, async(req, res) => {
+    level = req.body.new_moisture
+    plantName = req.body.new_plant_name
+    var min, max
+    if(level == "Dry"){
+        min = 40
+        max = 50
+    }else if(level == "Moist"){
+        min = 60
+        max = 70
+    }else{
+        min = 80
+        max = 90
+    }
+    inserted = await accountModel.insertNewPlant(req.user.id, plantName, min, max)
+    if(inserted){
+        req.flash('success_msg', 'Plant Profile Successfully Added')    
+    }else{
+        req.flash('error_msg', 'Plant Profile Not Added')
+    }
+    res.redirect('/users/plants')
+})
+
+router.post('/removePlant', checkAuthenticated, nocache, async(req, res) => {
+    plantId = req.body.plantid
+    removed = await accountModel.deletePlant(req.user.id, plantId)
+    if(removed){
+        req.flash('success_msg', 'Plant Profile Successfully Removed')
+    }else{
+        req.flash('error_msg', 'Plant Profile Not Removed')
+    }
+    res.redirect('/users/plants')
+})
+
+//TODO
+router.post('/renamePlant', checkAuthenticated, nocache, async(req, res) => {
+    const { plant_name, original, plant_id } = req.body
+    console.log(plant_name)
+    console.log(original)
+    console.log(plant_id)
+    // check if the user changed the name
+    if (plant_name != original) {
+        // user has changed the device name
+        renamed = await accountModel.renamePlant(plant_id, plant_name)
+        if (renamed) {
+            // device was renamed
+            req.flash('success_msg', 'Plant renamed to ' + plant_name)
+        } else {
+            // device was not renamed (result.affectedRows = 0)
+            req.flash('error_msg', 'Unable to rename plant')
+        }
+    }
+    res.redirect('/users/plants')
+})
+
+
 
 router.get('/changePlant', checkAuthenticated, nocache, async(req,res) => {
     const {plantid, deviceid} = req.query

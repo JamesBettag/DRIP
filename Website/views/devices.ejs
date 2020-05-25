@@ -20,7 +20,7 @@
             <ul class="navbar-nav px-3">
                 <li class="nav-item text-nowrap">
                     <form action="/logout?_method=DELETE" method="POST">
-                        <a onclick="this.closest('form').submit();return false;" class="nav-link" type="submit">Sign out</a>
+                        <a onclick="this.closest('form').submit();return false;" class="nav-link-signout" style="color: white;" type="submit">Sign out</a>
                     </form>
                 </li>
             </ul>
@@ -28,7 +28,7 @@
     
         <div class="container">
             <div class="row">
-                <nav class="col-md-2 d-none d-md-block bg-light sidebar">
+                <nav class="shadow col-md-2 d-none d-md-block bg-light sidebar">
                     <div class="sidebar-sticky">
                         <ul class="nav flex-column">
                             <li class="nav-item">
@@ -61,19 +61,20 @@
                     </div>
                 </nav>
                 <main role="main" class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
-                    <h1 class="h2">Devices</h1>
+                    <h1 class="mb-3">Devices</h1>
                     <div class="table">
                         <table class="table table-striped table-md">
                             <% include ./partials/messages %> 
                             <% include ./partials/devicesTable %>
                         </table>
+                        <br>
                         <h2>Add New Device</h2>
-                        <table class="table table-striped table-md">
+                        <table class="shadow table table-striped table-md">
                             <form action="/users/addDevice" method="POST">
                                 <tr>
                                     <th><input type="text" class="form-control" name = "new_device_name" id="new_device_name" placeholder="Enter device name" required></th>
                                     <td><input type="text" class="form-control" name = "new_device_id" id="new_device_id" placeholder="Enter device ID" required></td>
-                                    <td colspan="2" style="text-align:right;"><button type="submit" value="Submit" class="btn btn-success">Add Device</button></td>
+                                    <td colspan="2" style="text-align:right;"><button type="submit" value="Submit" class="shadow btn btn-success">Add Device</button></td>
                                 </tr> 
                             </form>
                         </table>
@@ -104,10 +105,10 @@
                 </script>
             </div>
             <script>
-                function formSubmitted(e) {
+                /*function formSubmitted(e) {
                     console.log(e)
                     return false
-                }
+                }*/
                 function lostFocus(e) {
                     if($(e).val() !== $(e).siblings('input').val()) {
                         console.log('different siblings')
