@@ -71,11 +71,10 @@
                 <% include ./partials/messages %>
                 <div class="row">
                   <div class="col-md-6 mb-6">
-                    <label for="name">Full name</label>
                     <input type="text" class="shadow form-control" name="user_name" id="user_name"
                       placeholder="Enter new name" value="<%= typeof user_name != 'undefined' ? user_name : '' %>">
                     <div class="invalid-feedback">
-                      Valid first name is required.
+                      Enter your name
                     </div>
                   </div>
                 </div>
@@ -85,7 +84,7 @@
                   <input type="password" class="shadow form-control" name="password" id="password"
                     placeholder="New password">
                   <div class="invalid-feedback">
-                    Please enter your password.
+                    Please enter your password
                   </div>
                 </div>
   
@@ -93,7 +92,7 @@
                   <input type="password" class="shadow form-control" name="password2" id="password2"
                     placeholder="Reenter new password">
                   <div class="invalid-feedback">
-                    Please enter your password.
+                    Please enter your password
                   </div>
                 </div>
                 <button type="submit" value="Submit" class="shadow-lg btn btn-success">Update</button>
