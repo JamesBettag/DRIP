@@ -1,10 +1,19 @@
 enable-shadows
+.shadowed-lg{
+  -webkit-filter: drop-shadow(5px 5px 5px #222); 
+  filter: drop-shadow(5px 5px 5px #222);
+}
+
+.shadowed-sm{
+  -webkit-filter: drop-shadow(10px 10px 10px #222); 
+  filter: drop-shadow(.5px .5px .5px #222);
+}
+
 body {
     font-size: .875rem;
     font-family: Ubuntu-Regular;
   }
   
-
   .feather {
     width: 16px;
     height: 16px;
