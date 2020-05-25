@@ -15,12 +15,6 @@
   src: url('../webfonts/ubuntu/Ubuntu-Bold.ttf'); 
 }
 
-@font-face {
-  font-family: JosefinSans-Bold;
-  src: url('../webfonts/JosefinSans/JosefinSans-Bold.ttf'); 
-}
-
-
 
 /*//////////////////////////////////////////////////////////////////
 [ RESTYLE TAG ]*/
@@ -33,7 +27,7 @@
 
 body, html {
 	height: 100%;
-	font-family: Ubuntu-Regular, sans-serif;
+	font-family: Ubuntu-Regular;
 }
 
 /*---------------------------------------------*/
@@ -200,7 +194,7 @@ iframe {
 }
 
 .login100-form-title {
-  font-family: JosefinSans-Bold;
+  font-family: Ubuntu-Bold;
   font-size: 30px;
   color: #fff;
   line-height: 1.2;
@@ -359,7 +353,7 @@ iframe {
 
 .alert-validate::after {
   content: "\f06a";
-  font-family: FontAwesome;
+  font-family: Ubuntu-regular;
   display: block;
   position: absolute;
   z-index: 1100;

@@ -37,9 +37,6 @@ body {
     z-index: 100; /* Behind the navbar */
     padding: 0;
     box-shadow: inset -1px 0 0 rgba(0, 0, 0, .1);
-    /*COULD FIX FIREFOX ISSUE ON DASH???
-    -moz-padding-top: 40px;
-    padding-top: none;*/
   } 
 
   /*style="padding-top: none; -moz-padding-top: 40px;"*/
@@ -120,5 +117,8 @@ body {
    * Utilities
    */
   
+   @-moz-document url-prefix() {
+    .sidebar {padding-top:45px;}
+}
   .border-top { border-top: 1px solid #e5e5e5; }
   .border-bottom { border-bottom: 1px solid #e5e5e5; }
