@@ -14,7 +14,7 @@
             </form>
                 <td style="text-align: left;">
                     <div class="dropdown" class="col-md-2">
-                        <button class="btn btn-secondary dropdown-toggle" type="button"
+                        <button class="shadow btn btn-secondary dropdown-toggle" type="button"
                             id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
                             aria-expanded="false">
                             <% if (device.plant != null) { %>
@@ -23,7 +23,7 @@
                                 Activate a Plant
                             <% } %> 
                         </button>
-                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        <div class="shadow dropdown-menu" aria-labelledby="dropdownMenuButton">
                             <% if (typeof plants != 'undefined') { %> 
                                 <% plants.forEach(function(plant) { %> 
                                     <a href="/users/changePlant?plantid=<%= plant.id %>&deviceid=<%= device.id %>" name="<%= plant.id %>" value="<%= plant.id %>" class="dropdown-item"><%= plant.name %></a>
@@ -37,7 +37,7 @@
                 <td colspan="1" style="text-align:right;">
                     <form method="POST" action="/users/removeDevice">
                         <input type="hidden" id="deviceid" name="deviceid" value="<%= device.id %>">
-                        <button class="btn btn-danger" type="submit">Remove</button>
+                        <button class="shadow btn btn-danger" type="submit">Remove</button>
                     </form>
                 </td>
         </tr>

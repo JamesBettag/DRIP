@@ -3,10 +3,21 @@
  * Copyright 2013-2019 Start Bootstrap
  * Licensed under MIT (https://github.com/BlackrockDigital/startbootstrap-scrolling-nav/blob/master/LICENSE)
  */
+enable-shadows
 header {
   padding: 156px 0 100px;
 }
 
 section {
   padding: 150px 0;
+}
+
+.shadowed-lg{
+  -webkit-filter: drop-shadow(5px 5px 5px #222); 
+  filter: drop-shadow(5px 5px 5px #222);
+}
+
+.shadowed-sm{
+  -webkit-filter: drop-shadow(10px 10px 10px #222); 
+  filter: drop-shadow(.5px .5px .5px #222);
 }

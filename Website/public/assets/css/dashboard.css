@@ -1,6 +1,7 @@
-/* TODO: Define class/container for body similar to navbar */
+enable-shadows
 body {
     font-size: .875rem;
+    font-family: Ubuntu-Regular;
   }
   
 

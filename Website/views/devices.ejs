@@ -28,7 +28,7 @@
     
         <div class="container">
             <div class="row">
-                <nav class="col-md-2 d-none d-md-block bg-light sidebar">
+                <nav class="shadow col-md-2 d-none d-md-block bg-light sidebar">
                     <div class="sidebar-sticky">
                         <ul class="nav flex-column">
                             <li class="nav-item">
@@ -63,7 +63,7 @@
                 <main role="main" class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
                     <h1 class="h2">Devices</h1>
                     <div class="table">
-                        <table class="table table-striped table-md">
+                        <table class="shadow table table-striped table-md">
                             <% include ./partials/messages %> 
                             <% include ./partials/devicesTable %>
                         </table>
@@ -73,7 +73,7 @@
                                 <tr>
                                     <th><input type="text" class="form-control" name = "new_device_name" id="new_device_name" placeholder="Enter device name" required></th>
                                     <td><input type="text" class="form-control" name = "new_device_id" id="new_device_id" placeholder="Enter device ID" required></td>
-                                    <td colspan="2" style="text-align:right;"><button type="submit" value="Submit" class="btn btn-success">Add Device</button></td>
+                                    <td colspan="2" style="text-align:right;"><button type="submit" value="Submit" class="shadow btn btn-success">Add Device</button></td>
                                 </tr> 
                             </form>
                         </table>

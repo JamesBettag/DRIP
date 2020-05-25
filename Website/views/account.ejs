@@ -27,7 +27,7 @@
   
     <div class="container-fluid">
         <div class="row">
-          <nav class="col-md-2 md-offset-2 d-none d-md-block bg-light sidebar">
+          <nav class="shadow col-md-2 md-offset-2 d-none d-md-block bg-light sidebar">
             <div class="sidebar-sticky">
                 <ul class="nav flex-column">
                     <li class="nav-item">
@@ -63,47 +63,40 @@
 
     </div>
     <main role="main" class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
-        <div class="container">
+      <h1 class="mb-3">Account Details</h1>
+      <div class="row">
+        <div class="col-md-8 order-md-1">
+          <form  action="/users/nameandpasswordchange" method="POST" class="login100-form validate-form p-l-55 p-r-55 p-t-178">
+            <% include ./partials/messages %>
             <div class="row">
-              <div class="col-md-8 order-md-1">
-                <h4 class="mb-3">Account Details</h4>
-                <form  action="/users/nameandpasswordchange" method="POST" class="login100-form validate-form p-l-55 p-r-55 p-t-178">
-                  <% include ./partials/messages %>
-                  <div class="row">
-                    <div class="col-md-6 mb-6">
-                      <label for="name">Full name</label>
-                      <input type="text" class="form-control" name = "user_name" id="user_name" placeholder="Enter new name" value="<%= typeof user_name != 'undefined' ? user_name : '' %>">
-                      <div class="invalid-feedback">
-                        Valid first name is required.
-                      </div>
-                    </div>
-                  </div>
-
-                  <div class="mb-3">
-                    <label for="password">Password</label>
-                    <input type="password" class="form-control" name="password" id="password" placeholder="Passwords must match">
-                    <div class="invalid-feedback">
-                      Please enter your password.
-                    </div>
-                  </div>
-
-                  <div class="mb-3">
-                    <label for="password2">Reenter Password</label>
-                    <input type="password" class="form-control" name="password2" id="password2" placeholder="Passwords must match">
-                    <div class="invalid-feedback">
-                      Please enter your password.
-                    </div>
-                  </div>
-                  <button type="submit" value="Submit" class="btn btn-success">Submit</button>
-                </form>
+              <div class="col-md-6 mb-6">
+                <label for="name">Full name</label>
+                <input type="text" class="shadow form-control" name = "user_name" id="user_name" placeholder="Enter new name" value="<%= typeof user_name != 'undefined' ? user_name : '' %>">
+                <div class="invalid-feedback">
+                  Valid first name is required.
+                </div>
               </div>
             </div>
-          </div>
+            <br>
+            <br>
+            <div class="mb-3">
+              <input type="password" class="shadow form-control" name="password" id="password" placeholder="New password">
+              <div class="invalid-feedback">
+                Please enter your password.
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <input type="password" class="shadow form-control" name="password2" id="password2" placeholder="Reenter new password">
+              <div class="invalid-feedback">
+                Please enter your password.
+              </div>
+            </div>
+            <button type="submit" value="Submit" class="shadow-lg btn btn-success">Update</button>
+          </form>
+        </div>
+      </div>  
     </main>
-
-
-
-
     <!-- Bootstrap core JavaScript
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
