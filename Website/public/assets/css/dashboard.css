@@ -1,8 +1,17 @@
+@font-face {
+  font-family: Ubuntu-Regular;
+  src: url('../webfonts/ubuntu/Ubuntu-Regular.ttf'); 
+};
+
+@font-face {
+  font-family: Ubuntu-Bold;
+  src: url('../webfonts/ubuntu/Ubuntu-Bold.ttf'); 
+}
+
 enable-shadows
 .shadowed-lg{
   -webkit-filter: drop-shadow(5px 5px 5px #222); 
   filter: drop-shadow(5px 5px 5px #222);
-  box-shadow: 5px 10px 8px #888888;
 }
 
 .shadowed-sm{
