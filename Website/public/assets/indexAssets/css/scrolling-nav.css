@@ -3,6 +3,16 @@
  * Copyright 2013-2019 Start Bootstrap
  * Licensed under MIT (https://github.com/BlackrockDigital/startbootstrap-scrolling-nav/blob/master/LICENSE)
  */
+ @font-face {
+  font-family: Ubuntu-Regular;
+  src: url('../webfonts/ubuntu/Ubuntu-Regular.ttf'); 
+}
+
+@font-face {
+  font-family: Ubuntu-Bold;
+  src: url('../webfonts/ubuntu/Ubuntu-Bold.ttf'); 
+}
+
 enable-shadows
 header {
   padding: 156px 0 100px;
