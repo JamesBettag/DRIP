@@ -2,6 +2,7 @@ enable-shadows
 .shadowed-lg{
   -webkit-filter: drop-shadow(5px 5px 5px #222); 
   filter: drop-shadow(5px 5px 5px #222);
+  box-shadow: 5px 10px 8px #888888;
 }
 
 .shadowed-sm{
@@ -66,11 +67,11 @@ body {
   }
   
   .sidebar .nav-link.active {
-    color: #57B845;
+    color: #60b33c;
   }
   
   .sidebar .nav-link.active .plantIcon {
-    color: #57B845;
+    color: #60b33c;
     opacity: 1;
   }
 

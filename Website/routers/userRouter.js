@@ -62,10 +62,10 @@ router.get('/dashboard', checkAuthenticated, nocache, async (req, res) => {
                 {
                     // TODO get device name
                     label: graphTitle,
-                    backgroundColor: 'rgba(0, 173, 180, 0.55)',
+                    backgroundColor: 'rgba(13, 154, 165, 0.55)',
                     borderColor: '#00ADB4',
-                    pointBackgroundColor: '#57B845',
-                    pointBorderColor: '#57B845',
+                    pointBackgroundColor: '#60b33c',
+                    pointBorderColor: '#60b33c',
                     data: moistureData,
                     lineTension: 0.15
                 }]
