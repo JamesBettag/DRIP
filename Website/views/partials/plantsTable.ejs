@@ -1,0 +1,44 @@
+<head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</head>
+
+<% if (typeof plants != 'undefined') { %> 
+    <% plants.forEach((plant) => { %> 
+        <tr>
+            <form action="renamePlant" method="POST" id="renameForm">
+                <th>
+                    <input readonly type="text" class="form-control" onblur="lostFocus(this)" name = "plant_name" id="<%= plant.id %>" placeholder="Enter plant name" value="<%= typeof plant.name != 'undefined' ? plant.name : '' %>" required>
+                    <input class="form-control" type="hidden" value="<%= plant.name %>" id="original" name="original">
+                    <input class="form-control" type="hidden" value="<%= plant.id %>" id="plant_id" name="plant_id">
+                </th> 
+            </form>
+            <td style="text-align: left;">
+                <div class="dropdown">
+                    <button class="shadow btn btn-secondary dropdown-toggle" type="button"
+                        id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
+                        aria-expanded="false">
+                        <% if (plant.moisture != null) { %>
+                            <%= plant.moisture %> 
+                        <% } else { %>
+                            Moisture Level
+                        <% } %> 
+                    </button>
+                    <div class="shadow dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        <a href="/users/changeMoistureLevel?plantid=<%= plant.id %>&level=Dry" name="<%= plant.id %>" class="dropdown-item">Dry</a>
+                        <a href="/users/changeMoistureLevel?plantid=<%= plant.id %>&level=Moist" name="<%= plant.id %>" class="dropdown-item">Moist</a>
+                        <a href="/users/changeMoistureLevel?plantid=<%= plant.id %>&level=Wet" name="<%= plant.id %>" class="dropdown-item">Wet</a>
+                    </div>
+                </div>
+            </td>
+            <td colspan="1" style="text-align:right;">
+                <form method="POST" action="/users/removePlant">
+                    <input type="hidden" id="plantid" name="plantid" value="<%= plant.id %>">
+                    <button class="shadow btn btn-danger" type="submit">Remove</button>
+                </form>
+            </td>
+        </tr>
+    <% }) %> 
+<% } else { %> 
+    <th>No Plants Linked With This Account</th>
+<% } %> 
+
