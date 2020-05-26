@@ -189,16 +189,13 @@ router.post('/removePlant', checkAuthenticated, nocache, async(req, res) => {
 //TODO
 router.post('/renamePlant', checkAuthenticated, nocache, async(req, res) => {
     const { plant_name, original, plant_id } = req.body
-    console.log(plant_name)
-    console.log(original)
-    console.log(plant_id)
     // check if the user changed the name
     if (plant_name != original) {
         // user has changed the device name
         renamed = await accountModel.renamePlant(plant_id, plant_name)
         if (renamed) {
             // device was renamed
-            req.flash('success_msg', 'Plant renamed to ' + plant_name)
+            req.flash('success_msg', 'Plant renamed')
         } else {
             // device was not renamed (result.affectedRows = 0)
             req.flash('error_msg', 'Unable to rename plant')
