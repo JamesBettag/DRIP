@@ -1,7 +1,13 @@
 <head>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 </head>
-
+<thead class="thead-dark">
+    <tr>
+        <th>Device Name</th>
+        <th>Active Plant Profile</th>
+        <th></th>
+    </tr>
+</thead>
 <% if (typeof devices != 'undefined') { %> 
     <% devices.forEach(function(device) { %> 
         <tr>
