@@ -2,6 +2,13 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 </head>
 
+<thead class="thead-dark">
+    <tr>
+        <th>Plant Name</th>
+        <th>Minimum Moisture Level</th>
+        <th></th>
+    </tr>
+</thead>
 <% if (typeof plants != 'undefined') { %> 
     <% plants.forEach((plant) => { %> 
         <tr>
