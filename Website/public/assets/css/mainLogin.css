@@ -165,18 +165,18 @@ iframe {
   align-items: center;
   padding: 15px;
   position: relative;
-  background-color: #fff;
+  background-color:#353a40;
 }
 
 .wrap-login100 {
   width: 500px;
-  background: #fff;
+  background-color:#353a40;
   border-radius: 20px;
   overflow: hidden;
   -webkit-box-shadow: 10px 10px 26px 0px rgba(0,0,0,0.75);
   -moz-box-shadow: 10px 10px 26px 0px rgba(0,0,0,0.75);
   box-shadow: 10px 10px 26px 0px rgba(0,0,0,0.75);
-  -o-box-shadow: 0 3px 20px 0px rgba(0, 0, 0, 0.1);
+  -o-box-shadow: 10px 10px 26px 0px rgba(0,0,0,0.75);
   -ms-box-shadow: 0 3px 20px 0px rgba(0, 0, 0, 0.1);
 }
 
