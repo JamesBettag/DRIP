@@ -95,14 +95,7 @@ router.get('/plants', checkAuthenticated, nocache, async (req, res) => {
     userPlants = await accountModel.getUserPlants(req.user.id)
     if (userPlants != null) {
         userPlants.forEach((plant) => {
-            if(plant.minimum == 40){
-                plants.push({ id: plant.plant_id, name: plant.plant_name, moisture: "Dry"})
-            }
-            else if(plant.minimum == 60){
-                plants.push({ id: plant.plant_id, name: plant.plant_name, moisture: "Moist"})
-            }else{
-                plants.push({ id: plant.plant_id, name: plant.plant_name, moisture: "Wet"})
-            }    
+            plants.push({ id: plant.plant_id, name: plant.plant_name, min: plant.minimum })  
         })
         res.render('../views/plants.ejs', { plants })
     } else {
@@ -112,20 +105,20 @@ router.get('/plants', checkAuthenticated, nocache, async (req, res) => {
 })
 
 router.get('/changeMoistureLevel', checkAuthenticated, nocache, async(req,res) => {
-    const {plantid, level} = req.query
-    if(level == "Dry"){
-        min = 40
-        max = 50
-    }else if(level == "Moist"){
-        min = 60
-        max = 70
-    }else{
-        min = 80
-        max = 90
-    }
-    inserted = await accountModel.updatePlantMoisture(req.user.id, plantid, min, max)
-    if(!inserted){
-        req.flash('error_msg', 'Moisture Level Not Changed')    
+    const { plant_moisture, original, plant_id } = req.query
+    // check if moisture level was changed
+    if (plant_moisture != original) {
+        // check if moisture level has valid input
+        if (plant_moisture >= 0 && plant_moisture <= 100) {
+            const changed = await dataModel.setPlantMoisture(plant_id, plant_moisture)
+            if (changed) {
+                req.flash('success_msg', 'Moisture level changed')
+            } else {
+                req.flash('error_msg', 'Could not change moisture level')
+            }
+        } else {
+            req.flash('error_msg', 'Invalid input. Must be between 0 and 100')
+        }
     }
     res.redirect('/users/plants')
 })
