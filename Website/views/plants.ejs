@@ -106,9 +106,10 @@
                 <!-- Bootstrap core JavaScript  
           ================================================== -->
                 <!-- Placed at the end of the document so the pages load faster -->
-                <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+                <!-- <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
                     integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
-                    crossorigin="anonymous"></script>
+                    crossorigin="anonymous">
+                </script> -->
                 <script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery-slim.min.js"><\/script>')</script>
                 <script src="http://leia.cs.spu.edu:3001/source/js/popper"></script>
                 <script src="http://leia.cs.spu.edu:3001/source/js/min"></script>
@@ -133,10 +134,25 @@
                     return false
                 }*/
                 function lostFocus(e) {
-                    if($(e).val() !== $(e).siblings('input').val()) {
-                        console.log('different siblings')
-                        $("#renameForm").submit();
-                    }
+                    var elementId = $(e).attr('id')
+                    console.log(elementId)
+                    $('#rename' + $(e).attr('id')).submit()
+                    // $.ajax({
+                    //     url: '/users/renamePlant',
+                    //     type: 'POST',
+                    //     dataType: 'JSON',
+                    //     data: { plant_name: $(e).val(), original: $(e).siblings('#original').val(), plant_id: $(e).siblings('#plant_id').val() },
+                    // })
+                    // .done(function (response) {
+                    //     console.log(response + typeof response)
+                    // })
+                    // .fail(function(response) {
+                    //     console.log('failed')
+                    // })
+
+                    // $.post("/users/renamePlant", { plant_name: $(e).val(), original: $(e).siblings('#original').val(), plant_id: $(e).siblings('#plant_id').val() }, function(response) {
+                    //     console.log(response)
+                    // })
                     $(e).prop('readonly', true);
                 }
                 $( document ).on( "click", function(e) {
