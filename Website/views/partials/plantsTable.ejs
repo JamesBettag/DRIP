@@ -19,7 +19,12 @@
                 </form>
             </th> 
             <td style="text-align: left;">
-                <div class="dropdown">
+                <form action="">
+                    <input size=1 readonly type="text" class="form-control" onblur="lostFocus(this)" name = "min" id="<%= plant.id %>" placeholder="Enter min" value="<%= typeof plant.min != 'undefined' ? plant.min : '' %>" required>
+                    <input class="form-control" type="hidden" value="<%= plant.name %>" id="original_min" name="original_min">
+                    <input class="form-control" type="hidden" value="<%= plant.id %>" id="plant_id" name="plant_id">
+                </form>
+                <!--<div class="dropdown">
                     <button class="shadow btn btn-secondary dropdown-toggle" type="button"
                         id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
                         aria-expanded="false">
@@ -29,12 +34,20 @@
                             Moisture Level
                         <% } %> 
                     </button>
+                    
                     <div class="shadow dropdown-menu" aria-labelledby="dropdownMenuButton">
                         <a href="/users/changeMoistureLevel?plantid=<%= plant.id %>&level=Dry" name="<%= plant.id %>" class="dropdown-item">Dry</a>
                         <a href="/users/changeMoistureLevel?plantid=<%= plant.id %>&level=Moist" name="<%= plant.id %>" class="dropdown-item">Moist</a>
                         <a href="/users/changeMoistureLevel?plantid=<%= plant.id %>&level=Wet" name="<%= plant.id %>" class="dropdown-item">Wet</a>
                     </div>
-                </div>
+                </div>-->
+            </td>
+            <td style="text-align: left;">
+                <form action="">
+                    <input size=1 readonly type="text" class="form-control" onblur="lostFocus(this)" name = "min" id="<%= plant.id %>" placeholder="Enter max" value="<%= typeof plant.max != 'undefined' ? plant.max : '' %>" required>
+                    <input class="form-control" type="hidden" value="<%= plant.name %>" id="original_max" name="original_max">
+                    <input class="form-control" type="hidden" value="<%= plant.id %>" id="plant_id" name="plant_id">
+                </form>
             </td>
             <td colspan="1" style="text-align:right;">
                 <form method="POST" action="/users/removePlant">

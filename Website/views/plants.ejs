@@ -1,163 +1,177 @@
 <!doctype html>
 <html lang="en">
-    <head>
-        <meta charset="utf-8">
-            <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-            <meta name="Plant Profile page">
-            <meta name="Tad, James, Mathew">
-            <link rel="icon" href="/docs/4.0/assets/img/favicons/favicon.ico">
-            <title>Devices</title>
-            <link rel="canonical" href="https://getbootstrap.com/docs/4.0/examples/dashboard/">
-            <link href="http://leia.cs.spu.edu:3001/source/css/min" rel="stylesheet">
-            <!-- Custom styles for this template -->
-            <!-- <script type="text/javascript" src="http://leia.cs.spu.edu:3001/source/css/dash"></script> -->
-            <link href="http://leia.cs.spu.edu:3001/source/css/dash" rel="stylesheet">
-            <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-      </head>
-    
-      <body>
-        <nav class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0">
-            <a class="navbar-brand col-sm-3 col-md-2 mr-0" href="/index">DRIP</a>
-            <ul class="navbar-nav px-3">
-                <li class="nav-item text-nowrap">
-                    <form action="/logout?_method=DELETE" method="POST">
-                        <a onclick="this.closest('form').submit();return false;" class="nav-link-signout" style="color: white;" type="submit">Sign out</a>
-                    </form>
-                </li>
-            </ul>
-        </nav>
-    
-        <div class="container">
-            <div class="row">
-                <nav class="shadow col-md-2 d-none d-md-block bg-light sidebar">
-                    <div class="sidebar-sticky">
-                        <ul class="nav flex-column">
-                            <li class="nav-item">
-                                <a class="nav-link" href="/users/dashboard">
-                                    <span data-feather="home"></span>
-                                    Dashboard
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link active" href="/users/plants">
-                                    <span><img src="http://leia.cs.spu.edu:3001/source/plant" alt="Plant Icon"
-                                            onMouseOver="this.style.color='#0F0'" onMouseOut="this.style.color='#00F'"
-                                            class="feather plantIcon"></span>
-                                    Plants <span class="sr-only">(current)</span>
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="/users/devices">
-                                    <span data-feather="cpu"></span>
-                                    Devices 
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="/users/account">
-                                    <span data-feather="users"></span>
-                                    Account
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
-                </nav>
-                <main role="main" class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
-                    <h1 class="mb-3">Plant Profiles</h1>
-                    <div class="table">
-                        <table class="table table-striped table-md">
-                            <% include ./partials/messages %> 
-                            <% include ./partials/plantsTable %>
-                        </table>
-                        <br>
-                        <h2>Add New Plant</h2>
-                        <table class="shadow table table-striped table-md">
-                            <form action="/users/addPlant" method="POST">
-                                <tr>
-                                    <th><input type="text" class="form-control" name = "new_plant_name" id="new_plant_name" placeholder="Enter plant name" required></th>
-                                    <td style="text-align: center;">
-                                        <div class="dropdown">
-                                            <button class="btn btn-secondary dropdown-toggle" type="button"
-                                                id="dropdownMenuButtonNew" data-toggle="dropdown" aria-haspopup="true"
-                                                aria-expanded="false">
-                                                Moisture Level
-                                            </button>
-                                            <ul id="addNewDropdown" class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                                <li><a class="dropdown-item" value="Dry">Dry</a></li>
-                                                <li><a class="dropdown-item" value="Moist">Moist</a></li>
-                                                <li><a class="dropdown-item" value="Wet">Wet</a></li>
-                                            </ul>
-                                            <script>
-                                                $(document).ready(function(){
-                                                    $("#addNewDropdown li a").click(function(){
-                                                        $("#dropdownMenuButtonNew").text($(this).text());
-                                                        $('#new_moisture').val($(this).text());
-                                                    });
-                                                });
-                                            </script>
-                                            <input class="form-control" type="hidden" value="none" id="new_moisture" name="new_moisture">
-                                        </div>
-                                    </td>
-                                    <td colspan="2" style="text-align:right;"><button type="submit" value="Submit" class="btn btn-success">Add Plant</button></td>                                    
-                            </form>
-                        </table>
-                    </div>
-                </main>
-               
-                <!-- Bootstrap core JavaScript  
-          ================================================== -->
-                <!-- Placed at the end of the document so the pages load faster -->
-                <!-- <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
-                    integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
-                    crossorigin="anonymous">
-                </script> -->
-                <script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery-slim.min.js"><\/script>')</script>
-                <script src="http://leia.cs.spu.edu:3001/source/js/popper"></script>
-                <script src="http://leia.cs.spu.edu:3001/source/js/min"></script>
-    
-                <!--Our JS (We may not need this..?Seems to work without it so far)-->
-                <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
-                    integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
-                    crossorigin="anonymous"></script>
-                <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
-                    integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
-                    crossorigin="anonymous"></script>
-    
-                <!-- Icons -->
-                <script src="https://unpkg.com/feather-icons/dist/feather.min.js"></script>
-                <script>
-                    feather.replace()
-                </script>
-            </div>
-            <script>
-                /*function formSubmitted(e) {
-                    console.log(e)
-                    return false
-                }*/
-                function lostFocus(e) {
-                    var elementId = $(e).attr('id')
-                    console.log(elementId)
-                    $('#rename' + $(e).attr('id')).submit()
-                    // $.ajax({
-                    //     url: '/users/renamePlant',
-                    //     type: 'POST',
-                    //     dataType: 'JSON',
-                    //     data: { plant_name: $(e).val(), original: $(e).siblings('#original').val(), plant_id: $(e).siblings('#plant_id').val() },
-                    // })
-                    // .done(function (response) {
-                    //     console.log(response + typeof response)
-                    // })
-                    // .fail(function(response) {
-                    //     console.log('failed')
-                    // })
 
-                    // $.post("/users/renamePlant", { plant_name: $(e).val(), original: $(e).siblings('#original').val(), plant_id: $(e).siblings('#plant_id').val() }, function(response) {
-                    //     console.log(response)
-                    // })
-                    $(e).prop('readonly', true);
-                }
-                $( document ).on( "click", function(e) {
-                    $(e.target).closest( "input" ).removeAttr("readonly");
-                });
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="Plant Profile page">
+    <meta name="Tad, James, Mathew">
+    <link rel="icon" href="/docs/4.0/assets/img/favicons/favicon.ico">
+    <title>Plants</title>
+    <link rel="canonical" href="https://getbootstrap.com/docs/4.0/examples/dashboard/">
+    <link href="http://leia.cs.spu.edu:3001/source/css/min" rel="stylesheet">
+    <!-- Custom styles for this template -->
+    <!-- <script type="text/javascript" src="http://leia.cs.spu.edu:3001/source/css/dash"></script> -->
+    <link href="http://leia.cs.spu.edu:3001/source/css/dash" rel="stylesheet">
+    <link rel="stylesheet" href="/assets/css/dashboard.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</head>
+
+<body>
+    <nav class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0">
+        <a class="navbar-brand col-sm-3 col-md-2 mr-0" href="/index">DRIP</a>
+        <ul class="navbar-nav px-3">
+            <li class="nav-item text-nowrap">
+                <form action="/logout?_method=DELETE" method="POST">
+                    <a onclick="this.closest('form').submit();return false;" class="nav-link-signout"
+                        style="color: white;" type="submit">Sign out</a>
+                </form>
+            </li>
+        </ul>
+    </nav>
+
+    <div class="container">
+        <div class="row">
+            <nav class="shadow col-md-2 d-none d-md-block bg-light sidebar">
+                <div class="sidebar-sticky">
+                    <ul class="nav flex-column">
+                        <li class="nav-item">
+                            <a class="nav-link" href="/users/dashboard">
+                                <span data-feather="home"></span>
+                                Dashboard
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link active" href="/users/plants">
+                                <span><img src="http://leia.cs.spu.edu:3001/source/plant" alt="Plant Icon"
+                                        onMouseOver="this.style.color='#0F0'" onMouseOut="this.style.color='#00F'"
+                                        class="feather plantIcon"></span>
+                                Plants <span class="sr-only">(current)</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/users/devices">
+                                <span data-feather="cpu"></span>
+                                Devices
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/users/account">
+                                <span data-feather="users"></span>
+                                Account
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+            <main role="main" class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
+                <h1 class="mb-3">Plant Profiles</h1>
+                <div class="table">
+                    <table class="table table-striped table-md">
+                        <div class="alert-success">
+                            <% include ./partials/messages %>
+                        </div>
+                        <% include ./partials/plantsTable %>
+                    </table>
+                    <br>
+                    <h2>Add New Plant</h2>
+                    <table class="shadow table table-striped table-md">
+                        <form action="/users/addPlant" method="POST">
+                            <tr>
+                                <th><input type="text" class="form-control" name="new_plant_name" id="new_plant_name"
+                                        placeholder="Enter plant name" required></th>
+                                <td style="text-align: center;">
+                                    <div class="dropdown">
+                                        <button class="btn btn-secondary dropdown-toggle" type="button"
+                                            id="dropdownMenuButtonNew" data-toggle="dropdown" aria-haspopup="true"
+                                            aria-expanded="false">
+                                            Moisture Level
+                                        </button>
+                                        <ul id="addNewDropdown" class="dropdown-menu"
+                                            aria-labelledby="dropdownMenuButton">
+                                            <li><a class="dropdown-item" value="Dry">Dry</a></li>
+                                            <li><a class="dropdown-item" value="Moist">Moist</a></li>
+                                            <li><a class="dropdown-item" value="Wet">Wet</a></li>
+                                        </ul>
+                                        <script>
+                                            $(document).ready(function () {
+                                                $("#addNewDropdown li a").click(function () {
+                                                    $("#dropdownMenuButtonNew").text($(this).text());
+                                                    $('#new_moisture').val($(this).text());
+                                                });
+                                            });
+                                        </script>
+                                        <input class="form-control" type="hidden" value="none" id="new_moisture"
+                                            name="new_moisture">
+                                    </div>
+                                </td>
+                                <td colspan="2" style="text-align:right;"><button type="submit" value="Submit"
+                                        class="btn btn-success">Add Plant</button></td>
+                        </form>
+                    </table>
+                </div>
+            </main>
+
+            <!-- Bootstrap core JavaScript  
+          ================================================== -->
+            <!-- Placed at the end of the document so the pages load faster -->
+            <!--<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+                    integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+                    crossorigin="anonymous"></script>
+                <script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery-slim.min.js"><\/script>')</script>-->
+            <script src="http://leia.cs.spu.edu:3001/source/js/popper"></script>
+            <script src="http://leia.cs.spu.edu:3001/source/js/min"></script>
+
+            <!--Our JS (We may not need this..?Seems to work without it so far)-->
+            <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+                integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+                crossorigin="anonymous"></script>
+            <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+                integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+                crossorigin="anonymous"></script>
+
+            <!-- Icons -->
+            <script src="https://unpkg.com/feather-icons/dist/feather.min.js"></script>
+            <script>
+                feather.replace()
             </script>
-    </body>
+        </div>
+        <script>
+            /*function formSubmitted(e) {
+                console.log(e)
+                return false
+            }*/
+            /*function lostFocus(e) {
+                if($(e).val() !== $(e).siblings('input').val()) {
+                    console.log('different siblings');
+                    $("#renameForm").submit();
+                }
+                $(e).prop('readonly', true);
+            }*/
+
+            function lostFocus(e) {
+                if ($(e).val() !== $(e).siblings('input').val()) {
+                    $.ajax({
+                        type: 'POST',
+                        url: '/users/renamePlant',
+                        data: { plant_name: $(e).val(), original: $(e).siblings('#original').val(), plant_id: $(e).siblings('#plant_id').val() },
+                        success: function (x) {
+                            $(".alert-success").empty();
+                            $(".alert-success").append("<div class='alert alert-success alert-dismissible fade show' role='alert'>Plant renamed<button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>&times;</span></button></div>");
+
+                        },
+                        error: function (x) {
+                            $(".alert-success").empty();
+                            $(".alert-success").append("<div class='alert alert-warning alert-dismissible fade show' role='alert'>Unable to rename plant<button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>&times;</span></button></div>");
+                        }
+                    })
+                }
+                $(e).prop('readonly', true);
+            }
+            $(document).on("click", function (e) {
+                $(e.target).closest("input").removeAttr("readonly");
+            });
+        </script>
+</body>
+
 </html>
