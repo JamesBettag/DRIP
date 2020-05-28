@@ -71,7 +71,8 @@ router.get('/dashboard', checkAuthenticated, nocache, async (req, res) => {
             console.log(err)
         })
     } else {
-        res.render('../views/dashboard.ejs', { name })
+        numCanvas = 'empty'
+        res.render('../views/dashboard.ejs', { name, numCanvas })
     }
 })
 
