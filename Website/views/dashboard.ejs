@@ -9,12 +9,10 @@
     <title><%= name %>'s Dashboard</title>
     <link rel="canonical" href="//getbootstrap.com/docs/4.0/examples/dashboard/">
     <!-- Bootstrap core CSS -->
-    <!-- <script type="text/javascript" src="http://leia.cs.spu.edu:3001/source/css/min"></script> -->
+    <link rel="stylesheet" href="/assets/css/dashboard.css">
     <link href="http://leia.cs.spu.edu:3001/source/css/min" rel="stylesheet">
     <!-- Custom styles for this template -->
-    <!-- <script type="text/javascript" src="http://leia.cs.spu.edu:3001/source/css/dash"></script> -->
     <link href="http://leia.cs.spu.edu:3001/source/css/dash" rel="stylesheet">
-
   </head>
   
   <body>
@@ -23,15 +21,15 @@
       <ul class="navbar-nav px-3">
         <li class="nav-item text-nowrap">
           <form action="/logout?_method=DELETE" method="POST">
-            <a onclick="this.closest('form').submit();return false;" class="nav-link" type="submit">Sign out</a>
+            <a onclick="this.closest('form').submit();return false;" class="nav-link-signout" style="color: white;" type="submit">Sign out</a>
           </form>
         </li>
       </ul>
     </nav>
-
+    <!--Nav bar-->
     <div class="container-fluid">
       <div class="row">
-        <nav class="col-md-2 d-none d-md-block bg-light sidebar">
+        <nav class="shadow col-md-2 d-none d-md-block bg-light sidebar">
           <div class="sidebar-sticky">
             <ul class="nav flex-column">
               <li class="nav-item">
@@ -62,11 +60,12 @@
             </ul>
           </div>
         </nav>
-
+        <!--Body-->
         <main role="main" class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
-          <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
-            <h1 class="h2">Dashboard</h1>
+          <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3">
+            <h1 class="mb-3">Dashboard</h1>
             <div class="btn-toolbar mb-2 mb-md-0">
+              <!--For future updates graphing intervals-->
               <!--
               <div class="btn-group mr-2">
                 <button class="btn btn-sm btn-outline-secondary">Share</button>
@@ -74,14 +73,14 @@
               </div>
             -->
             <!--<button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">-->
-              <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              <!--<button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <span data-feather="calendar"></span>
                 <% include ./partials/graphInterval %>
-              </button>
+              </button>-->
             </div>
           </div>
-
-          <canvas class="my-4" id="myChart" width="900" height="380"></canvas>
+          <!--Graph-->
+          <canvas class="shadow-sm my-4" id="myChart" width="900" height="380"></canvas>
         </main>
       </div>
     </div>

@@ -100,3 +100,14 @@ exports.getUserDevicesAndActivePlant = function(accountId) {
         )
     })
 }
+
+exports.setPlantMoisture = function(plantId, min) {
+    return new Promise(function(resolve, reject) {
+        db.get().query(
+            "UPDATE plant SET minimum = ? WHERE plant_id = ?", [min, plantId], (err, result) => {
+                if (err) { reject(err) }
+                else { resolve(result.affectedRows) }
+            }
+        )
+    })
+}
