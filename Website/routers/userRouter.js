@@ -104,23 +104,31 @@ router.get('/plants', checkAuthenticated, nocache, async (req, res) => {
     
 })
 
-router.get('/changeMoistureLevel', checkAuthenticated, nocache, async(req,res) => {
-    const { plant_moisture, original, plant_id } = req.query
-    // check if moisture level was changed
-    if (plant_moisture != original) {
-        // check if moisture level has valid input
-        if (plant_moisture >= 0 && plant_moisture <= 100) {
-            const changed = await dataModel.setPlantMoisture(plant_id, plant_moisture)
-            if (changed) {
-                req.flash('success_msg', 'Moisture level changed')
+router.post('/changeMoistureLevel', checkAuthenticated, nocache, async(req,res) => {
+    const { plant_moisture, original, plant_id } = req.body
+    // check if plant_moisture is a valid number
+    if (isNaN(plant_moisture)) {
+        res.status(400)
+        res.send('Invalid Moisture number')
+    } else {
+        moisture = parseFloat(plant_moisture).toFixed(2)
+        // check if moisture level was changed
+        if (moisture != original) {
+            // check if moisture level has valid input
+            if (moisture >= 0 && moisture <= 100) {
+                const changed = await dataModel.setPlantMoisture(plant_id, moisture)
+                if (changed) {
+                    console.log('changed moisture level')
+                    req.flash('success_msg', 'Moisture level changed')
+                } else {
+                    req.flash('error_msg', 'Could not change moisture level')
+                }
             } else {
-                req.flash('error_msg', 'Could not change moisture level')
+                req.flash('error_msg', 'Invalid input. Must be between 0 and 100')
             }
-        } else {
-            req.flash('error_msg', 'Invalid input. Must be between 0 and 100')
+            res.redirect('/users/plants')
         }
     }
-    res.redirect('/users/plants')
 })
 
 router.post('/addPlant', checkAuthenticated, nocache, async(req, res) => {
@@ -155,12 +163,14 @@ router.post('/removePlant', checkAuthenticated, nocache, async(req, res) => {
 //TODO
 router.post('/renamePlant', checkAuthenticated, nocache, async(req, res) => {
     const { plant_name, original, plant_id } = req.body
+    console.log(req.body)
     // check if the user changed the name
     if (plant_name != original) {
         // user has changed the device name
         renamed = await accountModel.renamePlant(plant_id, plant_name)
         if (renamed) {
             // device was renamed
+            console.log('renamed plant')
             req.flash('success_msg', 'Plant renamed')
         } else {
             // device was not renamed (result.affectedRows = 0)

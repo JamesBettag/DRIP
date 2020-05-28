@@ -149,7 +149,7 @@
                     $.ajax({
                         type: 'POST',
                         url: '/users/changeMoistureLevel',
-                        data: { plant_moisture: $(e).val(), original: $(e).siblings('#original').val(), plant_id: $(e).siblings('#plant_id').val() },
+                        data: { plant_moisture: $(e).val(), original: $(e).siblings('#original_min').val(), plant_id: $(e).siblings('#plant_id').val() },
                         success: function (x) {
                             $(".alert-success").empty();
                             $(".alert-success").append("<div class='alert alert-success alert-dismissible fade show' role='alert'>Moisture level changed<button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>&times;</span></button></div>");

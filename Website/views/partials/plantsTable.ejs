@@ -14,15 +14,9 @@
         <tr>
             <th>
                 <form action="renamePlant" method="POST" id="renameplant<%= plant.id %>" name="renameplant<%= plant.id %>"></form>
-                    <div class="plantNameDiv">
-                        <input readonly type="text" class="form-control" onblur="lostFocus(this)" name="plant_name" id="plant<%= plant.id %>" placeholder="Enter plant name" value="<%= typeof plant.name != 'undefined' ? plant.name : '' %>" required>
-                    </div>
-                    <div class="plantOriginalDiv">
-                        <input class="form-control" type="hidden" value="<%= plant.name %>" id="original" name="original">
-                    </div>
-                    <div class="plantIdDiv">
-                        <input class="form-control" type="hidden" value="<%= plant.id %>" id="plant_id" name="plant_id">
-                    </div>
+                    <input readonly type="text" class="form-control" onblur="lostFocus(this)" name="plant_name" id="plant<%= plant.id %>" placeholder="Enter plant name" value="<%= typeof plant.name != 'undefined' ? plant.name : '' %>" required>
+                    <input class="form-control" type="hidden" value="<%= plant.name %>" id="original" name="original">
+                    <input class="form-control" type="hidden" value="<%= plant.id %>" id="plant_id" name="plant_id">
                 </form>
             </th> 
             <td style="text-align: left;">
