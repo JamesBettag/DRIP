@@ -79,8 +79,8 @@
               </button>-->
             </div>
           </div>
-          <!--Graph-->
-          <canvas class="shadow-sm my-4" id="myChart" width="900" height="380"></canvas>
+          <% include ./partials/multipleCanvas %>
+          <!-- <canvas class="my-4" id="myChart" width="900" height="380"></canvas> -->
         </main>
       </div>
     </div>
@@ -107,6 +107,8 @@
     <!-- Tad's Test Graphs -->
     <canvas id="myChart"></canvas>
     <script src="//cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+
+    
     <% include ./partials/chartData %>
 
 

@@ -1,11 +1,11 @@
 const db = require('../config/db')
 
-exports.getGraphData = function(accountId, startDate, stopDate) {
+exports.getGraphData = function(accountId, plantId, startDate, stopDate) {
     return new Promise(function(resolve, reject) {
         db.get().query(
-            "SELECT plant.minimum, plant.maximum, data.moisture, data.time, plant.plant_name " +
+            "SELECT plant.minimum, plant.maximum, data.moisture, data.time, plant.plant_name, data.plant_id " +
             "FROM data JOIN plant ON data.plant_id = plant.plant_id " + 
-            "WHERE (plant.account_id = ?) AND (data.time) BETWEEN ? AND ? ORDER BY data.time ASC", [accountId, startDate, stopDate], (err, result, fields) => {
+            "WHERE (plant.account_id = ?) AND (data.plant_id = ?) AND (data.time) BETWEEN ? AND ? ORDER BY data.time ASC", [accountId, plantId, startDate, stopDate], (err, result, fields) => {
                 if(err) {
                     reject(err)
                 } else {

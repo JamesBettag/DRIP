@@ -1,9 +1,57 @@
-<% if(typeof chartData != 'undefined'){ %>
-  <script>
-    var ctx = document.getElementById('myChart').getContext('2d');
-    // VS will show an error in the code in the next line but the code works
-    var chart = new Chart( ctx, <%- JSON.stringify(chartData) %> );
-  </script>
+<% if(numCanvas !== 'empty'){ %>
+  <% index = 0 %>
+  <% for(index; index < numCanvas; index++) { %> 
+    <% 
+      let myGraph = {
+        type: 'line',
+          // The data for our dataset
+        data: {
+          labels: globalLabelData[index],
+          datasets: [
+          {
+            // threshold for minimum line
+            label: "minimum",
+            borderColor: '#424242',
+            data: globalMinData[index],
+            pointBorderWidth: 0,
+            pointRadius: 0
+        },
+        {
+            // threshold for maximum line
+            label: "maximum",
+            borderColor: '#424242',
+            data: globalMaxData[index],
+            pointBorderWidth: 0,
+            pointRadius: 0
+        },
+        {
+            // TODO get device name
+            label: graphTitles[index],
+            backgroundColor: 'rgba(13, 154, 165, 0.55)',
+            borderColor: '#00ADB4',
+            pointBackgroundColor: '#60b33c',
+            pointBorderColor: '#60b33c',
+            data: globalMoistureData[index],
+            lineTension: 0.15
+          }]
+        },
+        // Configuration options go here
+        options: {
+            scales: {
+                yAxes: [{
+                    display: true,
+                    ticks: { suggestedMin: 0, suggestedMax: 100 }
+                }]
+            }
+        }
+      }
+      %> 
+    <script>
+      var ctx = document.getElementById('myChart<%= index %>').getContext('2d');
+      // VS will show an error in the code in the next line but the code works
+      var chart<%= index %> = new Chart( ctx, <%- JSON.stringify(myGraph) %> );
+    </script>
+  <% } %> 
 <% } else { %>
   <script>
     // placeholder for empty data titles 'no active devices'

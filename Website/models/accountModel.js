@@ -325,3 +325,19 @@ exports.renamePlant = function(plantId, plantName) {
         )
     })
 }
+
+exports.getRecentPlantIds = function(accountId, startDate, stopDate) {
+    return new Promise(function(resolve, reject) {
+        db.get().query(
+            "SELECT DISTINCT(data.plant_id) " +
+            "FROM data JOIN plant ON data.plant_id = plant.plant_id " + 
+            "WHERE plant.account_id = ? AND data.time BETWEEN ? AND ?", [accountId, startDate, stopDate], (err, result, fields) => {
+                if (err) { reject(err) }
+                else {
+                    if (result.length) { resolve(result) }
+                    else { resolve(null) }
+                }
+            }
+        )
+    })
+}
