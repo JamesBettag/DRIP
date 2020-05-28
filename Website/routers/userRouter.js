@@ -17,95 +17,59 @@ router.use(methodOverride('_method'))
 router.get('/dashboard', checkAuthenticated, nocache, async (req, res) => {
     // first get graph data and device info
     let name = req.user.email
-    let graphData = []
+    let graphTitles = []
+
     var stopDate = moment(new Date()).format("YYYY-MM-DD HH:mm:ss")
     var startDate = moment(stopDate).subtract(1, 'day').format("YYYY-MM-DD HH:mm:ss")
-    userPlants = await dataModel.getUserPlants(req.user.id)
+    const userPlants = await accountModel.getRecentPlantIds(req.user.id, startDate, stopDate)
     // variable to hold number of plants so the same number of canvases can be displayed
-    numCanvas = Object.keys(userPlants).length 
     if (userPlants != null) {
-        let moistureData = []
-        let labelData = []
-        let minData = []
-        let maxData = []
-        userPlants.forEach(async function(plant) {
-            plantData = await dataModel.getGraphData(req.user.id, plant.plant_id, startDate, stopDate)
-            if (plantData != null) {
-                moistureData = []
-                labelData = []
-                minData = []
-                maxData = []
-                graphTitle = plant.plant_name
-                plantData.forEach(function(row) {
-                    labelData.push(moment(row.time).format("MM-DD HH:mm"))
-                    moistureData.push(row.moisture)
-                    minData.push(row.minimum)
-                    maxData.push(row.maximum)
-                })
-                let myGraph = {        
-                    // The type of chart we want to create
-                    type: 'line',
-            
-                    // The data for our dataset
-                    data: {
-                        labels: labelData,
-                        datasets: [
-                        {
-                            // threshold for minimum line
-                            label: "minimum",
-                            borderColor: '#424242',
-                            data: minData,
-                            pointBorderWidth: 0,
-                            pointRadius: 0
-                        },
-                        {
-                            // threshold for maximum line
-                            label: "maximum",
-                            borderColor: '#424242',
-                            data: maxData,
-                            pointBorderWidth: 0,
-                            pointRadius: 0
-                        },
-                        {
-                            // TODO get device name
-                            label: graphTitle,
-                            backgroundColor: 'rgba(0, 173, 180, 0.55)',
-                            borderColor: '#00ADB4',
-                            pointBackgroundColor: '#57B845',
-                            pointBorderColor: '#57B845',
-                            data: moistureData,
-                            lineTension: 0.15
-                        }]
-                    },
-                    // Configuration options go here
-                    options: {
-                        scales: {
-                            yAxes: [{
-                                display: true,
-                                ticks: { suggestedMin: 0 }
-                            }]
-                        }
-                    }
+        // get number of plants active in last 24 hours
+        numCanvas = Object.keys(userPlants).length
+        // create double arrays with rows set to numbers of plants
+        var globalLabelData = new Array(numCanvas)
+        var globalMoistureData = new Array(numCanvas)
+        var globalMaxData = new Array(numCanvas)
+        var globalMinData = new Array(numCanvas)
+        // create a promise so that router will wait for data before rendering page
+        const waitForGraph = new Promise((resolve, reject) => {
+            i = 0
+            userPlants.forEach(async function (plant) {
+                const data = await dataModel.getGraphData(req.user.id, plant.plant_id, startDate, stopDate)
+                if (data != null) {
+                    dataInSet = Object.keys(data).length
+                    // set 2d arrays column's to number of rows in data (number of data points)
+                    globalLabelData[i] = new Array(dataInSet)
+                    globalMoistureData[i] = new Array(dataInSet)
+                    globalMaxData[i] = new Array(dataInSet)
+                    globalMinData[i] = new Array(dataInSet)
+                    graphTitles.push(data[0].plant_name)
+                    j = 0
+                    data.forEach((row) => {
+                        // add all data into 2d arrays
+                        globalLabelData[i][j] = moment(row.time).format("MM-DD HH:mm")
+                        globalMoistureData[i][j] = row.moisture
+                        globalMaxData[i][j] = row.maximum
+                        globalMinData[i][j] = row.minimum
+                        j++
+                    })
                 }
-                graphData.push({ graph: myGraph })
-            } else {
-                // plant had no data, push an empty graph
-                let myGraph = {
-                    labels: "",
-                    datasets: [{
-                        label: 'No Active Devices',
-                        backgroundColor: '#00ADB4',
-                        borderColor: '#00ADB4',
-                        pointBackgroundColor: '#77C425',
-                        pointBorderColor: '#77C425',
-                        data: []
-                    }]
+                i++
+                // check if loop is finished
+                if (i == numCanvas) {
+                    // if loop is finished, resolve promise
+                    resolve(true)
                 }
-                graphData.push({ graph: myGraph })
-            }
+            })
         })
-        console.log(Object.keys(graphData).length)
-        res.render('../views/dashboard.ejs', { graphData, numCanvas, name })
+        // wait for all data to be pushed to the 2d arrays
+        await waitForGraph.then((returnValue) => {
+            if(returnValue) { // pointless check here, don't need it
+                res.render('../views/dashboard.ejs', { name, numCanvas, graphTitles, globalLabelData, globalMoistureData, globalMaxData, globalMinData })
+            }
+        }).catch((err) => {
+            console.log(err)
+        })
     } else {
         res.render('../views/dashboard.ejs', { name })
     }
