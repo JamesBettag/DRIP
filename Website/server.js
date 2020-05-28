@@ -24,7 +24,8 @@ const passport = require('passport')
 require('./config/passport-config')(passport)
 
 //app.use(bodyParser.urlencoded({ extended: true })); //James
-app.use(bodyParser.json()); //James
+app.use(bodyParser.urlencoded({ extended: true }))
+app.use(bodyParser.json()) //James
 
 
 app.set('view-engine', 'ejs')

@@ -64,7 +64,7 @@
                 <main role="main" class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
                     <h1 class="mb-3">Devices</h1>
                     <div class="table">
-                        <table class="table table-striped table-md">
+                        <table class="table table table-md">
                             <div class="alert-success">
                                 <% include ./partials/messages %> 
                             </div>
@@ -72,7 +72,7 @@
                         </table>
                         <br>
                         <h2>Add New Device</h2>
-                        <table class="shadow table table-striped table-md">
+                        <table class="shadow table table table-md">
                             <form action="/users/addDevice" method="POST">
                                 <tr>
                                     <th><input type="text" class="form-control" name = "new_device_name" id="new_device_name" placeholder="Enter device name" required></th>
@@ -105,11 +105,13 @@
                 </script>
             </div>
             <script>
+                /* Submit form to renameDevice when clicking out of the name input field*/
                 function lostFocus(e) {
                     if ($(e).val() !== $(e).siblings('input').val()) {
                         $.ajax({
                             type: 'POST',
                             url: '/users/renameDevice',
+                            //Send new device name, original device name and device id
                             data: { device_name: $(e).val(), original: $(e).siblings('#original').val(), device_id: $(e).siblings('#device_id').val() },
                             success: function (x) {
                                 $(".alert-success").empty();
@@ -124,6 +126,7 @@
                     $(e).prop('readonly', true);
                 }
                 $( document ).on( "click", function(e) {
+                    //Device name input fields are readonly until bringing them into focus 
                     $(e.target).closest( "input" ).removeAttr("readonly");
                 });
             </script>
