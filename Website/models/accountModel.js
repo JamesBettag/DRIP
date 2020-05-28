@@ -276,6 +276,31 @@ exports.deletePlant = function(accId, plantId){
     })
 }
 
+exports.plantHasDevice = function(plantId) {
+    return new Promise(function(resolve, reject) {
+        db.get().query(
+            "SELECT device_id FROM device WHERE plant_id = ?", [plantId], (err, result, fields) => {
+                if (err) { reject(err) }
+                else {
+                    if (result.length) { resolve(result[0].device_id) }
+                    else { resolve(null) }
+                }
+            }
+        )
+    })
+}
+
+exports.changeDevicePlantToNull = function(deviceId) {
+    return new Promise(function(resolve, reject) {
+        db.get().query(
+            "UPDATE device SET plant_id = NULL WHERE device_id = ?", [deviceId], (err, result) => {
+                if (err) { reject(err) }
+                else { resolve(result.affectedRows) }
+            }
+        )
+    })
+}
+
 exports.updatePlantMoisture = function(accId, plantid, min, max) {
     return new Promise(function(resolve, reject) {
         db.get().query(
