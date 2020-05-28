@@ -118,15 +118,16 @@ router.post('/changeMoistureLevel', checkAuthenticated, nocache, async(req,res) 
             if (moisture >= 0 && moisture <= 100) {
                 const changed = await dataModel.setPlantMoisture(plant_id, moisture)
                 if (changed) {
-                    console.log('changed moisture level')
-                    req.flash('success_msg', 'Moisture level changed')
+                    res.status(200)
+                    res.send('Moisture level changed')
                 } else {
-                    req.flash('error_msg', 'Could not change moisture level')
+                    res.status(400)
+                    res.send('Could not change moisture level')
                 }
             } else {
-                req.flash('error_msg', 'Invalid input. Must be between 0 and 100')
+                res.status(400)
+                res.send('Invalid Moisture Input')
             }
-            res.redirect('/users/plants')
         }
     }
 })
@@ -150,11 +151,15 @@ router.post('/addPlant', checkAuthenticated, nocache, async(req, res) => {
 })
 
 router.post('/removePlant', checkAuthenticated, nocache, async(req, res) => {
-    plantId = req.body.plantid
-    removed = await accountModel.deletePlant(req.user.id, plantId)
-    if(removed){
+    const plantId = req.body.plantid
+    const deviceId = await accountModel.plantHasDevice(plantId)
+    if (deviceId != null) {
+        await accountModel.changeDevicePlantToNull(deviceId)
+    }
+    const removed = await accountModel.deletePlant(req.user.id, plantId)
+    if (removed) {
         req.flash('success_msg', 'Plant Profile Successfully Removed')
-    }else{
+    } else {
         req.flash('error_msg', 'Plant Profile Not Removed')
     }
     res.redirect('/users/plants')
