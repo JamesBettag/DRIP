@@ -113,23 +113,13 @@
             </script>
         </div>
         <script>
-            /*function formSubmitted(e) {
-                console.log(e)
-                return false
-            }*/
-            /*function lostFocus(e) {
-                if($(e).val() !== $(e).siblings('input').val()) {
-                    console.log('different siblings');
-                    $("#renameForm").submit();
-                }
-                $(e).prop('readonly', true);
-            }*/
-
+             /*Submit form to renamePlant when clicking out of the name input field*/
             function lostFocus(e) {
                 if ($(e).val() !== $(e).siblings('input').val()) {
                     $.ajax({
                         type: 'POST',
                         url: '/users/renamePlant',
+                        //Send new plant name, original plant name and plant id
                         data: { plant_name: $(e).val(), original: $(e).siblings('#original').val(), plant_id: $(e).siblings('#plant_id').val() },
                         success: function (x) {
                             $(".alert-success").empty();
@@ -144,11 +134,13 @@
                 }
                 $(e).prop('readonly', true);
             }
+            /*Submit form to changeMoistureLevel when clicking out of the min input field*/
             function lostFocusMin(e) {
                 if ($(e).val() !== $(e).siblings('input').val()) {
                     $.ajax({
                         type: 'POST',
                         url: '/users/changeMoistureLevel',
+                        //Send new level, original level and plant id
                         data: { plant_moisture: $(e).val(), original: $(e).siblings('#original_min').val(), plant_id: $(e).siblings('#plant_id').val() },
                         success: function (x) {
                             $(".alert-success").empty();
@@ -164,6 +156,7 @@
                 $(e).prop('readonly', true);
             }
             $(document).on("click", function (e) {
+            //Input fields are readonly until bring them into focus
                 $(e.target).closest("input").removeAttr("readonly");
             });
         </script>

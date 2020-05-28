@@ -266,7 +266,7 @@ exports.deletePlant = function(accId, plantId){
         db.get().query(
             'DELETE FROM plant WHERE plant_id = ? AND account_id = ?', [plantId, accId], (err, result) => {
                 if(err){
-                    console.log(err)
+                    
                     reject(false)
                 } else {
                     resolve(true)
