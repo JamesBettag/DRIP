@@ -32,6 +32,22 @@
                 </form>
             </td>
         </tr>
+        <script>
+            $("#plant<%= plant.id %>").keypress(function(event){
+                var keycode = (event.keyCode ? event.keyCode : event.which);
+                if(keycode == '13'){
+                    event.preventDefault();
+                    lostFocus(document.getElementById("plant<%= plant.id %>"));                    
+                }
+            });
+            $("#min<%= plant.id %>").keypress(function(event){
+                var keycode = (event.keyCode ? event.keyCode : event.which);
+                if(keycode == '13'){
+                    event.preventDefault();
+                    lostFocusMin(document.getElementById("min<%= plant.id %>"));                    
+                }
+            });
+        </script>
     <% }) %> 
 <% } else { %> 
     <th>No Plants Linked With This Account</th>

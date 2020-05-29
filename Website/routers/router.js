@@ -90,7 +90,6 @@ router.post('/register', checkNotAuthenticated, async (req,res) => {
                         res.render('../views/register.ejs', { errors, name, email, password, psw2 })
                     } else {
                         // if no errors were found, flash confirmation and redirect to login
-                        console.log("Inserted user: " + name)
                         // if user was inserted, send email and flash success message, then redirect
                         emailVerification.sendVerificationEmail(email, accHash)
                         req.flash('success_msg', 'Registration Complete. Please Verify Email Address')
