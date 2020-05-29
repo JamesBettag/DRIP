@@ -1,0 +1,55 @@
+<head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</head>
+
+<thead class="thead-dark">
+    <tr>
+        <th>Plant Name</th>
+        <th>Minimum Moisture Level</th>
+        <th></th>
+    </tr>
+</thead>
+<% if (typeof plants != 'undefined') { %> 
+    <% plants.forEach((plant) => { %> 
+        <tr>
+            <th>
+                <form action="renamePlant" method="POST" id="renameplant<%= plant.id %>" name="renameplant<%= plant.id %>"></form>
+                    <input readonly type="text" class="form-control" onblur="lostFocus(this)" name="plant_name" id="plant<%= plant.id %>" placeholder="Enter plant name" value="<%= typeof plant.name != 'undefined' ? plant.name : '' %>" required>
+                    <input class="form-control" type="hidden" value="<%= plant.name %>" id="original" name="original">
+                    <input class="form-control" type="hidden" value="<%= plant.id %>" id="plant_id" name="plant_id">
+                </form>
+            </th> 
+            <td style="text-align: left;">
+                <form action="">
+                    <input size=1 readonly type="text" class="form-control" onblur="lostFocusMin(this)" name = "min" id="min<%= plant.id %>" placeholder="Enter min" value="<%= typeof plant.min != 'undefined' ? plant.min : '' %>" required>
+                    <input class="form-control" type="hidden" value="<%= plant.min %>" id="original_min" name="original_min">
+                    <input class="form-control" type="hidden" value="<%= plant.id %>" id="plant_id" name="plant_id">
+                </form>
+            <td colspan="1" style="text-align:right;">
+                <form method="POST" action="/users/removePlant">
+                    <input type="hidden" id="plantid" name="plantid" value="<%= plant.id %>">
+                    <button class="shadow btn btn-danger" type="submit">Remove</button>
+                </form>
+            </td>
+        </tr>
+        <script>
+            $("#plant<%= plant.id %>").keypress(function(event){
+                var keycode = (event.keyCode ? event.keyCode : event.which);
+                if(keycode == '13'){
+                    event.preventDefault();
+                    lostFocus(document.getElementById("plant<%= plant.id %>"));                    
+                }
+            });
+            $("#min<%= plant.id %>").keypress(function(event){
+                var keycode = (event.keyCode ? event.keyCode : event.which);
+                if(keycode == '13'){
+                    event.preventDefault();
+                    lostFocusMin(document.getElementById("min<%= plant.id %>"));                    
+                }
+            });
+        </script>
+    <% }) %> 
+<% } else { %> 
+    <th>No Plants Linked With This Account</th>
+<% } %> 
+

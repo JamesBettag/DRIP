@@ -1,0 +1,12 @@
+<% if (typeof numCanvas != 'undefined') { %> 
+    <% for (i = 0; i < numCanvas; i++) { %> 
+        <canvas class="my-4" id="myChart<%= i %>" width="900" height="380"></canvas>
+        <% if(i < numCanvas-1){ %>
+            <hr style="height: 3px;width:100%;text-align:left;margin-left:0;background-color:#222;">
+        <% } %>  
+        <br>
+        <br>
+    <% } %> 
+<% } else { %> 
+    <canvas class="my-4" id="myChart" width="900" height="380"></canvas>
+<% } %> 

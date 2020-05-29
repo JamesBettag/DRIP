@@ -1,25 +1,15 @@
-
-
-
-
 /*//////////////////////////////////////////////////////////////////
 [ FONT ]*/
 
 @font-face {
   font-family: Ubuntu-Regular;
   src: url('../webfonts/ubuntu/Ubuntu-Regular.ttf'); 
-}
+};
 
 @font-face {
   font-family: Ubuntu-Bold;
   src: url('../webfonts/ubuntu/Ubuntu-Bold.ttf'); 
 }
-
-@font-face {
-  font-family: JosefinSans-Bold;
-  src: url('../webfonts/JosefinSans/JosefinSans-Bold.ttf'); 
-}
-
 
 
 /*//////////////////////////////////////////////////////////////////
@@ -33,9 +23,9 @@
 
 body, html {
 	height: 100%;
-	font-family: Ubuntu-Regular, sans-serif;
+	font-family: Ubuntu-Regular;
 }
-
+enable-shadows
 /*---------------------------------------------*/
 a {
 	font-family: Ubuntu-Regular;
@@ -55,7 +45,7 @@ a:focus {
 
 a:hover {
 	text-decoration: none;
-  color: #1b3815;
+  color: #598b36;
 }
 
 /*---------------------------------------------*/
@@ -104,15 +94,15 @@ textarea:focus, input:focus {
 }
 
 
-input::-webkit-input-placeholder { color: #1b3815;}
-input:-moz-placeholder { color: #1b3815;}
-input::-moz-placeholder { color: #1b3815;}
-input:-ms-input-placeholder { color: #1b3815;}
+input::-webkit-input-placeholder { color: #598b36;}
+input:-moz-placeholder { color: #598b36;}
+input::-moz-placeholder { color: #598b36;}
+input:-ms-input-placeholder { color: #598b36;}
 
-textarea::-webkit-input-placeholder { color: #1b3815;}
-textarea:-moz-placeholder { color: #1b3815;}
-textarea::-moz-placeholder { color: #1b3815;}
-textarea:-ms-input-placeholder { color: #1b3815;}
+textarea::-webkit-input-placeholder { color: #598b36;}
+textarea:-moz-placeholder { color: #598b36;}
+textarea::-moz-placeholder { color: #598b36;}
+textarea:-ms-input-placeholder { color: #598b36;}
 
 /*---------------------------------------------*/
 button {
@@ -141,14 +131,14 @@ iframe {
 .txt2 {
   font-family: Ubuntu-Regular;
   font-size: 15px;
-  color: #57b846;
+  color: #60b33c;
   line-height: 1.4;
 }
 
 .txt3 {
   font-family: Ubuntu-Bold;
   font-size: 15px;
-  color: #57b846;
+  color: #60b33c;
   line-height: 1.4;
   text-transform: uppercase;
 }
@@ -175,18 +165,18 @@ iframe {
   align-items: center;
   padding: 15px;
   position: relative;
-  background-color: #fff;
+  background-color:#353a40;
 }
 
 .wrap-login100 {
   width: 500px;
-  background: #fff;
+  background-color:#353a40;
   border-radius: 20px;
   overflow: hidden;
-  box-shadow: 0 3px 20px 0px rgba(0, 0, 0, 0.1);
-  -moz-box-shadow: 0 3px 20px 0px rgba(0, 0, 0, 0.1);
-  -webkit-box-shadow: 0 3px 20px 0px rgba(0, 0, 0, 0.1);
-  -o-box-shadow: 0 3px 20px 0px rgba(0, 0, 0, 0.1);
+  -webkit-box-shadow: 10px 10px 26px 0px rgba(0,0,0,0.75);
+  -moz-box-shadow: 10px 10px 26px 0px rgba(0,0,0,0.75);
+  box-shadow: 10px 10px 26px 0px rgba(0,0,0,0.75);
+  -o-box-shadow: 10px 10px 26px 0px rgba(0,0,0,0.75);
   -ms-box-shadow: 0 3px 20px 0px rgba(0, 0, 0, 0.1);
 }
 
@@ -200,7 +190,7 @@ iframe {
 }
 
 .login100-form-title {
-  font-family: JosefinSans-Bold;
+  font-family: Ubuntu-Regular;
   font-size: 30px;
   color: #fff;
   line-height: 1.2;
@@ -211,7 +201,7 @@ iframe {
   width: 100%;
   top: 0;
   left: 0;
-  background-color: #57b846;
+  background-color: #60b33c;
   padding-top: 50px;
   padding-bottom: 39px;
 }
@@ -228,9 +218,9 @@ iframe {
 }
 
 .input100 {
-  font-family: Ubuntu-Bold;
+  font-family: Ubuntu-Regular;
   font-size: 15px;
-  color: #1b3815;
+  color: #598b36;
   line-height: 1.2;
 
   position: relative;
@@ -297,10 +287,10 @@ iframe {
   padding: 0 20px;
   width: 100%;
   height: 50px;
-  background-color: #57b846;
+  background-color: #60b33c;
   border-radius: 25px;
 
-  font-family: Ubuntu-Bold;
+  font-family: Ubuntu-Regular;
   font-size: 15px;
   color: #fff;
   line-height: 1.2;
@@ -313,7 +303,7 @@ iframe {
 }
 
 .login100-form-btn:hover {
-  background-color: #1b3815;
+  background-color: #598b36;
 }
 
 
@@ -342,7 +332,7 @@ iframe {
   right: 10px;
   pointer-events: none;
 
-  font-family: Ubuntu-Bold;
+  font-family: Ubuntu-Regular;
   color: #c80000;
   font-size: 13px;
   line-height: 1.4;
@@ -359,7 +349,7 @@ iframe {
 
 .alert-validate::after {
   content: "\f06a";
-  font-family: FontAwesome;
+  font-family: Ubuntu-regular;
   display: block;
   position: absolute;
   z-index: 1100;

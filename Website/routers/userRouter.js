@@ -17,81 +17,171 @@ router.use(methodOverride('_method'))
 router.get('/dashboard', checkAuthenticated, nocache, async (req, res) => {
     // first get graph data and device info
     let name = req.user.email
+    let graphTitles = []
+
     var stopDate = moment(new Date()).format("YYYY-MM-DD HH:mm:ss")
     var startDate = moment(stopDate).subtract(1, 'day').format("YYYY-MM-DD HH:mm:ss")
-    var data = await dataModel.getGraphData(req.user.id, startDate, stopDate)
-    // check if query returned anything
-    if(data != null) {
-        // console.log(data)
-        let moistureData = []
-        let labelData = []
-        let minData = []
-        let maxData = []
-        var graphTitle = data[0].plant_name
-        data.forEach(function(row) {
-            labelData.push(moment(row.time).format("MM-DD HH:mm"))
-            moistureData.push(row.moisture)
-            minData.push(row.minimum)
-            maxData.push(row.maximum)
-        })
-
-        let chartData = {        
-            // The type of chart we want to create
-            type: 'line',
-    
-            // The data for our dataset
-            data: {
-                labels: labelData,
-                datasets: [
-                {
-                    // threshold for minimum line
-                    label: "minimum",
-                    borderColor: '#424242',
-                    data: minData,
-                    pointBorderWidth: 0,
-                    pointRadius: 0
-                },
-                {
-                    // threshold for maximum line
-                    label: "maximum",
-                    borderColor: '#424242',
-                    data: maxData,
-                    pointBorderWidth: 0,
-                    pointRadius: 0
-                },
-                {
-                    // TODO get device name
-                    label: graphTitle,
-                    backgroundColor: 'rgba(0, 173, 180, 0.55)',
-                    borderColor: '#00ADB4',
-                    pointBackgroundColor: '#57B845',
-                    pointBorderColor: '#57B845',
-                    data: moistureData,
-                    lineTension: 0.15
-                }]
-            },
-            // Configuration options go here
-            options: {
-                scales: {
-                    yAxes: [{
-                        display: true,
-                        ticks: { suggestedMin: 0 }
-                    }]
+    const userPlants = await accountModel.getRecentPlantIds(req.user.id, startDate, stopDate)
+    // variable to hold number of plants so the same number of canvases can be displayed
+    if (userPlants != null) {
+        // get number of plants active in last 24 hours
+        numCanvas = Object.keys(userPlants).length
+        // create double arrays with rows set to numbers of plants
+        var globalLabelData = new Array(numCanvas)
+        var globalMoistureData = new Array(numCanvas)
+        var globalMaxData = new Array(numCanvas)
+        var globalMinData = new Array(numCanvas)
+        // create a promise so that router will wait for data before rendering page
+        const waitForGraph = new Promise((resolve, reject) => {
+            i = 0
+            userPlants.forEach(async function (plant) {
+                const data = await dataModel.getGraphData(req.user.id, plant.plant_id, startDate, stopDate)
+                if (data != null) {
+                    dataInSet = Object.keys(data).length
+                    // set 2d arrays column's to number of rows in data (number of data points)
+                    globalLabelData[i] = new Array(dataInSet)
+                    globalMoistureData[i] = new Array(dataInSet)
+                    globalMaxData[i] = new Array(dataInSet)
+                    globalMinData[i] = new Array(dataInSet)
+                    graphTitles.push(data[0].plant_name)
+                    j = 0
+                    data.forEach((row) => {
+                        // add all data into 2d arrays
+                        globalLabelData[i][j] = moment(row.time).format("MM-DD HH:mm")
+                        globalMoistureData[i][j] = row.moisture
+                        globalMaxData[i][j] = row.maximum
+                        globalMinData[i][j] = row.minimum
+                        j++
+                    })
                 }
+                i++
+                // check if loop is finished
+                if (i == numCanvas) {
+                    // if loop is finished, resolve promise
+                    resolve(true)
+                }
+            })
+        })
+        // wait for all data to be pushed to the 2d arrays
+        await waitForGraph.then((returnValue) => {
+            if(returnValue) { // pointless check here, don't need it
+                res.render('../views/dashboard.ejs', { name, numCanvas, graphTitles, globalLabelData, globalMoistureData, globalMaxData, globalMinData })
             }
-        }
-        
-        // push timestamps labels and moisture data into data
-        res.render('../views/dashboard.ejs', { chartData, name })
+        }).catch((err) => {
+            console.log(err)
+        })
     } else {
-        // no data was found within the last week
-        res.render('../views/dashboard.ejs', { name })
-    }    
+        numCanvas = 'empty'
+        res.render('../views/dashboard.ejs', { name, numCanvas })
+    }
 })
 
 //Open plants if you are currently logged in 
-router.get('/plants', checkAuthenticated, nocache, (req, res) => {
-    res.render('../views/plants.ejs', {name: req.user.email})
+router.get('/plants', checkAuthenticated, nocache, async (req, res) => {
+    let plants = []
+    // get all user's plants from db
+    userPlants = await accountModel.getUserPlants(req.user.id)
+    if (userPlants != null) {
+        // push all plant info to plants array
+        userPlants.forEach((plant) => {
+            plants.push({ id: plant.plant_id, name: plant.plant_name, min: plant.minimum })  
+        })
+        res.render('../views/plants.ejs', { plants })
+    } else {
+        res.render('../views/plants.ejs')
+    }
+    
+})
+
+router.post('/changeMoistureLevel', checkAuthenticated, nocache, async(req,res) => {
+    const { plant_moisture, original, plant_id } = req.body
+    // check if plant_moisture is a valid number
+    if (isNaN(plant_moisture)) {
+        // send error code to Ajax if NaN
+        res.status(400)
+        res.send('Invalid Moisture number')
+    } else {
+        // change precision to 2 decimal places
+        moisture = parseFloat(plant_moisture).toFixed(2)
+        // check if moisture level was changed
+        if (moisture != original) {
+            // check if moisture level has valid input
+            if (moisture >= 0 && moisture <= 100) {
+                const changed = await dataModel.setPlantMoisture(plant_id, moisture)
+                if (changed) {
+                    res.status(200)
+                    res.send('Moisture level changed')
+                } else {
+                    res.status(400)
+                    res.send('Could not change moisture level')
+                }
+            } else {
+                res.status(400)
+                res.send('Invalid Moisture Input')
+            }
+        }
+    }
+})
+
+router.post('/addPlant', checkAuthenticated, nocache, async(req, res) => {
+    plantName = req.body.new_plant_name
+    min = req.body.new_min
+    max = 100
+    if(min >= 0 && min <= 100){
+        // insert new plant info into db
+        inserted = await accountModel.insertNewPlant(req.user.id, plantName, min, max)
+        if(inserted){
+            req.flash('success_msg', 'Plant Profile Successfully Added')    
+        }else{
+            req.flash('error_msg', 'Plant Profile Not Added')
+        }
+    }
+    else{
+        req.flash('error_msg', 'Moisture range is only 0 - 100')
+    }
+    res.redirect('/users/plants')
+})
+
+router.post('/removePlant', checkAuthenticated, nocache, async(req, res) => {
+    const plantId = req.body.plantid
+    // check if plant has device connected to it
+    const deviceId = await accountModel.plantHasDevice(plantId)
+    if (deviceId != null) {
+        // change device's plant_id to null
+        await accountModel.changeDevicePlantToNull(deviceId)
+    }
+    // delete plant from plant table
+    const removed = await accountModel.deletePlant(req.user.id, plantId)
+    if (removed) {
+        req.flash('success_msg', 'Plant Profile Successfully Removed')
+    } else {
+        req.flash('error_msg', 'Plant Profile Not Removed')
+    }
+    res.redirect('/users/plants')
+})
+
+//TODO
+router.post('/renamePlant', checkAuthenticated, nocache, async(req, res) => {
+    const { plant_name, original, plant_id } = req.body
+    // check if the user changed the name
+    if (plant_name != original) {
+        // user has changed the device name
+        renamed = await accountModel.renamePlant(plant_id, plant_name)
+        if (renamed) {
+            // device was renamed
+            req.flash('success_msg', 'Plant renamed')
+        } else {
+            // device was not renamed (result.affectedRows = 0)
+            req.flash('error_msg', 'Unable to rename plant')
+        }
+    }
+    res.redirect('/users/plants')
+})
+
+router.get('/changePlant', checkAuthenticated, nocache, async(req,res) => {
+    const {plantid, deviceid} = req.query
+    inserted = await accountModel.updateActivePlant(plantid, deviceid)
+    res.redirect('/users/devices')
 })
 
 //Open devices if you are currently logged in
@@ -135,14 +225,26 @@ router.get('/devices', checkAuthenticated, nocache, (req, res) => {
      })
 })
 
-router.get('/changePlant', checkAuthenticated, nocache, async(req,res) => {
-    const {plantid, deviceid} = req.query
-    inserted = await accountModel.updateActivePlant(plantid, deviceid)
+router.post('/renameDevice', checkAuthenticated, nocache, async (req, res) => {
+    const { device_name, original, device_id } = req.body
+    // check if the user changed the name
+    if (device_name != original) {
+        // user has changed the device name
+        renamed = await accountModel.renameDevice(device_id, device_name)
+        if (renamed) {
+            // device was renamed
+            req.flash('success_msg', 'Device renamed to ' + device_name)
+        } else {
+            // device was not renamed (result.affectedRows = 0)
+            req.flash('error_msg', 'Unable to rename device')
+        }
+    }
     res.redirect('/users/devices')
 })
 
 router.post('/removeDevice', checkAuthenticated, nocache, async (req, res) => {
     deviceId = req.body.deviceid
+    // query db to remove device
     removed = await accountModel.deleteDevice(req.user.id, deviceId)
     if(removed){
         req.flash('success_msg', 'Device Successfully Removed')
@@ -154,6 +256,7 @@ router.post('/removeDevice', checkAuthenticated, nocache, async (req, res) => {
 
 router.post('/addDevice', checkAuthenticated, nocache, async(req,res) => {
     const {new_device_name, new_device_id} = req.body
+    // query db to insert new device
     inserted = await accountModel.insertNewDevice(req.user.id, new_device_id, new_device_name)
     if(inserted){
         req.flash('success_msg', 'Device Successfully Registered')
@@ -265,8 +368,6 @@ router.post('/nameandpasswordchange', checkAuthenticated, async (req,res) => {
         res.redirect('/users/account')
     }
 })
-
-
 
 //This will stop you from entering our dashbaord if you are not registered/signed in
 function checkAuthenticated(req, res, next){

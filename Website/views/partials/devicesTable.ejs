@@ -1,10 +1,26 @@
+<head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</head>
+<thead class="thead-dark">
+    <tr>
+        <th>Device Name</th>
+        <th>Active Plant Profile</th>
+        <th></th>
+    </tr>
+</thead>
 <% if (typeof devices != 'undefined') { %> 
     <% devices.forEach(function(device) { %> 
         <tr>
-            <th><input type="text" class="form-control" name = "device_name" id="device_name" placeholder="Enter device name" value="<%= typeof device.name != 'undefined' ? device.name : '' %>" required></th> 
+            <form action="renameDevice" method="POST" id="renameForm">
+                <th>
+                    <input readonly type="text" class="form-control" onblur="lostFocus(this)" name = "device_name" id="<%= device.id %>" placeholder="Enter device name" value="<%= typeof device.name != 'undefined' ? device.name : '' %>" required>
+                    <input class="form-control" type="hidden" value="<%= device.name %>" id="original" name="original">
+                    <input class="form-control" type="hidden" value="<%= device.id %>" id="device_id" name="device_id">
+                </th> 
+            </form>
                 <td style="text-align: left;">
                     <div class="dropdown" class="col-md-2">
-                        <button class="btn btn-secondary dropdown-toggle" type="button"
+                        <button class="shadow btn btn-secondary dropdown-toggle" type="button"
                             id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
                             aria-expanded="false">
                             <% if (device.plant != null) { %>
@@ -13,7 +29,7 @@
                                 Activate a Plant
                             <% } %> 
                         </button>
-                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        <div class="shadow dropdown-menu" aria-labelledby="dropdownMenuButton">
                             <% if (typeof plants != 'undefined') { %> 
                                 <% plants.forEach(function(plant) { %> 
                                     <a href="/users/changePlant?plantid=<%= plant.id %>&deviceid=<%= device.id %>" name="<%= plant.id %>" value="<%= plant.id %>" class="dropdown-item"><%= plant.name %></a>
@@ -27,7 +43,7 @@
                 <td colspan="1" style="text-align:right;">
                     <form method="POST" action="/users/removeDevice">
                         <input type="hidden" id="deviceid" name="deviceid" value="<%= device.id %>">
-                        <button class="btn btn-danger" type="submit">Remove</button>
+                        <button class="shadow btn btn-danger" type="submit">Remove</button>
                     </form>
                 </td>
         </tr>
@@ -42,4 +58,3 @@
         </td>
     </tr>
 <% } %> 
-

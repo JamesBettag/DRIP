@@ -10,7 +10,7 @@ exports.sendNotificationEmail = function sendNotificationEmailFunction(email) {
     from: 'notifications.drip@gmail.com',
     subject: 'DRIP Notification',
     text: '?',    //This field does not seem to appear on emails
-    html: "<strong>Your water levels have gone too low!</strong><br><p>Click this link:<br>  <a href=\"http://localhost:3001/\">Redirect to website</a></p>"
+    html: "<strong>Your water levels have gone too low!</strong><br><p>Click this link:<br>  <a href=\"http://leia.cs.spu.edu:3001/\">Redirect to website</a></p>"
   };
   //ES8
   (async () => {
