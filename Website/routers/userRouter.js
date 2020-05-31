@@ -269,7 +269,8 @@ router.post('/addDevice', checkAuthenticated, nocache, async(req,res) => {
 //Open account if you are currently logged in
 router.get('/account', checkAuthenticated, nocache, async(req, res) => {
     user_name = await accountModel.getUserName(req.user.id)
-    res.render('../views/account.ejs', {user_name})
+    notification = await accountModel.getNotification(req.user.id)
+    res.render('../views/account.ejs', {user_name, notification})
 })
 
 //Logout
@@ -283,8 +284,9 @@ router.delete('/logout', (req, res) => {
 router.post('/nameandpasswordchange', checkAuthenticated, async (req,res) => {
     let success = []
     let errors = []
-    const { user_name, password, password2 } = req.body
+    const { user_name, password, password2, notificationsCheck } = req.body
 
+    console.log(req.body)
     //If all 3 fields are filled
     if((user_name != '') && (password != '') && (password2 != ''))
     {
@@ -298,6 +300,11 @@ router.post('/nameandpasswordchange', checkAuthenticated, async (req,res) => {
             let fname = user_name;
             let lname = user_name;
             let inserted = await accountModel.updateNameAndPasswordById(req.user.id, fname, lname, hashedPassword)
+            if(typeof req.body.notificationsCheck != 'undefined'){
+                await accountModel.updateNotificationById(req.user.id, true)
+            } else {
+                await accountModel.updateNotificationById(req.user.id, false)
+            }
 
             if(inserted) {
                 // Name and password were changed
@@ -319,6 +326,11 @@ router.post('/nameandpasswordchange', checkAuthenticated, async (req,res) => {
             let fname = user_name;
             let lname = user_name;
             let inserted = await accountModel.updateNameById(req.user.id, fname, lname)
+            if(typeof req.body.notificationsCheck != 'undefined'){
+                await accountModel.updateNotificationById(req.user.id, true)
+            } else {
+                await accountModel.updateNotificationById(req.user.id, false)
+            }
 
             if(inserted) {
                 // Name was changed
@@ -342,6 +354,11 @@ router.post('/nameandpasswordchange', checkAuthenticated, async (req,res) => {
         } else {
            let hashedPassword = await bcrypt.hash(password, 10)
             let inserted = await accountModel.updatePasswordById(req.user.id, hashedPassword)
+            if(typeof req.body.notificationsCheck != 'undefined'){
+                await accountModel.updateNotificationById(req.user.id, true)
+            } else {
+                await accountModel.updateNotificationById(req.user.id, false)
+            }
 
             if(inserted) {
                 // Password was changed
@@ -356,6 +373,25 @@ router.post('/nameandpasswordchange', checkAuthenticated, async (req,res) => {
                 res.render('../views/account.ejs', { errors, user_name, password, password2 })
             }
         }
+    }
+    else if((user_name == '') && (password == '') && (password2 == ''))   //If username and both passwords are empty, submit only checkbox
+    {
+        /*
+        if(typeof req.body.notificationsCheck != 'undefined'){
+            await accountModel.updateNotificationById(req.user.id, true)
+        } else {
+            await accountModel.updateNotificationById(req.user.id, false)
+        }
+        if(insertNotify) {
+            // Password was changed
+            req.flash('success_msg', 'Notifications Sucessfully Changed')
+            res.redirect('/users/account')
+        } else {
+            // Password was not changed. could not find an account with that id (big problem: user serialized on website without logging in)
+            req.flash('error_msg', 'Notifications Unsuccessfully Changed')
+            res.render('../views/account.ejs', { errors, user_name, password, password2 })
+        }
+*/
     }
     else if((password == '') || (password2 == ''))   //If only one password field is filled
     {

@@ -361,3 +361,35 @@ exports.getRecentPlantIds = function(accountId, startDate, stopDate) {
         )
     })
 }
+
+exports.getNotification = function(accountId) {
+    return new Promise(function(resolve, reject) {
+        db.get().query(
+            "SELECT notification FROM account WHERE account_id = ?", [accountId], (err, result, fields) => {
+                if(err) {
+                    reject(err)
+                } else {
+                    if(result.length) {
+                        resolve(result)
+                    } else {
+                        resolve(null)
+                    }
+                }
+            }
+        )
+    })
+}
+
+exports.updateNotificationById = function (accountId, notify) {
+    return new Promise(function(resolve, reject) {
+        db.get().query(
+            "UPDATE account SET notification = ? WHERE account_id = ?", [notify, accountId], (err, result) => {
+                if(err) {
+                    reject(false)
+                } else {
+                    resolve(true)
+                }
+            }
+        )
+    })
+}
