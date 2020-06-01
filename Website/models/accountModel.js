@@ -31,6 +31,21 @@ exports.getUserEmail = function(email) {
     
 }
 
+exports.getUserEmailById = function(accId) {
+    return new Promise(function(resolve, reject) {
+        db.get().query(
+            'SELECT email FROM account WHERE account_id = ?', accId, (err, result, fields) => {
+                if(err) {
+                    reject(err)
+                } else {
+                    resolve(result[0].email)
+                }
+            }
+        )
+    })
+    
+}
+
 exports.getUserPasswordHash = function(email, done) {
     //return new Promise(function(resolve, reject) {
         db.get().query(
@@ -261,12 +276,12 @@ exports.insertNewPlant = function(accId, plantName, min, max){
     })
 }
 
-exports.getUserEmailByPlantId = function(plantId) {
+exports.getAccountAndEmailByDevice = function(deviceId) {
     return new Promise(function(resolve, reject) {
         db.get().query(
-            "SELECT account.email " +
+            "SELECT account.email, device.account_id " +
             "FROM account JOIN device ON device.account_id = account.account_id " +
-            "WHERE device.plant_id = ?", [plantId], (err, result, fields) => {
+            "WHERE device.device_id = ?", deviceId, (err, result, fields) => {
                 if(err) {
                     reject(err)
                 } else {
@@ -355,6 +370,52 @@ exports.getRecentPlantIds = function(accountId, startDate, stopDate) {
                 if (err) { reject(err) }
                 else {
                     if (result.length) { resolve(result) }
+                    else { resolve(null) }
+                }
+            }
+        )
+    })
+}
+
+exports.getNotification = function(accountId) {
+    return new Promise(function(resolve, reject) {
+        db.get().query(
+            "SELECT notification FROM account WHERE account_id = ?", [accountId], (err, result, fields) => {
+                if(err) {
+                    reject(err)
+                } else {
+                    if(result.length) {
+                        resolve(result[0].notification)
+                    } else {
+                        resolve(null)
+                    }
+                }
+            }
+        )
+    })
+}
+
+exports.updateNotificationById = function (accountId, notify) {
+    return new Promise(function(resolve, reject) {
+        db.get().query(
+            "UPDATE account SET notification = ? WHERE account_id = ?", [notify, accountId], (err, result) => {
+                if(err) {
+                    reject(false)
+                } else {
+                    resolve(true)
+                }
+            }
+        )
+    })
+}
+
+exports.getUserEmailByAccountId = function (accountId) {
+    return new Promise(function (resolve, reject) {
+        db.get().query(
+            "SELECT email FROM account WHERE account_id = ?", accountId, (err, result, fields) => {
+                if (err) { reject(err) }
+                else {
+                    if (result.length) { resolve(result[0].email) }
                     else { resolve(null) }
                 }
             }
