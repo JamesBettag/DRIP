@@ -150,13 +150,21 @@ router.post('/removePlant', checkAuthenticated, nocache, async(req, res) => {
         // change device's plant_id to null
         await accountModel.changeDevicePlantToNull(deviceId)
     }
-    // delete plant from plant table
-    const removed = await accountModel.deletePlant(req.user.id, plantId)
-    if (removed) {
-        req.flash('success_msg', 'Plant Profile Successfully Removed')
-    } else {
+    // delete data associated with plant 
+    const deletedData = await accountModel.deletePlantData(plantId)
+    if(deletedData){
+        // delete plant from plant table
+        const removed = await accountModel.deletePlant(req.user.id, plantId)
+        if (removed) {
+            req.flash('success_msg', 'Plant Profile Successfully Removed')
+        } else {
+            req.flash('error_msg', 'Plant Profile Not Removed')
+        }
+    }
+    else{
         req.flash('error_msg', 'Plant Profile Not Removed')
     }
+    
     res.redirect('/users/plants')
 })
 
