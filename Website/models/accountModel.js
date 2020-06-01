@@ -296,6 +296,20 @@ exports.getAccountAndEmailByDevice = function(deviceId) {
     })
 }
 
+exports.deletePlantData = function(plantId){
+    return new Promise(function(resolve, reject) {
+        db.get().query(
+            'DELETE FROM data WHERE plant_id = ?', [plantId], (err, result) => {
+                if(err){
+                    reject(false)
+                } else {
+                    resolve(true)
+                }
+            }
+        )
+    })
+}
+
 exports.deletePlant = function(accId, plantId){
     return new Promise(function(resolve, reject) {
         db.get().query(
