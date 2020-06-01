@@ -31,6 +31,21 @@ exports.getUserEmail = function(email) {
     
 }
 
+exports.getUserEmailById = function(accId) {
+    return new Promise(function(resolve, reject) {
+        db.get().query(
+            'SELECT email FROM account WHERE account_id = ?', accId, (err, result, fields) => {
+                if(err) {
+                    reject(err)
+                } else {
+                    resolve(result[0].email)
+                }
+            }
+        )
+    })
+    
+}
+
 exports.getUserPasswordHash = function(email, done) {
     //return new Promise(function(resolve, reject) {
         db.get().query(
@@ -370,7 +385,7 @@ exports.getNotification = function(accountId) {
                     reject(err)
                 } else {
                     if(result.length) {
-                        resolve(result)
+                        resolve(result[0].notification)
                     } else {
                         resolve(null)
                     }

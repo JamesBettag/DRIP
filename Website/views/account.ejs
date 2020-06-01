@@ -72,12 +72,19 @@
                 <% include ./partials/messages %>
                 <div class="row">
                   <div class="col-md-6 mb-6">
+                    <p>Name:</p>
                     <input type="text" class="shadow form-control" name="user_name" id="user_name"
                       placeholder="Enter new name" value="<%= typeof user_name != 'undefined' ? user_name : '' %>">
+                    <br>
+                    <input type="hidden" name="old_user_name" id="old_user_name" value="<%= user_name %>">  
                     <div class="invalid-feedback">
                       Enter your name
                     </div>
                   </div>
+                </div>
+                <div class="mb-3">
+                  <p>Email:</p>
+                  <input readonly class="shadow form-control" type="text" name="user_email" id="user_email" value="<%= user_email %>">
                 </div>
                 <br>
                 <br>
@@ -101,7 +108,7 @@
                     <input type="checkbox" class="form-check-input" name = "notificationsCheck" id="notificationsCheck" checked>
                     <label class="form-check-label" for="notificationsCheck">Enable Notifications</label>
                   <% } else { %> 
-                    <input type="checkbox" class="form-check-input" name = "notificationsCheck" id="notificationsCheck">
+                    <input type="checkbox" class="form-check-input" name = "notificationsCheck" id="notificationsCheck" unchecked>
                     <label class="form-check-label" for="notificationsCheck">Enable Notifications</label>
                   <% } %>
                 </div>
