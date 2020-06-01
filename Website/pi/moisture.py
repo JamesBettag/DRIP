@@ -37,10 +37,8 @@ try:
             print("inserted data: " + str(data))
         elif (r.text == "1") :
             print("this device does not have a registered plant. please go online and create/connect a plant with this device")
-            exit()
         elif (r.text == "2") :
             print("this device has not been registered with your account. please login to your accound and register this device. Device ID: " + mac_addr)
-            exit()
 
         # pause for 15 minutes
         time.sleep(15 * 60)
