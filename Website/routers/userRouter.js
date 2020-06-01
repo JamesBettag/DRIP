@@ -256,12 +256,19 @@ router.post('/removeDevice', checkAuthenticated, nocache, async (req, res) => {
 
 router.post('/addDevice', checkAuthenticated, nocache, async(req,res) => {
     const {new_device_name, new_device_id} = req.body
-    // query db to insert new device
-    inserted = await accountModel.insertNewDevice(req.user.id, new_device_id, new_device_name)
-    if(inserted){
-        req.flash('success_msg', 'Device Successfully Registered')
-    }else {
-        req.flash('error_msg', 'Device Not Added')
+    // check if device already exists
+    const existingDevice = await accountModel.checkExistingDevice(new_device_id)
+    if (!existingDevice) {
+        // query db to insert new device
+        inserted = await accountModel.insertNewDevice(req.user.id, new_device_id, new_device_name)
+        if(inserted){
+            req.flash('success_msg', 'Device Successfully Registered')
+        }else {
+            req.flash('error_msg', 'Device Not Added')
+        }
+    } else {
+        // device already exists
+        req.flash('error_msg', 'Device ID already exists')
     }
     res.redirect('/users/devices')
 })

@@ -422,3 +422,17 @@ exports.getUserEmailByAccountId = function (accountId) {
         )
     })
 }
+
+exports.checkExistingDevice = function(deviceId) {
+    return new Promise(function (resolve, reject) {
+        db.get().query(
+            "SELECT device_id FROM device WHERE device_id = ?", deviceId, (err, result, fields) => {
+                if (err) { reject(err) }
+                else {
+                    if (result.length) { resolve(true) }
+                    else { resolve(false) }
+                }
+            }
+        )
+    })
+}

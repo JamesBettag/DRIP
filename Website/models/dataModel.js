@@ -20,15 +20,15 @@ exports.getGraphData = function(accountId, plantId, startDate, stopDate) {
     })
 }
 
-exports.getPlantID = function(mac) {
+exports.getPlantAndAccountId = function(mac) {
     return new Promise(function(resolve, reject) {
         db.get().query(
-            "SELECT plant_id FROM device WHERE device_id = ?", mac, (err, result, fields) => {
+            "SELECT plant_id, account_id FROM device WHERE device_id = ?", mac, (err, result, fields) => {
                 if(err) {
                     reject(err)
                 } else {
                     if(result.length) {
-                        resolve(result[0].plant_id)
+                        resolve(result)
                     } else {
                         resolve(null)
                     }

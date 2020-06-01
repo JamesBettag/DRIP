@@ -32,7 +32,7 @@ try:
         #print("ADC Voltage: " + str(chan.voltage) + "V")
         data = round(100 - ((chan.value / 65536) * 100), 2)
         PARAMS = { 'mac': mac_addr, 'data': data }
-        r = requests.get(url = URL, params = PARAMS)
+        r = requests.post(url = URL, data = PARAMS)
         if (r.text == "0") :
             print("inserted data: " + str(data))
         elif (r.text == "1") :

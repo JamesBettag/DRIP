@@ -7,27 +7,33 @@ const accountModel = require('../models/accountModel')
 
 router.use(methodOverride('_method'))
 
-router.get('/insert', async (req, res) => {
-    const { mac, data } = req.query
+router.post('/insert', async (req, res) => {
+    const { mac, data } = req.body
     // get plant ID from db
-    plantId = await dataModel.getPlantID(mac)
-    if(plantId != null) {
+    plantAndAccount = await dataModel.getPlantAndAccountId(mac)
+    if((plantAndAccount != null) && (plantAndAccount[0].plant_id != null)) {
+        const accountId = plantAndAccount[0].account_id
+        const plantId = plantAndAccount[0].plant_id
         // check if plant id exists, if so, insert the data to the plant
         const inserted = dataModel.insertMoistureData(plantId, data)
-        const accountAndEmail = await accountModel.getAccountAndEmailByDevice(mac)
-        const notification = await accountModel.getNotification(accountId)
-        const accountId = accountAndEmail[0].account_id
-        const email = accountAndEmail[0].email
-        if (notification) {
-            min = await dataModel.getMinimumFromPlant(plantId)    //Return minimum from plant
-            if (data < min) {
-                notificationEmail.sendNotificationEmail(email)  //Send the notification email using the email as a parameter
+        const waitEmail = accountModel.getUserEmailById(accountId)
+        const waitNotification = accountModel.getNotification(accountId)
+        Promise.all([waitEmail, waitNotification])
+        .then(async ([email, notification]) => {
+            if (notification) {
+                const min = await dataModel.getMinimumFromPlant(plantId)    //Return minimum from plant
+                if (data < min) {
+                    notificationEmail.sendNotificationEmail(email)  //Send the notification email using the email as a parameter
+                }
             }
-        }
-        // make sure moisture data has been inserted at this point
-        await Promise.all([inserted])
-        // send code to pi for it to interpret success        
-        res.send("0")
+            // make sure moisture data has been inserted at this point
+            await Promise.all([inserted])
+            // send code to pi for it to interpret success        
+            res.send("0")
+        })
+        .catch((err) => {
+            console.log(err)
+        })
     } else {
         // no plant was found, check if device exists
         const deviceId = await dataModel.getDeviceID(mac)
