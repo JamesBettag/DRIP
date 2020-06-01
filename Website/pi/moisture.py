@@ -41,7 +41,7 @@ try:
             print("this device has not been registered with your account. please login to your accound and register this device. Device ID: " + mac_addr)
 
         # pause for 15 minutes
-        time.sleep(60 * 60)
+        time.sleep(15 * 60)
 
 except KeyboardInterrupt:
     print("cancel")
