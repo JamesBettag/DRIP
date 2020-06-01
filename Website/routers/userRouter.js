@@ -269,8 +269,9 @@ router.post('/addDevice', checkAuthenticated, nocache, async(req,res) => {
 //Open account if you are currently logged in
 router.get('/account', checkAuthenticated, nocache, async(req, res) => {
     user_name = await accountModel.getUserName(req.user.id)
+    user_email = await accountModel.getUserEmailById(req.user.id)
     notification = await accountModel.getNotification(req.user.id)
-    res.render('../views/account.ejs', {user_name, notification})
+    res.render('../views/account.ejs', {user_name, user_email, notification})
 })
 
 //Logout
@@ -284,9 +285,7 @@ router.delete('/logout', (req, res) => {
 router.post('/nameandpasswordchange', checkAuthenticated, async (req,res) => {
     let success = []
     let errors = []
-    const { user_name, password, password2, notificationsCheck } = req.body
-
-    console.log(req.body)
+    const { user_name, old_user_name, password, password2, notificationsCheck } = req.body
     //If all 3 fields are filled
     if((user_name != '') && (password != '') && (password2 != ''))
     {
@@ -308,14 +307,14 @@ router.post('/nameandpasswordchange', checkAuthenticated, async (req,res) => {
 
             if(inserted) {
                 // Name and password were changed
-                req.flash('success_msg', 'Name and Password Changed Successfully')
+                req.flash('success_msg', 'Account info updated successfully')
                 //errors.push({ msg: 'Password Successfully Changed' })
                 //res.redirect('/dashboard')
                 res.redirect('/users/account')
             } else {
                 // Name and password were not changed. could not find an account with that id (big problem: user serialized on website without logging in)
                 // process.exit(1)
-                req.flash('error_msg', 'Name and Password Unsuccessfully Changed')
+                req.flash('error_msg', 'Account info not updated')
                 //req.logOut()
                 res.render('../views/account.ejs', { errors, user_name, password, password2 })
             }
@@ -323,6 +322,7 @@ router.post('/nameandpasswordchange', checkAuthenticated, async (req,res) => {
     }
     else if((user_name != '') && ((password == '') && (password2 == '')))     //If username is filled AND both of the passwords are not filled
     {
+        if(user_name != old_user_name){
             let fname = user_name;
             let lname = user_name;
             let inserted = await accountModel.updateNameById(req.user.id, fname, lname)
@@ -334,16 +334,33 @@ router.post('/nameandpasswordchange', checkAuthenticated, async (req,res) => {
 
             if(inserted) {
                 // Name was changed
-                req.flash('success_msg', 'Name Changed Successfully')
+                req.flash('success_msg', 'Account info updated successfully')
                 //res.redirect('/dashboard')
                 res.redirect('/users/account')
             } else {
                 // Name was not changed. could not find an account with that id (big problem: user serialized on website without logging in)
                 // process.exit(1)
-                req.flash('error_msg', 'Name Unsuccessfully Changed')
+                req.flash('error_msg', 'Account info not updated')
                 //req.logOut()
                 res.render('../views/account.ejs', { errors, user_name, password, password2 })
             }
+        //Still same name check for notification         
+        }else{
+            if(typeof req.body.notificationsCheck != 'undefined'){
+                insertNotify = await accountModel.updateNotificationById(req.user.id, true)
+            } else {
+                insertNotify = await accountModel.updateNotificationById(req.user.id, false)
+            }
+            if(insertNotify) {
+                // Notification was changed
+                req.flash('success_msg', 'Account info updated successfully')
+                res.redirect('/users/account')
+            } else {
+                // Notification was not changed
+                req.flash('error_msg', 'Account info not updated')
+                res.render('../views/account.ejs', { errors, user_name, password, password2 })
+            }
+        }
     }
     else if((user_name == '') && (password != '') && (password2 != ''))   //If username is empty AND both password fields are filled
     {
@@ -362,13 +379,13 @@ router.post('/nameandpasswordchange', checkAuthenticated, async (req,res) => {
 
             if(inserted) {
                 // Password was changed
-                req.flash('success_msg', 'Password Changed Successfully')
+                req.flash('success_msg', 'Account info updated successfully')
                 //res.redirect('/dashboard')
                 res.redirect('/users/account')
             } else {
                 // Password was not changed. could not find an account with that id (big problem: user serialized on website without logging in)
                 // process.exit(1)
-                req.flash('error_msg', 'Password Unsuccessfully Changed')
+                req.flash('error_msg', 'Account info not updated')
                 //req.logOut()
                 res.render('../views/account.ejs', { errors, user_name, password, password2 })
             }
@@ -376,22 +393,22 @@ router.post('/nameandpasswordchange', checkAuthenticated, async (req,res) => {
     }
     else if((user_name == '') && (password == '') && (password2 == ''))   //If username and both passwords are empty, submit only checkbox
     {
-        /*
+        
         if(typeof req.body.notificationsCheck != 'undefined'){
-            await accountModel.updateNotificationById(req.user.id, true)
+            insertNotify = await accountModel.updateNotificationById(req.user.id, true)
         } else {
-            await accountModel.updateNotificationById(req.user.id, false)
+            insertNotify = await accountModel.updateNotificationById(req.user.id, false)
         }
         if(insertNotify) {
             // Password was changed
-            req.flash('success_msg', 'Notifications Sucessfully Changed')
+            req.flash('success_msg', 'Account info updated successfully')
             res.redirect('/users/account')
         } else {
             // Password was not changed. could not find an account with that id (big problem: user serialized on website without logging in)
-            req.flash('error_msg', 'Notifications Unsuccessfully Changed')
+            req.flash('error_msg', 'Account info not updated')
             res.render('../views/account.ejs', { errors, user_name, password, password2 })
         }
-*/
+
     }
     else if((password == '') || (password2 == ''))   //If only one password field is filled
     {
