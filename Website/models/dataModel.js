@@ -30,7 +30,6 @@ exports.getPlantID = function(mac) {
                     if(result.length) {
                         resolve(result[0].plant_id)
                     } else {
-			console.log("no plant found")
                         resolve(null)
                     }
                 }
@@ -61,7 +60,7 @@ exports.getDeviceID = function(mac) {
                     reject(err)
                 } else {
                     if(result.length) {
-                        resolve(result.device_id)
+                        resolve(result[0].device_id)
                     } else {
                         resolve(null)
                     }
@@ -120,7 +119,7 @@ exports.getMinimumFromPlant = function(plantId){
                     reject(err)
                 } else {
                     if(result.length) {
-                        resolve(result)
+                        resolve(result[0].minimum)
                     } else {
                         resolve(null)
                     }
