@@ -26,9 +26,9 @@
                     <input class="form-control" type="hidden" value="<%= plant.id %>" id="plant_id" name="plant_id">
                 </form>
             <td colspan="1" style="text-align:right;">
-                <form method="POST" id="removePlant" action="/users/removePlant">
+                <form method="POST" action="/users/removePlant">
                     <input type="hidden" id="plantid" name="plantid" value="<%= plant.id %>">
-                    <button type="button"class="shadow btn btn-danger" data-toggle="modal" data-target="#warning">Remove</button>
+                    <button class="shadow btn btn-danger" type="submit">Remove</button>
                 </form>
             </td>
         </tr>

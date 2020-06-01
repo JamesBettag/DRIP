@@ -78,36 +78,13 @@
                     <table class="shadow table table-striped table-md">
                         <form action="/users/addPlant" method="POST">
                             <tr>
-                                <th><input type="text" class="form-control" name="new_plant_name" id="new_plant_name"
-                                        placeholder="Enter plant name" required></th>
+                                <th><input type="text" class="form-control" name="new_plant_name" id="new_plant_name" placeholder="Enter plant name" required></th>
                                 <td style="text-align:left;">
-                                    <input size=1 type="text" class="form-control" name="new_min" id="new_min"
-                                        placeholder="Enter min" required>
+                                    <input size=1 type="text" class="form-control" name="new_min" id="new_min" placeholder="Enter min"required>
                                 </td>
-                                <td colspan="2" style="text-align:right;"><button type="submit" value="Submit"
-                                        class="btn btn-success">Add Plant</button></td>
+                                <td colspan="2" style="text-align:right;"><button type="submit" value="Submit"class="btn btn-success">Add Plant</button></td>
                         </form>
                     </table>
-                    <!--Warning popup-->
-                    <div class="modal fade" id="warning" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-                        <div class="modal-dialog modal-dialog-centered" role="document">
-                          <div class="modal-content">
-                            <div class="modal-header">
-                              <h1 class="modal-title-centered" id="warning_title">Warning!</h1>
-                              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                              </button>
-                            </div>
-                            <div class="modal-body">
-                            <h2 style="text-align: center;">If you remove this plant all associated data will be lost</h2>
-                            </div>
-                            <div class="modal-footer">
-                              <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                              <button type="submit" form="removePlant" class="btn btn-success">Save changes</button>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
                 </div>
             </main>
 
@@ -136,7 +113,7 @@
             </script>
         </div>
         <script>
-            /*Submit form to renamePlant when clicking out of the name input field*/
+             /*Submit form to renamePlant when clicking out of the name input field*/
             function lostFocus(e) {
                 if ($(e).val() !== $(e).siblings('input').val()) {
                     $.ajax({
@@ -179,7 +156,7 @@
                 $(e).prop('readonly', true);
             }
             $(document).on("click", function (e) {
-                //Input fields are readonly until bring them into focus
+            //Input fields are readonly until bring them into focus
                 $(e.target).closest("input").removeAttr("readonly");
             });
         </script>
