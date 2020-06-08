@@ -1,0 +1,29 @@
+Update and Upgrade the Raspberry Pi
+  - open the terminal and use the following commands
+  - sudo apt update
+  - sudo apt update --fix-missing
+  - sudo apt upgrade
+
+Enable SPI Interface with the Raspberry Pi
+  - launch the terminal and type the command: sudo raspi-config
+  - Navigate to the interface options
+  - Enable the SPI interface
+  - Reboot the Raspberry Pi
+  
+ Install the spidev Library
+  - Open the terminal and execute the following commands
+  - sudo apt-get install git python-dev
+  - git clone git://github.com/doceme/py-spidev
+  - cd py-spidev/
+  - sudo python setup.py install
+
+The following dependencies are needed as well
+  - sudo apt install python3-picamera
+  - sudo apt install python3-pip
+  - sudo pip3 install adafruit-blinka
+  - sudo pip3 install adafruit-circuitpython-mcp3xxx
+  - sudo pip3 install get-mac
+
+To Place wires correctly to interface the GPIO pins and Power/Ground Pins
+  - Connect the Wires with each corresponding pin, shown in DRIP-RPi-Pin-Setup.png
+  - Use the User Manual provided by Raspberry Pi, it shows where each pin is located.
