@@ -30,8 +30,8 @@ app.use(bodyParser.json()) //James
 
 app.set('view-engine', 'ejs')
 app.use(require('express-session')({ secret: 'keyboard cat', resave: true, saveUninitialized: true })) //This solved an error for me "Error: secret option required for sessions"
-app.use(express.static(__dirname + '/public')) //Global variable so we can access stuff in /public 
-app.use(express.urlencoded({ extended: false })) //Allows us to take input from .ejs fourms and use as req inside of post methods 
+app.use(express.static(__dirname + '/public')) //Global variable so we can access stuff in /public
+app.use(express.urlencoded({ extended: false })) //Allows us to take input from .ejs fourms and use as req inside of post methods
 app.use(flash())
 app.use(session({
     secret: process.env.SESSION_SECRET, //Keye the encrypts information for the current session
@@ -40,7 +40,7 @@ app.use(session({
 }))
 
 app.use(passport.initialize())
-app.use(passport.session()) 
+app.use(passport.session())
 
 app.use(flash())
 
@@ -72,5 +72,5 @@ app.use(function(req, res) {
   res.redirect('/index')
 })
 
-app.listen(port) 
+app.listen(port)
 console.log('Listening on port ' + port)
