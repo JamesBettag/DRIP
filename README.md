@@ -1,8 +1,12 @@
 # DRIP
 
+### Developers:
 [James Bettag](https://www.linkedin.com/in/james-bettag/)
+
 [Mathew Lister](https://www.linkedin.com/in/listermathew/)
+
 [Tad Okazaki](https://www.linkedin.com/in/tad-okazaki/)
+
 
 ![Demo](Slides/Slide1.jpg)
 ![Demo](Slides/Slide2.jpg)
