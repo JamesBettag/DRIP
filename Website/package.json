@@ -25,7 +25,7 @@
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.19.0",
     "bootstrap": "^4.4.1",
-    "chart.js": "^2.9.3",
+    "chart.js": "^2.9.4",
     "ejs": "^2.6.2",
     "express": "^4.17.1",
     "express-flash": "0.0.2",
